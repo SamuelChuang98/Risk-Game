@@ -82,7 +82,7 @@ void OrderList::move(int position, int new_position)
 		vec_order_list.erase(vec_order_list.begin() + position);
 	}
 	else {
-		cout << "\n not valid position" << endl;
+		cout << "\n Position is invalid!" << endl;
 	}
 }
 
