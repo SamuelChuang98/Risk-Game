@@ -1,5 +1,8 @@
 #include <vector>
 
+#include "Cards.h"
+#include "Orders.h"
+
 #pragma once
 
 using namespace std;
@@ -10,7 +13,7 @@ class Player
 
 	public:
 		Player();
-		Player(vector<string*> ters, vector<string*> cards, vector<string*> orders);
+		Player(vector<string*> ters, Hand* cards, OrderList* orders);
 		Player(Player &p);
 		~Player();
 		Player& operator = (const Player& rightSide);	// Assignment operator
@@ -20,7 +23,7 @@ class Player
 
 	private:
 		vector<string*> ters;		// Type will be Territory*
-		vector<string*> cards;		// Type will be Cards*
-		vector<string*> orders;		// Type will be Orders*
+		Hand* cards;		
+		OrderList* orders;
 		friend std::ostream& operator<<(std::ostream &strm, const Player &p);
 };

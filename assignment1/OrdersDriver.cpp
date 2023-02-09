@@ -18,7 +18,7 @@ int main()
 	ordersList.set_order_list(&anadvance);
 	ordersList.set_order_list(&abomb);
 	ordersList.set_order_list(&ablockade);
-	aordersList.set_order_list(&anairlift);
+	ordersList.set_order_list(&anairlift);
 	ordersList.set_order_list(&anegotiate);
 
 

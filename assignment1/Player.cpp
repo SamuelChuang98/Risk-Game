@@ -6,23 +6,25 @@
 // Default constructor
 Player::Player()
 {
-
+	cards = new Hand();
+	orders = new OrderList();
 }
 
 // Param. constructor
-Player::Player(vector<string*> ters, vector<string*> cards, vector<string*> orders)
+Player::Player(vector<string*> ters, Hand* cards, OrderList* orders)
 {
 	for (string* ter : ters) {
 		this->ters.push_back(new string(*ter));
 	}
 
-	for (string* card : cards) {
-		this->cards.push_back(new string(*card));
-	}
+	// TODO: Uncomment; No copy constructor/assignment op yet 
+	// this->cards = new Hand(cards);
+	this->cards = new Hand();
 
-	for (string* order : orders) {
-		this->orders.push_back(new string(*order));
-	}
+	// TODO: Uncomment; No copy constructor/assignment op yet 
+	// this->orders = new Order(orders);
+	this->orders = new OrderList();
+	
 }
 
 // Copy constructor - performs deep copy
@@ -32,13 +34,13 @@ Player::Player(Player& p)
 		this->ters.push_back(new string(*ter));
 	}
 
-	for (string* card : p.cards) {
-		this->cards.push_back(new string(*card));
-	}
+	// TODO: Uncomment; No copy constructor/assignment op yet 
+	// this->cards = new Hand(p.cards);
+	this->cards = new Hand();
 
-	for (string* order : p.orders) {
-		this->orders.push_back(new string(*order));
-	}
+	// TODO: Uncomment; No copy constructor/assignment op yet 
+	// orders = new OrderList(p.orders);
+	orders = new OrderList();
 }
 
 
@@ -51,15 +53,8 @@ Player::~Player()
 	}
 	ters.clear();	// Remove pointers from ters
 
-	for (string* card : cards) {
-		delete card;
-	}
-	cards.clear();
-
-	for (string* order : orders) {
-		delete order;
-	}
-	orders.clear();
+	delete cards;
+	delete orders;
 }
 
 // Assignment operator - performs shallow copy
@@ -104,8 +99,8 @@ vector<string*> Player::toAttack()
 
 void Player::issueOrder()
 {
-	string* order = new string();	// Type will be Order*
-	orders.push_back(order);
+	Order* order = new Order();
+	orders->set_order_list(order);
 }
 
 
