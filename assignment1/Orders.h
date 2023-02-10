@@ -32,17 +32,14 @@ private :
 
 //Note that the orders’ actions do not need to be implemented at this point.
 
-
-class Deploy : public Order 
-{
-
+class Deploy : public Order {
 public:
 	Deploy();
 	~Deploy();
-	string* get_type();
+
 private:
-	string type1 = { "deploy" };
 };
+
 
 class Advance : public Order {
 public:
