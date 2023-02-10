@@ -73,22 +73,12 @@ int main()
 	Airlift airlift;
 	Negotiate negotiate;
 
-<<<<<<< Updated upstream
-	ordersList.set_order_list(&aDeploy);
-	ordersList.set_order_list(&anadvance);
-	ordersList.set_order_list(&abomb);
-	ordersList.set_order_list(&ablockade);
-	ordersList.set_order_list(&anairlift);
-	ordersList.set_order_list(&anegotiate);
-=======
 	ordersList.set_order_list(&deploy);
 	ordersList.set_order_list(&advance);
 	ordersList.set_order_list(&bomb);
 	ordersList.set_order_list(&blockade);
 	ordersList.set_order_list(&airlift);
 	ordersList.set_order_list(&negotiate);
->>>>>>> Stashed changes
-
 
 	//print orderlist
 	cout << "\n the orderlist contains: " << endl;
