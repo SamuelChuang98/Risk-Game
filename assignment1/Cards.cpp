@@ -6,27 +6,31 @@
 /**
  * Card Class implementation
  */
-Cards ::Cards() {Cards::setType(diplomacy);}
+std::random_device dev;
+std::mt19937 engine(dev());
+std::uniform_int_distribution<> dis(0, 4); // Define the range
+std::uniform_int_distribution<> das(0, 51); // Define the range
 
-Cards ::Cards(cardType theType) {Cards::setType(theType);}
+ //Default Constructor
+Cards::Cards() { Cards ::setType(diplomacy); }
+
+Cards::Cards(cardType theType) { Cards ::setType(theType); }
 
 
-cardType Cards ::getType()
-{
-    return   Cards :: type;
+cardType Cards::getType() {
+    return Cards::type;
 }
-void Cards :: setType( cardType theType )
-{
-    Cards :: type = theType;
+
+void Cards::setType(cardType theType) {
+    Cards::type = theType;
 }
 
 void Cards::play() {
- cout << "Playing : ";
- this->printCard();
+    cout << "Playing : ";
+    this->printCard();
 }
 
-void Cards :: printCard()
-{
+void Cards::printCard() {
     switch (type) {
         case bomb:
             cout << " bomb" << endl;
@@ -56,12 +60,12 @@ bool Cards::equals(Cards card) {
 /**
  * Hand Class implementation
  */
-Hand::Hand(){}
+Hand::Hand() = default;
 
 //represents the action of drawing a card from the deck and putting it in a players hand
 void Hand::addToHand(Cards card) {
     cards.push_back(card);
-    cout<<" You got card: ";
+    cout << " You got card: ";
     card.printCard();
 }
 
@@ -70,12 +74,12 @@ Cards Hand::remFromHand(int index) {
     index--;
     Cards card;
     for (int i = 0; i < cards.size(); ++i) {
-        if(index ==i){
+        if (index == i) {
             card = cards.at(i);
             cards.erase(cards.begin() + i);
-            return card;
         }
     }
+    return card;
 }
 
 bool Hand::isEmpty() {
@@ -83,10 +87,9 @@ bool Hand::isEmpty() {
 }
 
 void Hand::printHand() {
-    for (int i = 0; i < cards.size() ; ++i) {
-        cout << (i+1) << " ";
+    for (int i = 0; i < cards.size(); ++i) {
+        cout << (i + 1) << " ";
         cards.at(i).printCard();
-        ;
     }
 }
 
@@ -95,15 +98,14 @@ void Hand::printHand() {
  * Deck Class implementation
  */
 //Initialize deck object with 52 randomly generated cards
-Deck::Deck()
-{
+Deck::Deck() {
     int random;
-    srand(time(0));
+
 
     for (int i = 0; i < 52; i++)
     {
-        random = rand() % 5;
-        cardType type = static_cast<cardType>(random);
+        random = dis(engine);
+        auto type = static_cast<cardType>(random);
         Cards card(type);
         cards.push_back(card);
     }
@@ -112,8 +114,7 @@ Deck::Deck()
 //represents the action of picking up a card from the deck, removes one random card from deck and returns it
 Cards Deck::draw() {
 
-    srand(time(0));
-    int theLuckyOne = rand() % cards.size();
+    int theLuckyOne = das(engine);
     Cards card( cards.at( theLuckyOne));
     cards.erase(cards.begin() + theLuckyOne);
     return card;
@@ -122,9 +123,10 @@ Cards Deck::draw() {
 bool Deck::isEmpty() {
     return cards.empty();
 }
+
 void Deck::printDeck() {
-    for (int i = 0; i < cards.size() ; ++i) {
-        cout<< (i+1) << " ";
+    for (int i = 0; i < cards.size(); ++i) {
+        cout << (i + 1) << " ";
         cards.at(i).printCard();
     }
 }
