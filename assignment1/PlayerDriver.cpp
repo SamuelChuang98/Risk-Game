@@ -3,104 +3,99 @@
 #include "Player.h"
 
 //using namespace std;
-int playerSpace::playerMain() {
-    // Create vectors of strings that will represent territories, cards, and orders of p1 and p2.
-    vector<string *> p1Ters = {new string("Quebec"), new string("Ontario"), new string("Alberta")};
-   // vector<string *> p1Cards = {new string("Bomb1"), new string("Airlift2")};
-    Deck *deck = new Deck;
-    Hand * p1Cards = new Hand;
-    p1Cards->addToHand(deck->draw());
-    p1Cards->addToHand(deck->draw());
-    vector<string *> p1Orders = {new string("Deploy to Quebec"), new string("Attack Vermont")};
+int playerSpace::playerMain() 
+{
+    // Create territories for p1 and p2
+    vector<Territory*> p1Ters = { new Territory("Quebec", "NA", 3), new Territory("Ontario", "NA", 0),
+        new Territory("Alberta", "NA", 2) };
+    vector<Territory*> p2Ters = { new Territory("Minnesota", "NA", 4), new Territory("Wisconsin", "NA", 1),
+        new Territory("Michigan", "NA", 3) };
+    
+    // Create hands of cards for p1 and p2
+    Deck* deck = new Deck;
+    Hand* p1Hand = new Hand;
+    p1Hand->addToHand(deck->draw());
+    p1Hand->addToHand(deck->draw());
+    Hand *p2Hand = new Hand;
+    p2Hand->addToHand(deck->draw());
+    p2Hand->addToHand(deck->draw());
 
-    vector<string *> p2Ters = {new string("Minnesota"), new string("Wisconsin"), new string("Michigan")};
-   // vector<string *> p2Cards = {new string("Airlift3"), new string("Blockade2")};
-    Hand *p2Cards = new Hand;
-    p2Cards->addToHand(deck->draw());
-    p2Cards->addToHand(deck->draw());
-
-    vector<string *> p2Orders = {new string("Deploy to Wisconsin"), new string("Attack Iowa")};
+    // Create order lists for p1 and p2
+    OrderList* p1Orders = new OrderList();
+    OrderList* p2Orders = new OrderList();
 
     // Initialize p1 and p2 with earlier created vectors.
-    Player p1 = {p1Ters, p1Cards, p1Orders};
-    Player p2 = {p2Ters, p2Cards, p2Orders};
+    Player p1 = {p1Ters, p1Hand, p1Orders};
+    Player p2 = {p2Ters, p2Hand, p2Orders};
 
 
-    // Players' arbitrary lists of territories to be defended and attacked are printed.
+    // Print players' arbitrary lists of territories to be defended and attacked are printed.
 
-    vector<string *> p1ToAttack = p1.toAttack();
-    cout << "Territories for " << p1 << " to attack : ";
-    for (string *ter: p1ToAttack) {
-        cout << *ter << " ";
+    vector<Territory*> p1ToAttack = p1.toAttack();
+    cout << "\nTerritories for " << p1 << " to attack : ";
+    for (Territory *ter: p1ToAttack) {
+        cout << ter->getTerritoryName() << " ";
     }
 
-    vector<string *> p1ToDefend = p1.toDefend();
+    vector<Territory*> p1ToDefend = p1.toDefend();
     cout << endl << "Territories for " << p1 << " to defend : ";
-    for (string *ter: p1ToDefend) {
-        cout << *ter << " ";
+    for (Territory *ter: p1ToDefend) {
+        cout << ter->getTerritoryName() << " ";
     }
 
-    vector<string *> p2ToAttack = p2.toAttack();
+    vector<Territory*> p2ToAttack = p2.toAttack();
     cout << endl << "Territories for " << p2 << " to attack : ";
-    for (string *ter: p2ToAttack) {
-        cout << *ter << " ";
+    for (Territory *ter: p2ToAttack) {
+        cout << ter->getTerritoryName() << " ";
     }
 
-    vector<string *> p2ToDefend = p2.toDefend();
+    vector<Territory*> p2ToDefend = p2.toDefend();
     cout << endl << "Territories for " << p2 << " to defend : ";
-    for (string *ter: p2ToDefend) {
-        cout << *ter << " ";
+    for (Territory *ter: p2ToDefend) {
+        cout << ter->getTerritoryName() << " ";
     }
 
-    cout << endl << p1 << " Has cards : " << endl;
-    p1.hand->printHand();
+    // Testing issueOrder() on p1
+    
+    cout << endl << "\nQuantity of orders in p1 before issueOrder(): " 
+        << p1.getOrders()->get_order_list()->size() << endl;
 
-    cout << endl << p2 << " Has cards : " << endl;
-    p2.hand->printHand();
+    p1.issueOrder();
 
-    cout << endl <<  " Current deck status : " << endl ;
-    deck->printDeck();
+    cout << "Quantity of orders in p1 after issueOrder(): "
+        << p1.getOrders()->get_order_list()->size() << endl;
+
+    // Print contents of each players' hand as well as stream insertion operator
+
+    cout << endl << p1 << " has cards : " << endl;
+    p1.getHand()->printHand();
+
+    cout << p2 << " has cards : " << endl;
+    p2.getHand()->printHand();
 
     // Delete contents of pointers
 
-    for (string *s: p1Ters) {
-        delete s;
+    for (Territory *t: p1Ters) {
+        delete t;
     }
     p1Ters.clear();
 
-    /*for (string *s: p1Cards) {
-        delete s;
+    for (Territory* t : p2Ters) {
+        delete t;
     }
-    p1Cards.clear();*/
+    p1Ters.clear();
 
-    delete p1Cards;
-    p1Cards = NULL;
-
-    for (string *s: p1Orders) {
-        delete s;
-    }
-    p1Orders.clear();
-
-    for (string *s: p2Ters) {
-        delete s;
-    }
-    p2Ters.clear();
-
-    /*for (string *s: p2Cards) {
-        delete s;
-    }
-    p2Cards.clear();*/
-
-    delete p2Cards;
-    p2Cards = NULL;
-
-    for (string *s: p2Orders) {
-        delete s;
-    }
-    p2Orders.clear();
-
+    delete p1Hand;
+    p1Hand = NULL;
+    delete p2Hand;
+    p2Hand = NULL;
     delete deck;
     deck = NULL;
+
+    delete p1Orders;
+    p1Orders = NULL;
+    delete p2Orders;
+    p2Orders = NULL;
 
     return 0;
 }

@@ -4,6 +4,8 @@
 #include <vector>
 #include <iostream>
 #include "Cards.h"
+#include "Orders.h"
+#include "Map.h"
 
 using namespace std;
 namespace playerSpace{
@@ -15,23 +17,20 @@ class Player {
 
 public:
     Player();
-
-    Player(vector<string *> ters, Hand *hand/* vector<string *> cards*/, vector<string *> orders);
-
+    Player(vector<Territory*> ters, Hand* hand, OrderList* orders);
     Player(Player &p);
-
     ~Player();
-
     Player &operator=(const Player &rightSide);    // Assignment operator
-    vector<string *> toDefend();    // Type will be Territory*
-    vector<string *> toAttack();    // Type will be Territory*
-    Hand *hand;                      //User has a hand of cards
+    Hand* getHand();
+    OrderList* getOrders();
+    vector<Territory*> toDefend();
+    vector<Territory*> toAttack();
     void issueOrder();
 
 private:
-    vector<string *> ters;        // Type will be Territory*
-    //vector<string *> hands;        // Type will be hands*
-    vector<string *> orders;        // Type will be Orders*
+    vector<Territory*> ters;    // Vector of territories owned by the player
+    Hand* hand;                 // Hand of cards owned by the player
+    OrderList* orders;          // List of orders owned by the player
     friend std::ostream &operator<<(std::ostream &strm, const Player &p);
 };
 
