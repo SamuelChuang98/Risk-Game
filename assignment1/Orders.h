@@ -1,8 +1,8 @@
 #pragma once 
 #include <iostream>
 #include <fstream>
-#include <vector>
 #include <string>
+#include <vector>
 using namespace std;
 
 namespace orderSpace{
@@ -13,17 +13,11 @@ class Order
 public :
 	Order();
 	~Order();
-	//Order(const Order& O);//copy constructor
-	//Order& operator = (const Order &O);//assignment construtor
 	
-
-	//check of the order is valid 
 	void validate();
-	//execute method 
 	void execute();
-	
-	//set type of the subclass
-	void set_type_id(int num);
+
+	void set_id(int num);
 	string get_type();
 
 private :
@@ -31,10 +25,6 @@ private :
 	vector<string> vec_type1 = { "deploy", "advance", "bomb", "blockade", "airlift", "negotiate" };
 	int type_id;
 };
-
-
-//Note that the orders’ actions do not need to be implemented at this point.
-
 
 class Deploy : public Order 
 {
@@ -94,9 +84,8 @@ class OrderList
 public:
 	void set_order_list(Order* an_order);
 	vector<Order*>* get_order_list();
-	//delete an order
+
 	void delete_order(Order* oneOrder);
-	//move
 	void move(int position, int new_position);
 
 private:

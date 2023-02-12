@@ -1,47 +1,53 @@
 #include "Orders.h"
 
+//using namespace std;
 
+//int main() {
 int orderSpace::orderMain() {
+
     cout << "test OrderDriver...\n" << endl;
     OrderList ordersList;
 
-    Deploy aDeploy;
-    Advance anadvance;
-    Bomb abomb;
-    Blockade ablockade;
-    Airlift anairlift;
-    Negotiate anegotiate;
+    Deploy deploy;
+    Advance advance;
+    Bomb bomb;
+    Blockade blockade;
+    Airlift airlift;
+    Negotiate negotiate;
 
-    ordersList.set_order_list(&aDeploy);
-    ordersList.set_order_list(&anadvance);
-    ordersList.set_order_list(&abomb);
-    ordersList.set_order_list(&ablockade);
-    ordersList.set_order_list(&anairlift);
-    ordersList.set_order_list(&anegotiate);
+    ordersList.set_order_list(&deploy);
+    ordersList.set_order_list(&advance);
+    ordersList.set_order_list(&bomb);
+    ordersList.set_order_list(&blockade);
+    ordersList.set_order_list(&airlift);
+    ordersList.set_order_list(&negotiate);
+
+    int listSize = ordersList.get_order_list()->size();
 
 
-    //print orderlist
-    cout << "\n the orderlist contains: " << endl;
-    for (int i = 0; i < ordersList.get_order_list()->size(); i++) {
-        cout << "  " << ordersList.get_order_list()->at(i)->get_type() << endl;
-    }
-
-    //delete an order
-    ordersList.delete_order(&aDeploy);
-
-    //print orderlist
-    cout << "\n the orderlist contains: " << endl;
-    for (int i = 0; i < ordersList.get_order_list()->size(); i++) {
+    //print list
+    cout << "Printing OrderList... \n " << endl;
+    for (int i = 0; i < listSize; i++) {
         cout << "  " << ordersList.get_order_list()->at(i)->get_type() << endl;
     }
 
     //move an order
-    ordersList.move(0, 4);
-    //ordersList.move(0, 5);
-    ordersList.move(0, 8);//invalid
-    //print orderlist
-    cout << "\n the orderlist contains: " << endl;
-    for (int i = 0; i < ordersList.get_order_list()->size(); i++) {
+    cout << "Moving order in index 1 to index 2 \n" << endl;
+    ordersList.move(1, 2);
+
+    //print list
+    cout << "Printing OrderList... \n" << endl;
+    for (int i = 0; i < listSize; i++) {
+        cout << "  " << ordersList.get_order_list()->at(i)->get_type() << endl;
+    }
+
+    //Delete an order (bomb)
+    cout << "Deleting an order... \n" << endl;
+    ordersList.delete_order(&bomb);
+
+    //Print list
+    cout << "Printing OrderList ... \n" << endl;
+    for (int i = 0; i < listSize; i++) {
         cout << "  " << ordersList.get_order_list()->at(i)->get_type() << endl;
     }
 
