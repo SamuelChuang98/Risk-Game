@@ -107,7 +107,10 @@ std::string Territory::toString()
 // Map 
 
 // Default constructor 
-Map::Map() {}
+Map::Map() {
+    this -> territoryNum = 0;
+    this -> adjMatrix = NULL;
+}
 
 // Copy constructor
 Map::Map(Map &m)
@@ -116,6 +119,31 @@ Map::Map(Map &m)
 }
 
 // Parameterized constructor
+
+
+//Validate graph if connected or not
+bool Map::Validate() {
+    bool visited[territoryNum];
+    for (int j = 0; j < territoryNum; j++) {
+        memset(visited, false, sizeof(visited));
+        traverse(j, visited);
+        for (int i = 0; i < territoryNum; i++){
+            if (!visited[i]) return false;
+        }
+    }
+    return true;
+}
+
+//traverses a graph
+void Map::traverse(int j, bool visited[]) {
+    visited[j] = true;
+    for (int v = 0; v < territoryNum; v++){
+        if (adjMatrix[j][v] && !visited[v]){
+            traverse(v, visited);
+        }
+    }
+}
+
 
 
 // --------------------------------------------------------------------------------------------------------------
