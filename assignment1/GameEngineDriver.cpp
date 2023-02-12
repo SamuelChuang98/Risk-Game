@@ -1,19 +1,21 @@
 #include "GameEngine.h"
 
-int main()
+int GameEngineSpace::GameEngineMain()
 {
-	GameEngine game = GameEngine();
-	GameState s = GameState();
-	game.setState(&s);
-	string command = "play";
-	int playersCount = 0;
+	GameState s = GameState();	//creating a game state object
+	GameEngine game = GameEngine(&s, 0);	//creating a GameEngine object with GameState pointing at GameState s
+	string command = "play"; //command string that will be responsible to get the input from the user
+	int playersCount = 0;	//number of players in the game
 
 	cout << "welcome to warzone!!!\n" << endl;
 
+	//infinite loop responsible for running the game
 	while (true)
 	{
+		//print current state of the program
 		cout << "Current state: " << game.getState()->getGameState() << "\n---------------------\nAvailable commands:" << endl;
 
+		//print the available commands depending on the state of the program
 		if (game.getState()->getGameState() == "start")
 		{
 			cout << " - load map" << endl;
@@ -47,11 +49,15 @@ int main()
 			cout << " - play\n - end" << endl;
 		}
 
+		//ask the user to enter a command
 		cout << "Enter a command: ";
 		getline(cin, command);
 		cout << endl;
+		//convert the command to lower case
 		transform(command.begin(), command.end(), command.begin(), ::tolower);
 
+		//transition the state of the program depending on the command that the user entered
+		//if the user entered a command that does not exist, the program will not transition and print an error and ask the user to enter a valid command
 		if (command == "load map" || command == "loadmap")
 		{
 			game.loadMap();
@@ -63,12 +69,15 @@ int main()
 		else if (command == "add player" || command == "addplayer")
 		{
 			try {
+				//ask the user to enter the number of players
 				cout << "Enter the number of players (2-6 players): " << endl;
 				cin >> playersCount;
 
+				//clear the input buffer to allow the program to accept multiple inputs
 				cin.clear();
 				cin.ignore(numeric_limits<int>::max(), '\n');
 
+				//print an error if the user enter an invalid number
 				if (playersCount > 6 || playersCount < 2)
 				{
 					cout << "ERROR: please enter a valid number" << endl;
@@ -76,6 +85,7 @@ int main()
 				else
 				{
 					game.addPlayer(playersCount);
+					
 				}
 			}
 			catch (exception e)
@@ -111,9 +121,11 @@ int main()
 		{
 			game.play();
 		}
-		else if (command == "end")
+		else if (command == "end" && game.getState()->getGameState() == "win")
 		{
 			game.end();
+			//break out of the infinite loop and terminate the program
+			break;
 		}
 		else
 		{
