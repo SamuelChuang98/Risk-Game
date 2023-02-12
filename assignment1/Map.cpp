@@ -6,6 +6,9 @@
 
 using namespace std;
 
+// --------------------------------------------------------------------------------------------------------------
+// Territory
+
 // Default constructor
 Territory::Territory() {} 
 
@@ -28,7 +31,14 @@ Territory::Territory(string territoryName, string continent, /* Player* playerNa
 }
 
 // Territory assignment operator
-
+Territory &Territory::operator= (const Territory &t)
+{
+    this->territoryName = t.territoryName;
+    this->continent = t.continent;
+    // this->playerName = t.playerName;
+    this->numberOfArmies = t.numberOfArmies;
+    return *this;
+}
 
 // Territory stream insertion operator
 
@@ -92,3 +102,22 @@ std::string Territory::toString()
 {
     return getTerritoryName() + " " + getContinent() + " " + to_string(getNumberOfArmies());
 }
+
+// --------------------------------------------------------------------------------------------------------------
+// Map 
+
+// Default constructor 
+Map::Map() {}
+
+// Copy constructor
+Map::Map(Map &m)
+{
+
+}
+
+// Parameterized constructor
+
+
+// --------------------------------------------------------------------------------------------------------------
+// MapLoader 
+
