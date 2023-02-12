@@ -1,5 +1,3 @@
-#pragma once
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -118,6 +116,10 @@ class MapLoader
         // Mutator
         void setFileName(string* fileName);    
 
-        bool read();
+        bool read(); // Check if file is valid
+
+        void getTerritoriesFromFile(); // Get the territories from valid files
+
+
 
 };
