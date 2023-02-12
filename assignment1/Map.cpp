@@ -8,72 +8,69 @@
 using namespace std;
 
 // --------------------------------------------------------------------------------------------------------------
-// PLAYER
+// Player (temporary)
 
-//default constructor
+// default constructor
 Player::Player() {
     this->name = "No Name";
 }
 
-//Parameterized constructor
-Player::Player(string pname) {
-    this->name = pname;
-}
-
-//copy constructor
+// copy constructor
 Player::Player(const Player &player) {
     this->name = player.name;
 }
 
-//Player assignment operator
-Player& Player::operator=(const Player& player)
+// Parameterized constructor
+Player::Player(string pname) {
+    this->name = pname;
+}
+
+// Assignment operator
+Player &Player::operator=(const Player &player)
 {
     this->name = player.name;
     return *this;
 }
 
-//destructor
-Player::~Player() {
+// Destructor
+Player::~Player() {}
 
-}
-
-//player name accessor
+// Accessor
 string Player::getName() {
     return this->name;
 }
 
-//player name mutator
+// Mutator
 void Player::setName(string pname) {
     this->name = pname;
 }
 
 // --------------------------------------------------------------------------------------------------------------
-// TERRITORY
+// Territory
 
 // Default constructor
 Territory::Territory() {
     this->territoryName = "None";
     this->continent = "None";
     this->numberOfArmies = 0;
-    this->owner = new Player();
-} 
+    this->playerName = new Player();
+}  
 
 // Copy constructor
 Territory::Territory(Territory &t)
 {
     this->territoryName = t.territoryName;
     this->continent = t.continent;
-    // this->playerName = t.playerName;
-    this->numberOfArmies = t.numberOfArmies;
-    this->owner = t.owner;
+    this->playerName = t.playerName;
+    this->numberOfArmies = t.numberOfArmies;    
 }
 
 // Parameterized constructor
-Territory::Territory(string territoryName, string continent, /* Player* playerName */ int numberOfArmies)
+Territory::Territory(string territoryName, string continent, Player* playerName, int numberOfArmies)
 {
     this->territoryName = territoryName;
     this->continent = continent;
-//  this->playerName = playerName;
+    this->playerName = playerName;
     this->numberOfArmies = numberOfArmies;
 }
 
@@ -82,71 +79,35 @@ Territory &Territory::operator= (const Territory &t)
 {
     this->territoryName = t.territoryName;
     this->continent = t.continent;
-    // this->playerName = t.playerName;
+    this->playerName = t.playerName;
     this->numberOfArmies = t.numberOfArmies;
     return *this;
 }
 
 // Territory stream insertion operator
 std::ostream &operator<<(ostream &os, const Territory &t) {
-    return os << "Territory(" << t.territoryName << t.continent << /*t.playerName*/ t.numberOfArmies << ")";
+    return os << "Territory(" << t.territoryName << t.continent << t.playerName << t.numberOfArmies << ")";
 }
 
 // Territory destructor
 Territory::~Territory()
 {
-    // delete playerName;
+    delete playerName;
     // playerName.clear();
-    // playerName = NULL;
+    playerName = NULL;
 }
 
 // Territory accessors
-
-string Territory::getTerritoryName()
-{
-    return territoryName;
-}
-
-string Territory::getContinent()
-{
-    return continent;
-}
-
-/*
-Player* Territory::getPlayerName()
-{
-    return playerName;
-}
-*/
-
-int Territory::getNumberOfArmies()
-{
-    return numberOfArmies;
-}
+string Territory::getTerritoryName() { return territoryName; }
+string Territory::getContinent() { return continent; }
+Player* Territory::getPlayerName() { return playerName; }
+int Territory::getNumberOfArmies() { return numberOfArmies; }
 
 // Territory mutators
-
-void Territory::setTerritoryName(string newTerritoryName)
-{
-    this->territoryName = newTerritoryName;
-}
-
-void Territory::setContinent(string newContinent)
-{
-    this->continent = newContinent;
-}
-
-/*
-void Territory::setPlayerName(Player* newPlayerName)
-{
-    this->playerName = newPlayerName;
-}
-*/
-
-void Territory::setNumberOfArmies(int newArmyCount)
-{
-    this->numberOfArmies = newArmyCount;
-}
+void Territory::setTerritoryName(string newTerritoryName) { this->territoryName = newTerritoryName; }
+void Territory::setContinent(string newContinent) { this->continent = newContinent; }
+void Territory::setPlayerName(Player* newPlayerName) { this->playerName = newPlayerName; }
+void Territory::setNumberOfArmies(int newArmyCount) { this->numberOfArmies = newArmyCount; }
 
 // Territory toString() method
 std::string Territory::toString()  
@@ -159,35 +120,64 @@ std::string Territory::toString()
 
 // Default constructor 
 Map::Map() {
-    this -> territoryNum = 0;
-    this -> adjMatrix = NULL;
+    this->territoryNumber = 0;
+    // this->adjMatrix = NULL;
 }
 
 // Copy constructor
 Map::Map(const Map &m) {
-    this->territoryNum = m.territoryNum;
-    this->adjMatrix = new bool[territoryNum * territoryNum];
-    for (int i = 0; i < territoryNum * territoryNum; i++)
-        this->adjMatrix[i] = m.adjMatrix[i];
+    this->territoryNumber = m.territoryNumber;
+    // this->adjMatrix = new bool[territoryNum * territoryNum];
+    // for (int i = 0; i < territoryNum * territoryNum; i++)
+    //     this->adjMatrix[i] = m.adjMatrix[i];
 }
-
 
 // Parameterized constructor
-Map::Map(int territoryNum) {
-    this->territoryNum = territoryNum;
-    adjMatrix = new bool* [territoryNum];
-    for (int i = 0; i < territoryNum; i++)
-        adjMatrix[i] = new bool[territoryNum]{false};
+Map::Map(int territoryNumber) {
+    this->territoryNumber = territoryNumber;
+    // adjMatrix = new bool* [territoryNumber];
+    // for (int i = 0; i < territoryNumber; i++)
+    //     adjMatrix[i] = new bool[territoryNumber]{false};
 }
 
+// Assignment operator
+Map &Map::operator= (const Map &m)
+{
+    this->territoryNumber = m.territoryNumber;
+    return *this;
+}
 
-//Validate graph
+// Stream insertion operator
+std::ostream& operator<<(std::ostream& strm, const Map& m)
+{
+    return strm << "Map(" << m.territoryNumber << ")";
+}
+
+// Destructor
+Map::~Map()
+{
+
+}
+
+// Method to add an edge 
+void addEdge(int i, int j)
+{
+
+}
+
+// Method to remove an edge
+void removeEdge(int i, int j)
+{
+
+}
+
+//Validate graph 
 bool Map::Validate() {
-    bool visited[territoryNum];
-    for (int j = 0; j < territoryNum; j++) {
-        memset(visited, false, sizeof(visited));
-        traverse(j, visited);
-        for (int i = 0; i < territoryNum; i++){
+    bool visited[territoryNumber];
+    for (int j = 0; j < territoryNumber; j++) {
+        // memset(visited, 0, sizeof(visited));W
+        Traverse(j, visited);
+        for (int i = 0; i < territoryNumber; i++){
             if (!visited[i]) return false;
         }
     }
@@ -195,11 +185,11 @@ bool Map::Validate() {
 }
 
 //traverses a graph
-void Map::traverse(int j, bool visited[]) {
+void Map::Traverse(int j, bool visited[]) {
     visited[j] = true;
-    for (int v = 0; v < territoryNum; v++){
-        if (adjMatrix[j][v] && !visited[v]){
-            traverse(v, visited);
+    for (int v = 0; v < territoryNumber; v++){
+        if (/*adjMatrix[j][v] && */ !visited[v]){
+            Traverse(v, visited);
         }
     }
 }
@@ -208,9 +198,7 @@ void Map::traverse(int j, bool visited[]) {
 // MapLoader 
 
 // Default constructor
-MapLoader::MapLoader()
-{
-}
+MapLoader::MapLoader() {}
 
 // Copy constructor
 MapLoader::MapLoader(const MapLoader& m)
@@ -224,26 +212,32 @@ MapLoader::MapLoader(string* fileName)
     this->fileName = fileName;
 }
 
-MapLoader& MapLoader::operator=(const MapLoader& m)
+// Assignment operator
+MapLoader &MapLoader::operator= (const MapLoader& mL)
 {
-    this->fileName = m.fileName;
+    this->fileName = mL.fileName;
+    return *this;
 }
 
+// Destructor
 MapLoader::~MapLoader()
 {
     delete fileName;
 }
 
+// Accessor
 string* MapLoader::getFileName()
 {
     return this->fileName;
 }
 
+// Mutator
 void MapLoader::setFileName(string* fileName)
 {
     this->fileName = fileName;
 }
 
+//
 bool MapLoader::read()
 {
     std::ifstream in;
@@ -253,15 +247,14 @@ bool MapLoader::read()
 
     }
 
-
     in.close();
 
     return false;
 }
 
-std::ostream& operator<<(std::ostream& strm, const MapLoader& m)
+// Stream assignment operator
+std::ostream& operator<<(std::ostream& strm, const MapLoader& mL)
 {
-    return strm << "MapLoader(" << m.fileName << ")";
+    return strm << "MapLoader(" << mL.fileName << ")";
 }
-
 
