@@ -11,37 +11,37 @@ using namespace std;
 // Player (temporary)
 
 // default constructor
-Player::Player() {
+TemporaryPlayer::TemporaryPlayer() {
     this->name = "No Name";
 }
 
 // copy constructor
-Player::Player(const Player &player) {
-    this->name = player.name;
+TemporaryPlayer::TemporaryPlayer(const TemporaryPlayer &TemporaryPlayer) {
+    this->name = TemporaryPlayer.name;
 }
 
 // Parameterized constructor
-Player::Player(string pname) {
+TemporaryPlayer::TemporaryPlayer(string pname) {
     this->name = pname;
 }
 
 // Assignment operator
-Player &Player::operator=(const Player &player)
+TemporaryPlayer &TemporaryPlayer::operator=(const TemporaryPlayer &TemporaryPlayer)
 {
-    this->name = player.name;
+    this->name = TemporaryPlayer.name;
     return *this;
 }
 
 // Destructor
-Player::~Player() {}
+TemporaryPlayer::~TemporaryPlayer() {}
 
 // Accessor
-string Player::getName() {
+string TemporaryPlayer::getName() {
     return this->name;
 }
 
 // Mutator
-void Player::setName(string pname) {
+void TemporaryPlayer::setName(string pname) {
     this->name = pname;
 }
 
@@ -53,7 +53,7 @@ Territory::Territory() {
     this->territoryName = "None";
     this->continent = "None";
     this->numberOfArmies = 0;
-    this->playerName = new Player();
+    this->playerName = new TemporaryPlayer();
 }  
 
 // Copy constructor
@@ -66,7 +66,7 @@ Territory::Territory(Territory &t)
 }
 
 // Parameterized constructor
-Territory::Territory(string territoryName, string continent, Player* playerName, int numberOfArmies)
+Territory::Territory(string territoryName, string continent, TemporaryPlayer* playerName, int numberOfArmies)
 {
     this->territoryName = territoryName;
     this->continent = continent;
@@ -100,13 +100,13 @@ Territory::~Territory()
 // Territory accessors
 string Territory::getTerritoryName() { return territoryName; }
 string Territory::getContinent() { return continent; }
-Player* Territory::getPlayerName() { return playerName; }
+TemporaryPlayer* Territory::getPlayerName() { return playerName; }
 int Territory::getNumberOfArmies() { return numberOfArmies; }
 
 // Territory mutators
 void Territory::setTerritoryName(string newTerritoryName) { this->territoryName = newTerritoryName; }
 void Territory::setContinent(string newContinent) { this->continent = newContinent; }
-void Territory::setPlayerName(Player* newPlayerName) { this->playerName = newPlayerName; }
+void Territory::setPlayerName(TemporaryPlayer* newPlayerName) { this->playerName = newPlayerName; }
 void Territory::setNumberOfArmies(int newArmyCount) { this->numberOfArmies = newArmyCount; }
 
 // Territory toString() method
@@ -162,20 +162,21 @@ Map::~Map()
 // Method to add an edge 
 void addEdge(int i, int j)
 {
-
+    // adjMatrix[i][j] = 1;
+    // adjMatrix[j][i] = 1;
 }
 
 // Method to remove an edge
 void removeEdge(int i, int j)
 {
-
+    
 }
 
 // Validates graph 
 bool Map::Validate() {
     bool visited[territoryNumber];
     for (int j = 0; j < territoryNumber; j++) {
-        // memset(visited, 0, sizeof(visited));W
+        // memset(visited, false, sizeof(visited));
         Traverse(j, visited);
         for (int i = 0; i < territoryNumber; i++){
             if (!visited[i]) return false;
@@ -188,7 +189,7 @@ bool Map::Validate() {
 void Map::Traverse(int j, bool visited[]) {
     visited[j] = true;
     for (int v = 0; v < territoryNumber; v++){
-        if (/*adjMatrix[j][v] && */ !visited[v]){
+        if (adjMatrix[j][v] && !visited[v]){
             Traverse(v, visited);
         }
     }
@@ -340,7 +341,7 @@ bool MapLoader::read()
     return valid;
 }
 
-//
+// Fetch territories list in a .map file
 void MapLoader::getTerritoriesFromFile() 
 {
     string line;

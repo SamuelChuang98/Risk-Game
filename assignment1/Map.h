@@ -9,18 +9,18 @@ namespace mapSpace{
 }
 
 // Temporary Player class
-class Player
+class TemporaryPlayer
 {
     private:
         // Private data member
         string name;
 
     public:
-        Player();                               // Default constructor
-        Player(const Player &p);                // Copy constructor
-        Player(string pname);                   // Parameterized constructor
-        Player &operator= (const Player &p);    // Assignment operator
-        ~Player();                              // Destructor
+        TemporaryPlayer();                               // Default constructor
+        TemporaryPlayer(const TemporaryPlayer &p);                // Copy constructor
+        TemporaryPlayer(string pname);                   // Parameterized constructor
+        TemporaryPlayer &operator= (const TemporaryPlayer &p);    // Assignment operator
+        ~TemporaryPlayer();                              // Destructor
 
         // Accessor
         string getName();
@@ -35,7 +35,7 @@ class Territory
         // Private data members
         string territoryName;
         string continent;
-        Player* playerName;
+        TemporaryPlayer* playerName;
         int numberOfArmies;
 
         // stream insertion operator
@@ -44,20 +44,20 @@ class Territory
     public:
         Territory();                                                                                     // Default constructor
         Territory(Territory &territory);                                                                 // Copy constructor
-        Territory(string territoryName, string continent, Player* playerName, int numberOfArmies);       // Parameterized constructor
+        Territory(string territoryName, string continent, TemporaryPlayer* playerName, int numberOfArmies);       // Parameterized constructor
         Territory &operator= (const Territory &t);                                                       // Assignment operator
         ~Territory();                                                                                    // Destructor
 
         // Accessors
         string getTerritoryName();
         string getContinent();
-        Player* getPlayerName();
+        TemporaryPlayer* getPlayerName();
         int getNumberOfArmies();
             
         // Mutators
         void setTerritoryName(string newName);
         void setContinent(string newContinent);
-        void setPlayerName(Player* newPlayerName);
+        void setPlayerName(TemporaryPlayer* newPlayerName);
         void setNumberOfArmies(int newArmyCount);
 
         // toString() method
@@ -69,6 +69,7 @@ class Map
     private:
         // Private data members
         int territoryNumber;
+        std::vector<std::vector<int>> adjMatrix;
 
         // Stream insertion operator
         friend std::ostream &operator<<(std::ostream &os, const Map &m); 
@@ -102,8 +103,8 @@ class MapLoader
        vector<string*> continents;
        vector<Territory*> territories;
 
-       // Stream insertion operator
-       friend std::ostream& operator<<(std::ostream& strm, const MapLoader& mL);
+        // Stream insertion operator
+        friend std::ostream& operator<<(std::ostream& strm, const MapLoader& mL);
 
     public:
         MapLoader();                                // Default constructor
@@ -121,7 +122,5 @@ class MapLoader
         bool read(); // Check if file is valid
 
         void getTerritoriesFromFile(); // Get the territories from valid files
-
-
 
 };

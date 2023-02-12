@@ -9,8 +9,8 @@ int mapSpace::mapMain()
 {
 
     // Create Players
-    Player* player1 = new Player("Alex");
-    Player* player2 = new Player("Samuel");
+    TemporaryPlayer* player1 = new TemporaryPlayer("Alex");
+    TemporaryPlayer* player2 = new TemporaryPlayer("Samuel");
 
     //------------------------------------------------------------------------------------
     // Territory class tests
