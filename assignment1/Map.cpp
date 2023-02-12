@@ -41,12 +41,16 @@ Territory &Territory::operator= (const Territory &t)
 }
 
 // Territory stream insertion operator
+std::ostream &operator<<(ostream &os, const Territory &t) {
+    return os << "Territory(" << t.territoryName << t.continent << /*t.playerName*/ t.numberOfArmies << ")";
+}
 
-
-// Territory Destructor
+// Territory destructor
 Territory::~Territory()
 {
-
+    // delete playerName;
+    // playerName.clear();
+    // playerName = NULL;
 }
 
 // Territory accessors
@@ -143,8 +147,6 @@ void Map::traverse(int j, bool visited[]) {
         }
     }
 }
-
-
 
 // --------------------------------------------------------------------------------------------------------------
 // MapLoader 

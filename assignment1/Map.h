@@ -3,6 +3,9 @@
 #include <vector>
 
 using namespace std;
+namespace mapSpace{
+    int mapMain();
+}
 
 class Territory 
 {
@@ -14,6 +17,7 @@ class Territory
         int numberOfArmies;
 
         // stream insertion operator
+        friend std::ostream &operator<<(std::ostream &os, const Territory &t); 
 
     public:
         Territory();                                                                                     // Default constructor
@@ -40,9 +44,12 @@ class Territory
 
 class Map
 {
-    // Private data members
     private:
-    
+        // Private data members
+        
+
+        // Stream insertion operator
+
 
     public:
         Map();                          // Default constructor

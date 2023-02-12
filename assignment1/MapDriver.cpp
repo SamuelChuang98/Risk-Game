@@ -7,7 +7,7 @@
 using namespace std;
 
 // Tests
-int main() 
+int mapSpace::mapMain() 
 {
     Territory t = {"Canada", "NA", 6};
     cout << t.toString() + "\n";
