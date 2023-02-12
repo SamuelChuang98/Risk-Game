@@ -14,16 +14,22 @@ GameState::GameState(const GameState& _GameState)
 	gameState = string(_GameState.gameState);
 }
 
-//GameState deconstructor
-GameState::~GameState() 
+//output stream operator for GameState
+ostream& operator<<(ostream& out, const GameState& _GameState)
 {
+	return out << "Current state: " << _GameState.gameState << "\n---------------------" << endl;
+}
 
+//GameState deconstructor
+GameState::~GameState()
+{
+	
 }
 
 //start state
 void GameState::start()
 {
-	
+
 }
 
 //map loaded state
@@ -77,6 +83,12 @@ void GameState::setGameState(string _gameState) //need to make this a deep copy
 //gameState accessor
 string GameState::getGameState() {
 	return gameState;
+}
+
+//GameState assignment operator (shallow copy)
+GameState& GameState::operator=(const GameState& _GameState) {
+	gameState = _GameState.gameState;
+	return *this;
 }
 
 //================================================================================================================================
@@ -309,4 +321,52 @@ void GameEngine::setPlayers(int _players)
 int GameEngine::getPlayers()
 {
 	return players;
+}
+
+//output stream operator for GameEngine
+ostream& operator<<(ostream& out, const GameEngine& _GameEngine) {
+	//print current state
+	cout << *_GameEngine.state;
+
+	cout << "Available commands : " << endl;
+	//print the available commands depending on the state of the program
+	if (_GameEngine.state->getGameState() == "start")
+	{
+		return out << " - load map" << endl;
+	}
+	else if (_GameEngine.state->getGameState() == "mapLoaded")
+	{
+		return out << " - load map\n - validate map" << endl;
+	}
+	else if (_GameEngine.state->getGameState() == "mapValidated")
+	{
+		return out << " - add player" << endl;
+	}
+	else if (_GameEngine.state->getGameState() == "playersAdded")
+	{
+		return out << " - add player\n - assign countries" << endl;
+	}
+	else if (_GameEngine.state->getGameState() == "assignReinforcement")
+	{
+		return out << " - issue order" << endl;
+	}
+	else if (_GameEngine.state->getGameState() == "issueOrders")
+	{
+		return out << " - issue order\n - end issue orders" << endl;
+	}
+	else if (_GameEngine.state->getGameState() == "executeOrders")
+	{
+		return out << " - execute order\n - end execute orders\n - win" << endl;
+	}
+	else if (_GameEngine.state->getGameState() == "win")
+	{
+		return out << " - play\n - end" << endl;
+	}
+}
+
+//GameEngine assignment operator (shallow copy)
+GameEngine& GameEngine::operator=(const GameEngine& _GameEngine) {
+	state = _GameEngine.state;
+	players = _GameEngine.players;
+	return *this;
 }

@@ -12,42 +12,8 @@ int GameEngineSpace::GameEngineMain()
 	//infinite loop responsible for running the game
 	while (true)
 	{
-		//print current state of the program
-		cout << "Current state: " << game.getState()->getGameState() << "\n---------------------\nAvailable commands:" << endl;
-
-		//print the available commands depending on the state of the program
-		if (game.getState()->getGameState() == "start")
-		{
-			cout << " - load map" << endl;
-		}
-		else if (game.getState()->getGameState() == "mapLoaded")
-		{
-			cout << " - load map\n - validate map" << endl;
-		}
-		else if (game.getState()->getGameState() == "mapValidated")
-		{
-			cout << " - add player" << endl;
-		}
-		else if (game.getState()->getGameState() == "playersAdded")
-		{
-			cout << " - add player\n - assign countries" << endl;
-		}
-		else if (game.getState()->getGameState() == "assignReinforcement")
-		{
-			cout << " - issue order" << endl;
-		}
-		else if (game.getState()->getGameState() == "issueOrders")
-		{
-			cout << " - issue order\n - end issue orders" << endl;
-		}
-		else if (game.getState()->getGameState() == "executeOrders")
-		{
-			cout << " - execute order\n - end execute orders\n - win" << endl;
-		}
-		else if (game.getState()->getGameState() == "win")
-		{
-			cout << " - play\n - end" << endl;
-		}
+		//print all informations about the game
+		cout << game;
 
 		//ask the user to enter a command
 		cout << "Enter a command: ";
@@ -68,25 +34,30 @@ int GameEngineSpace::GameEngineMain()
 		}
 		else if (command == "add player" || command == "addplayer")
 		{
-			try {
-				//ask the user to enter the number of players
-				cout << "Enter the number of players (2-6 players): " << endl;
-				cin >> playersCount;
+			//creating a temporary string
+			string temp = "";
+			//ask the user to enter the number of players
+			cout << "Enter the number of players (2-6 players): " << endl;
+			cin >> temp;
 
-				//clear the input buffer to allow the program to accept multiple inputs
-				cin.clear();
-				cin.ignore(numeric_limits<int>::max(), '\n');
-
-				//print an error if the user enter an invalid number
+			//clear the input buffer to allow the program to accept multiple inputs
+			cin.clear();
+			cin.ignore(numeric_limits<int>::max(), '\n');
+			
+			try
+			{
+				
+				if (temp.length() > 1)
+				{
+					throw exception();
+				}
+				playersCount = stoi(temp);
+				//check if number between 2 and 6
 				if (playersCount > 6 || playersCount < 2)
 				{
-					cout << "ERROR: please enter a valid number" << endl;
+					throw exception();
 				}
-				else
-				{
-					game.addPlayer(playersCount);
-					
-				}
+				game.addPlayer(playersCount);
 			}
 			catch (exception e)
 			{
@@ -131,7 +102,7 @@ int GameEngineSpace::GameEngineMain()
 		{
 			cout << "ERROR: command '" << command << "' does not exist\nPlease choose one of the available commands\n" << endl;
 		}
-		cout << "========================================" << endl;
+		cout << "========================================" << game.getPlayers()<< endl;
 	}
 	return 0;
 }
