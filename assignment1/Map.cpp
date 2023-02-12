@@ -127,8 +127,8 @@ Map::Map() {
 // Copy constructor
 Map::Map(const Map &m) {
     this->territoryNumber = m.territoryNumber;
-    // this->adjMatrix = new bool[territoryNum * territoryNum];
-    // for (int i = 0; i < territoryNum * territoryNum; i++)
+    // this->adjMatrix = new bool[territoryNumber * territoryNumber];
+    // for (int i = 0; i < territoryNumber * territoryNumber; i++)
     //     this->adjMatrix[i] = m.adjMatrix[i];
 }
 
@@ -137,7 +137,7 @@ Map::Map(int territoryNumber) {
     this->territoryNumber = territoryNumber;
     // adjMatrix = new bool* [territoryNumber];
     // for (int i = 0; i < territoryNumber; i++)
-    //     adjMatrix[i] = new bool[territoryNumber]{false};
+    // adjMatrix[i] = new bool[territoryNumber]{false};
 }
 
 // Assignment operator
@@ -171,7 +171,7 @@ void removeEdge(int i, int j)
 
 }
 
-//Validate graph 
+// Validates graph 
 bool Map::Validate() {
     bool visited[territoryNumber];
     for (int j = 0; j < territoryNumber; j++) {
@@ -184,7 +184,7 @@ bool Map::Validate() {
     return true;
 }
 
-//traverses a graph
+// Traverses a graph
 void Map::Traverse(int j, bool visited[]) {
     visited[j] = true;
     for (int v = 0; v < territoryNumber; v++){
@@ -237,19 +237,45 @@ void MapLoader::setFileName(string* fileName)
     this->fileName = fileName;
 }
 
-//
+// Validate File
 bool MapLoader::read()
 {
     std::ifstream in;
     in.open(*fileName);
+    bool valid = false;
+    string line;
+    getline(in, line);
 
-    while (in.good()) {
-
+    // Check if file contains countries (territories)
+    while(!in.eof()) {
+        if(line.find("countries") != string::npos) {
+            valid = true;
+            cout << "Valid File";
+            return valid;
+        }
     }
 
-    in.close();
+    // Exit if file is invalid
+    if(!valid) {
+        cout << "Invalid File";
+        exit(0);
+    }
 
-    return false;
+    return valid;
+}
+
+//
+void MapLoader::getTerritoriesFromFile() 
+{
+    string line;
+    std::ifstream in;
+    in.open(*fileName);
+
+    getline(in, line);
+
+    while(!in.eof()) {
+        
+    }
 }
 
 // Stream assignment operator
@@ -257,4 +283,3 @@ std::ostream& operator<<(std::ostream& strm, const MapLoader& mL)
 {
     return strm << "MapLoader(" << mL.fileName << ")";
 }
-
