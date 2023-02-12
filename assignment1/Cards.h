@@ -9,6 +9,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <random>
+
 using namespace std;
 
 enum cardType {
@@ -19,48 +20,76 @@ namespace cardSpace {
 }
 class Cards {
 private:
-    cardType type;
+    cardType *type;
 public:
+    //Default constructor
     Cards();
 
-    explicit Cards(cardType theType);
+    //copy constructor
+    Cards(Cards &card);
 
+    //param constructor
+    Cards(cardType *theType);
+
+    //destructor
+    ~Cards();
+
+    //getter
     cardType getType();
 
-    void setType(cardType theType);
+    void setType(cardType &theType);
 
     void play(); // To implement using orders
     void printCard();
-
-    bool equals(Cards card);
 
 };
 
 class Hand {
 private:
-    std::vector<Cards> cards;
+    std::vector<Cards *> cards;
 public:
+    //Default constructor
     Hand();
+    //copy constructor
+    Hand(Hand &hand);
+    //destructor
+    ~Hand();
+    /*
+     * represents the action of drawing a card from the deck and putting it in a players hand
+     * uses Cards parameterized constructor to push a new card on to the vector stack cards
+     * then prints out the cardType
+     */
+    void addToHand(Cards &card);
 
-    void addToHand(Cards card);
-
-    Cards remFromHand(int i);
-
-    bool isEmpty();
+    /*
+     * represents the action of removing a card from the players hand.
+    * removes first instance of chosen card from hand and returns it.
+    *
+    */
+    Cards &remFromHand(int i);
 
     void printHand();
 };
 
 class Deck {
 private:
-    std::vector<Cards> cards;
+    std::vector<Cards *> cards;
 public:
+    //default constructor
     Deck();
-
-    Cards draw();
+    //copy constructor
+    Deck(Deck &deck);
+    //destructor
+    ~Deck();
+    /*
+     * represents the action of picking up a card from the deck and returning it,
+     * initializes a pointer using Cards copy constructor of a card at the random position
+     * of the current deck size from cards vector, then erases it and returns the copied card
+     */
+    Cards *draw();
 
     bool isEmpty();
-
+    //print contents of deck
     void printDeck();
 };
 
