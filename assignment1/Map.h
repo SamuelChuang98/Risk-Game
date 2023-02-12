@@ -57,21 +57,25 @@ class MapLoader
 {
     private:
        // Private data member 
-       string fileName;
+       string* fileName;
 
        // Stream insertion operator
+       friend std::ostream& operator<<(std::ostream& strm, const MapLoader& m);
+
 
     public:
         MapLoader();                                    // Default constructor
-        MapLoader(const MapLoader &MapLoader);          // Copy constructor
-        MapLoader(string fileName);                     // Parameterized constructor
-        MapLoader &operator= (const Map &MapLoader);    // Assignment operator
+        MapLoader(const MapLoader &m);          // Copy constructor
+        MapLoader(string* fileName);                     // Parameterized constructor
+        MapLoader &operator= (const MapLoader &m);    // Assignment operator
         ~MapLoader();                                   // Destructor
 
         // Accessor
-        string getFileName();
+        string* getFileName();
 
         // Mutator
-        void setFileName(string fileName);    
+        void setFileName(string* fileName);    
+
+        bool read();
 
 };

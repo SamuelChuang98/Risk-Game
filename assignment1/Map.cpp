@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
 
 #include "Map.h"
 
@@ -148,4 +149,62 @@ void Map::traverse(int j, bool visited[]) {
 
 // --------------------------------------------------------------------------------------------------------------
 // MapLoader 
+
+// Default constructor
+MapLoader::MapLoader()
+{
+}
+
+// Copy constructor
+MapLoader::MapLoader(const MapLoader& m)
+{
+    this->fileName = new string(*m.fileName);
+}
+
+// Param. constructor
+MapLoader::MapLoader(string* fileName)
+{
+    this->fileName = fileName;
+}
+
+MapLoader& MapLoader::operator=(const MapLoader& m)
+{
+    this->fileName = m.fileName;
+}
+
+MapLoader::~MapLoader()
+{
+    delete fileName;
+}
+
+string* MapLoader::getFileName()
+{
+    return this->fileName;
+}
+
+void MapLoader::setFileName(string* fileName)
+{
+    this->fileName = fileName;
+}
+
+bool MapLoader::read()
+{
+    std::ifstream in;
+    in.open(*fileName);
+
+    while (in.good()) {
+
+    }
+
+
+    in.close();
+
+    return false;
+}
+
+std::ostream& operator<<(std::ostream& strm, const MapLoader& m)
+{
+    return strm << "MapLoader(" << m.fileName << ")";
+}
+
 

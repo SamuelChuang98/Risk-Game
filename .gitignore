@@ -3,3 +3,9 @@
 ################################################################################
 
 /.vs
+/x64/Debug
+/CppProperties.json
+/comp345.vcxproj.user
+/comp345.vcxproj.filters
+/comp345.vcxproj
+/comp345.sln
