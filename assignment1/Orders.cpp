@@ -3,65 +3,53 @@
 using std::cout;
 using std::endl;
 
-//Order&Order ::operator = (const Order&O)
-//{
-//	
-//}
+Order::Order(){}
+Order::~Order(){}
 
-Order::Order()
-{
-}
-
-Order::~Order()
-{
-}
-//Order::Order(const Order& O) 
-//{
-//	this->vec_type1 = *new vector<string>(O.vec_type1);
-//	this->type_id = new string(*(O.type_id));
-//}
+//This validates the order
 void Order::validate()
 {
-	cout << "validate if the order is valid" << endl;
+	cout << "Validating order..." << endl;
 	valid = true;
 }
 
+//This executes the order
 void Order::execute()
 {
 	if (valid) {
-		cout << "executes the action..." << endl;
+		cout << "Executing order..." << endl;
 	}
 }
 
-void Order::set_type_id(int num)
+//This sets the type id
+void Order::set_id(int num)
 {
 	type_id = num;
 }
 
+//This returns the type of the Order
 string Order::get_type()
 {
 	return vec_type1.at(type_id);
 }
 
-
-
-
-
-void OrderList::set_order_list(Order* an_order)
+//This function adds an order to the Order List
+void OrderList::set_order_list(Order* anOrder)
 {
-	vec_order_list.push_back(an_order); //add an order
+	vec_order_list.push_back(anOrder);
 }
 
+//This returns the order list
 vector<Order*>* OrderList::get_order_list()
 {
 	return &vec_order_list;
 }
 
-void OrderList::delete_order(Order* oneOrder)
+//This deletes an order
+void OrderList::delete_order(Order* delOrder)
 {
 	for (int i = 0; i < vec_order_list.size(); i++) {
-		if (oneOrder->get_type() == vec_order_list.at(i)->get_type()) {
-			cout << "  deleting the order: " << oneOrder->get_type() << endl;
+		if (delOrder->get_type() == vec_order_list.at(i)->get_type()) {
 			vec_order_list.erase(vec_order_list.begin() + i);
 			
 			return;
@@ -69,32 +57,33 @@ void OrderList::delete_order(Order* oneOrder)
 	}
 }
 
-void OrderList::move(int position, int new_position)
+//This moves a position from its current to a new position
+void OrderList::move(int position, int newPosition)
 {
-	if (position >= 0 && position < vec_order_list.size() && new_position >= 0 && new_position < vec_order_list.size())
+
+	int listSize = vec_order_list.size();
+
+	if (position >= 0 && position < listSize && newPosition >= 0 && newPosition < listSize )
 	{
-		vec_order_list.insert(vec_order_list.begin() + new_position, vec_order_list.at(position));
+		vec_order_list.insert(vec_order_list.begin() + newPosition, vec_order_list.at(position));
 		vec_order_list.erase(vec_order_list.begin() + position);
 	}
-	else if (new_position == vec_order_list.size()  )
+	else if (newPosition == listSize)
 	{
 		vec_order_list.push_back(vec_order_list.at(position));
 		vec_order_list.erase(vec_order_list.begin() + position);
 	}
 	else {
-		cout << "\n Position is invalid!" << endl;
+		cout << "\n Invalid position." << endl;
 	}
 }
 
 Deploy::Deploy()
 {
-	cout << "deploy is creating..." << endl;
-	set_type_id(0);
+	set_id(0);
 }
 
-Deploy::~Deploy()
-{
-}
+Deploy::~Deploy(){}
 
 string* Deploy::get_type()
 {
@@ -103,50 +92,35 @@ string* Deploy::get_type()
 
 Advance::Advance()
 {
-	cout << "advance is creating..." << endl;
-	set_type_id(1);
+	set_id(1);
 }
 
-Advance::~Advance()
-{
-}
+Advance::~Advance(){}
 
 Bomb::Bomb()
 {
-	cout << "bomb is creating..." << endl;
-	set_type_id(2);
+	set_id(2);
 }
 
-Bomb::~Bomb()
-{
-}
+Bomb::~Bomb(){}
 
 Blockade::Blockade()
 {
-	cout << "blockade is creating..." << endl;
-	set_type_id(3);
+	set_id(3);
 }
 
-Blockade::~Blockade()
-{
-}
+Blockade::~Blockade(){}
 
 Airlift::Airlift()
 {
-	cout << "airlift is creating..." << endl;
-	set_type_id(4);
+	set_id(4);
 }
 
-Airlift::~Airlift()
-{
-}
+Airlift::~Airlift(){}
 
 Negotiate::Negotiate()
 {
-	cout << "negotiate is creating..." << endl;
-	set_type_id(5);
+	set_id(5);
 }
 
-Negotiate::~Negotiate()
-{
-}
+Negotiate::~Negotiate(){}
