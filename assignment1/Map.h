@@ -99,6 +99,8 @@ class MapLoader
     private:
        // Private data member 
        string* fileName;
+       vector<string*> continents;
+       vector<Territory*> territories;
 
        // Stream insertion operator
        friend std::ostream& operator<<(std::ostream& strm, const MapLoader& mL);

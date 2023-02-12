@@ -244,15 +244,91 @@ bool MapLoader::read()
     in.open(*fileName);
     bool valid = false;
     string line;
-    getline(in, line);
+    
+    valid = false;
+    int sectionsFound = 0;
 
     // Check if file contains countries (territories)
-    while(!in.eof()) {
-        if(line.find("countries") != string::npos) {
-            valid = true;
-            cout << "Valid File";
-            return valid;
+    while(getline(in, line)) {
+        
+        // Assumes a valid file will have continents, countries, then borders.
+        if (line.find("[continents]") != string::npos) {
+            while (!line.empty()) {
+                getline(in, line);
+
+                const int lineValues = 3;
+                string lineSplit[lineValues]; // name, army value, color
+
+                // Break values of continent into array
+                for (int i = 0; i < lineValues; i++) {
+                    int index = line.find(' '); // Index of first space
+                    lineSplit[i] = line.substr(0, index);
+                    line = line.substr(index);  // Remove first value from line
+                }
+                
+                // Only continent name is currently important
+                continents.push_back(new string(lineSplit[0]));
+            }
+            sectionsFound++;
         }
+        else if (line.find("[countries]") != string::npos) {
+            while (!line.empty()) {
+                getline(in, line);
+
+                const int lineValues = 5;
+                string lineSplit[lineValues]; // num, name, continent index, x, y 
+
+                // Break values of country into array
+                for (int i = 0; i < lineValues; i++) {
+                    int index = line.find(' ');
+                    lineSplit[i] = line.substr(0, index);
+                    line = line.substr(index);
+                }
+
+                int continentIndex = stoi(lineSplit[2])-1;
+                string* continent = continents.at(continentIndex);
+
+                Territory* t = new Territory();
+                t->setTerritoryName(lineSplit[1]);
+                t->setContinent(*continent);
+                territories.push_back(t);
+            }
+            sectionsFound++;
+        }
+        else if (line.find("[borders]") != string::npos) {
+            while (!line.empty()) {
+                getline(in, line);
+
+                int targetCountryIndex = 0;
+                vector<int*> adjacentIndexes;
+
+                // Break values of country into array
+                int counter = 0;
+                while (line.find(' ') != string::npos) {
+                    int delimiterIndex = line.find(' ');
+                    int countryIndex = stoi(line.substr(0, delimiterIndex));
+                    if (counter == 0) {
+                        // First value is a country that has adjacent countries
+                        targetCountryIndex = countryIndex;
+                    }
+                    else {
+                        // Proceeding values are indexes of adjacent the countries
+                        adjacentIndexes.push_back(&countryIndex);
+                        line = line.substr(delimiterIndex);
+                    }
+                    counter++;
+                }
+
+                // Add all the adjacent country indexes to adj matrix of target country
+                for (int* i : adjacentIndexes) {
+                    addEdge(targetCountryIndex, *i);
+                }
+            }
+
+            sectionsFound++;
+        }
+
+        valid = (sectionsFound == 3);
     }
 
     // Exit if file is invalid
