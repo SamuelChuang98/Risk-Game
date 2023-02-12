@@ -7,10 +7,55 @@
 using namespace std;
 
 // --------------------------------------------------------------------------------------------------------------
-// Territory
+// PLAYER
+
+//default constructor
+Player::Player() {
+    this->name = "No Name";
+}
+
+//Parameterized constructor
+Player::Player(string pname) {
+    this->name = pname;
+}
+
+//copy constructor
+Player::Player(const Player &player) {
+    this->name = player.name;
+}
+
+//Player assignment operator
+Player& Player::operator=(const Player& player)
+{
+    this->name = player.name;
+    return *this;
+}
+
+//destructor
+Player::~Player() {
+
+}
+
+//player name accessor
+string Player::getName() {
+    return this->name;
+}
+
+//player name mutator
+void Player::setName(string pname) {
+    this->name = pname;
+}
+
+// --------------------------------------------------------------------------------------------------------------
+// TERRITORY
 
 // Default constructor
-Territory::Territory() {} 
+Territory::Territory() {
+    this->territoryName = "None";
+    this->continent = "None";
+    this->numberOfArmies = 0;
+    this->owner = new Player();
+} 
 
 // Copy constructor
 Territory::Territory(Territory &t)
@@ -19,6 +64,7 @@ Territory::Territory(Territory &t)
     this->continent = t.continent;
     // this->playerName = t.playerName;
     this->numberOfArmies = t.numberOfArmies;
+    this->owner = t.owner;
 }
 
 // Parameterized constructor
@@ -113,15 +159,24 @@ Map::Map() {
 }
 
 // Copy constructor
-Map::Map(Map &m)
-{
-
+Map::Map(const Map &m) {
+    this->territoryNum = m.territoryNum;
+    this->adjMatrix = new bool[territoryNum * territoryNum];
+    for (int i = 0; i < territoryNum * territoryNum; i++)
+        this->adjMatrix[i] = m.adjMatrix[i];
 }
 
+
 // Parameterized constructor
+Map::Map(int territoryNum) {
+    this->territoryNum = territoryNum;
+    adjMatrix = new bool* [territoryNum];
+    for (int i = 0; i < territoryNum; i++)
+        adjMatrix[i] = new bool[territoryNum]{false};
+}
 
 
-//Validate graph if connected or not
+//Validate graph
 bool Map::Validate() {
     bool visited[territoryNum];
     for (int j = 0; j < territoryNum; j++) {
