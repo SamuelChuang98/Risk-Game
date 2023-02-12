@@ -4,48 +4,42 @@
 #include "Player.h"
 
 // Default constructor
-Player::Player() {
-
+Player::Player()
+{
+    hand = new Hand();
+    orders = new OrderList();
 }
 
 // Param. constructor
-Player::Player(vector<string *> ters, Hand *hand/*vector<string *> hands*/, vector<string *> orders) {
-    for (string *ter: ters) {
-        this->ters.push_back(new string(*ter));
+Player::Player(vector<Territory*> ters, Hand* hand, OrderList* orders) 
+{
+    for (Territory *ter: ters) {
+        this->ters.push_back(new Territory(*ter));
     }
-
-    /*for (string *Hand: hand) {
-        this->hands.push_back(new string(*hand));
-    }*/
 
     this->hand = new Hand(*hand);
 
-    for (string *order: orders) {
-        this->orders.push_back(new string(*order));
-    }
+    this->orders = new OrderList();
 }
 
 // Copy constructor - performs deep copy
-Player::Player(Player &p) {
-    for (string *ter: p.ters) {
-        this->ters.push_back(new string(*ter));
+Player::Player(Player &p) 
+{
+    for (Territory *ter: p.ters) {
+        this->ters.push_back(new Territory(*ter));
     }
 
-    /*for (string *hand: p.hands) {
-        this->hands.push_back(new string(*hand));
-    }*/
    this->hand =  new Hand(*p.hand);
 
-    for (string *order: p.orders) {
-        this->orders.push_back(new string(*order));
-    }
+   orders = new OrderList(*p.orders);
 }
 
 
 // Destructor
-Player::~Player() {
-    // Delete dynamically allocated strings pointed to in ters vector
-    for (string *ter: ters) {
+Player::~Player() 
+{
+    // Delete dynamically allocated territories pointed to in ters vector
+    for (Territory *ter: ters) {
         delete ter;
     }
     ters.clear();    // Remove pointers from ters
@@ -57,10 +51,8 @@ Player::~Player() {
     delete hand;
     hand = NULL;
 
-    for (string *order: orders) {
-        delete order;
-    }
-    orders.clear();
+    delete orders;
+    orders = NULL;
 }
 
 // Assignment operator - performs shallow copy
@@ -71,14 +63,24 @@ Player &Player::operator=(const Player &rightSide) {
     return *this;
 }
 
+Hand* Player::getHand()
+{
+    return hand;
+}
+
+OrderList* Player::getOrders()
+{
+    return orders;
+}
+
 // Stream insertion operator, returns player's first territory as a stream
 std::ostream &operator<<(std::ostream &strm, const Player &p) {
-    return strm << "Player(" << *p.ters.at(0) << ")";
+    return strm << "Player(" << p.ters.at(0)->getTerritoryName() << ")";
 }
 
 
-vector<string *> Player::toDefend() {
-    vector<string *> defenseTers;
+vector<Territory*> Player::toDefend() {
+    vector<Territory*> defenseTers;
 
     // Return half the territories from this player for now.
     for (int i = 0; i < ters.size(); i = i + 2) {
@@ -88,8 +90,8 @@ vector<string *> Player::toDefend() {
     return defenseTers;
 }
 
-vector<string *> Player::toAttack() {
-    vector<string *> attackTers;
+vector<Territory*> Player::toAttack() {
+    vector<Territory*> attackTers;
 
     // Return the other half of territories from this player for now.
     for (int i = 1; i < ters.size(); i = i + 2) {
@@ -100,8 +102,8 @@ vector<string *> Player::toAttack() {
 }
 
 void Player::issueOrder() {
-    string *order = new string();    // Type will be Order*
-    orders.push_back(order);
+    Order* order = new Order();
+    orders->set_order_list(order);
 }
 
 
