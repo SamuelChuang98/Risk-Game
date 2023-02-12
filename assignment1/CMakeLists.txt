@@ -12,4 +12,4 @@ add_executable(assignment1
         main.cpp
         Player.cpp
         Player.h
-        PlayerDriver.cpp OrdersDriver.cpp Orders.cpp)
+        PlayerDriver.cpp OrdersDriver.cpp Orders.cpp Map.cpp)
