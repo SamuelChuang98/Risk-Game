@@ -51,4 +51,6 @@ int orderSpace::orderMain() {
         cout << "  " << ordersList.get_order_list()->at(i)->get_type() << endl;
     }
 
+    return 0;
+
 }
