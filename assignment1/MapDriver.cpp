@@ -33,10 +33,7 @@ int mapSpace::mapMain()
     // Store file in MapLoader Object
     MapLoader* mL = new MapLoader(fileName);
 
-    if(mL->read()) {
-        mL->getTerritoriesFromFile();
-    } else
-        exit(0);
+    mL->read();
 
     return 0;
 }

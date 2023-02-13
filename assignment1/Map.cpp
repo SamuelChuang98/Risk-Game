@@ -173,6 +173,7 @@ void removeEdge(int i, int j)
 }
 
 // Validates graph 
+/*
 bool Map::Validate() {
     bool visited[territoryNumber];
     for (int j = 0; j < territoryNumber; j++) {
@@ -184,6 +185,7 @@ bool Map::Validate() {
     }
     return true;
 }
+*/
 
 // Traverses a graph
 void Map::Traverse(int j, bool visited[]) {
@@ -241,6 +243,7 @@ void MapLoader::setFileName(string* fileName)
 // Validate File
 bool MapLoader::read()
 {
+
     std::ifstream in;
     in.open(*fileName);
     bool valid = false;
@@ -254,8 +257,15 @@ bool MapLoader::read()
         
         // Assumes a valid file will have continents, countries, then borders.
         if (line.find("[continents]") != string::npos) {
-            while (!line.empty()) {
+
+            while (true) {
+
                 getline(in, line);
+                
+                // Break out if at end of continents
+                if (line == "") {
+                    break;
+                }
 
                 const int lineValues = 3;
                 string lineSplit[lineValues]; // name, army value, color
@@ -273,17 +283,26 @@ bool MapLoader::read()
             sectionsFound++;
         }
         else if (line.find("[countries]") != string::npos) {
-            while (!line.empty()) {
+
+            while (true) {
+
                 getline(in, line);
+
+                // Break out if at end of countries
+                if (line == "") {
+                    break;
+                }
 
                 const int lineValues = 5;
                 string lineSplit[lineValues]; // num, name, continent index, x, y 
+
+                
 
                 // Break values of country into array
                 for (int i = 0; i < lineValues; i++) {
                     int index = line.find(' ');
                     lineSplit[i] = line.substr(0, index);
-                    line = line.substr(index);
+                    line = line.substr(index+1);
                 }
 
                 int continentIndex = stoi(lineSplit[2])-1;
@@ -297,8 +316,15 @@ bool MapLoader::read()
             sectionsFound++;
         }
         else if (line.find("[borders]") != string::npos) {
-            while (!line.empty()) {
+
+            while (true) {
+
                 getline(in, line);
+
+                // Break out if at end of borders
+                if (line == "") {
+                    break;
+                }
 
                 int targetCountryIndex = 0;
                 vector<int*> adjacentIndexes;
@@ -314,23 +340,23 @@ bool MapLoader::read()
                     }
                     else {
                         // Proceeding values are indexes of adjacent the countries
-                        adjacentIndexes.push_back(&countryIndex);
-                        line = line.substr(delimiterIndex);
+                        // Add all the adjacent country indexes to adj matrix of target country
+                        addEdge(targetCountryIndex, countryIndex); 
+                        line = line.substr(delimiterIndex+1);
                     }
                     counter++;
                 }
 
-                // Add all the adjacent country indexes to adj matrix of target country
-                for (int* i : adjacentIndexes) {
-                    addEdge(targetCountryIndex, *i);
-                }
-            }
+                
 
+            }
             sectionsFound++;
         }
 
         valid = (sectionsFound == 3);
     }
+
+    in.close();
 
     // Exit if file is invalid
     if(!valid) {
