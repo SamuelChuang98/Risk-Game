@@ -46,6 +46,8 @@ int orderSpace::orderMain() {
     ordersList.delete_order(&bomb);
 
     //Print list
+    listSize = ordersList.get_order_list()->size();
+
     cout << "Printing OrderList ... \n" << endl;
     for (int i = 0; i < listSize; i++) {
         cout << "  " << ordersList.get_order_list()->at(i)->get_type() << endl;
