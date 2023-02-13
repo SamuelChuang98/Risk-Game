@@ -121,23 +121,23 @@ std::string Territory::toString()
 // Default constructor 
 Map::Map() {
     this->territoryNumber = 0;
-    // this->adjMatrix = NULL;
+    this->adjMatrix = NULL;
 }
 
 // Copy constructor
 Map::Map(const Map &m) {
     this->territoryNumber = m.territoryNumber;
-    // this->adjMatrix = new bool[territoryNumber * territoryNumber];
-    // for (int i = 0; i < territoryNumber * territoryNumber; i++)
-    //     this->adjMatrix[i] = m.adjMatrix[i];
+    this->adjMatrix = new bool[territoryNumber * territoryNumber];
+    for (int i = 0; i < territoryNumber * territoryNumber; i++)
+        this->adjMatrix[i] = m.adjMatrix[i];
 }
 
 // Parameterized constructor
 Map::Map(int territoryNumber) {
     this->territoryNumber = territoryNumber;
-    // adjMatrix = new bool* [territoryNumber];
-    // for (int i = 0; i < territoryNumber; i++)
-    // adjMatrix[i] = new bool[territoryNumber]{false};
+    adjMatrix = new bool* [territoryNumber];
+    for (int i = 0; i < territoryNumber; i++)
+    adjMatrix[i] = new bool[territoryNumber]{false};
 }
 
 // Assignment operator
@@ -156,20 +156,35 @@ std::ostream& operator<<(std::ostream& strm, const Map& m)
 // Destructor
 Map::~Map()
 {
-
+    for (int i = 0; i < this->territoryNumber; i++)
+        delete[] adjMatrix[i];
+    delete[] adjMatrix;
 }
 
 // Method to add an edge 
 void addEdge(int i, int j)
 {
-    // adjMatrix[i][j] = 1;
-    // adjMatrix[j][i] = 1;
+    adjMatrix[i][j] = true;
+    adjMatrix[j][i] = true;
 }
 
 // Method to remove an edge
 void removeEdge(int i, int j)
 {
-    
+    adjMatrix[i][j] = false;
+    adjMatrix[j][i] = false;
+}
+
+void Map::toString() {
+    for (int i = 0; i < territoryNumber; i++)
+        cout << i << " ";
+    cout << endl;
+    for (int i = 0; i < territoryNumber; i++) {
+        cout << i << " : ";
+        for (int j = 0; j < territoryNumber; j++)
+            cout << adjMatrix[i][j] << " ";
+        cout << endl;
+    }
 }
 
 // Validates graph 
