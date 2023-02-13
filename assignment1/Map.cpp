@@ -176,13 +176,10 @@ void removeEdge(int i, int j)
 }
 
 void Map::toString() {
-    for (int i = 0; i < territoryNumber; i++)
-        cout << i << " ";
-    cout << endl;
     for (int i = 0; i < territoryNumber; i++) {
-        cout << i << " : ";
-        for (int j = 0; j < territoryNumber; j++)
+        for (int j = 0; j < territoryNumber; j++) {
             cout << adjMatrix[i][j] << " ";
+        }
         cout << endl;
     }
 }
