@@ -28,7 +28,7 @@ int mapSpace::mapMain()
     // Map/MapLoader tests
 
     // Declare file
-    string* fileName = new string("bigeurope/bigeurope.map");
+    string* fileName = new string("C:/Users/samue/CLionProjects/Maps/bigeurope/bigeurope.map");
 
     // Store file in MapLoader Object
     MapLoader* mL = new MapLoader(fileName);

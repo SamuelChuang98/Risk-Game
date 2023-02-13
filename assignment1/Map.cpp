@@ -54,7 +54,7 @@ Territory::Territory() {
     this->continent = "None";
     this->numberOfArmies = 0;
     this->playerName = new TemporaryPlayer();
-}  
+}
 
 // Copy constructor
 Territory::Territory(Territory &t)
@@ -62,7 +62,7 @@ Territory::Territory(Territory &t)
     this->territoryName = t.territoryName;
     this->continent = t.continent;
     this->playerName = t.playerName;
-    this->numberOfArmies = t.numberOfArmies;    
+    this->numberOfArmies = t.numberOfArmies;
 }
 
 // Parameterized constructor
@@ -110,7 +110,7 @@ void Territory::setPlayerName(TemporaryPlayer* newPlayerName) { this->playerName
 void Territory::setNumberOfArmies(int newArmyCount) { this->numberOfArmies = newArmyCount; }
 
 // Territory toString() method
-std::string Territory::toString()  
+std::string Territory::toString()
 {
     return getTerritoryName() + " " + getContinent() + " " + to_string(getNumberOfArmies());
 }
@@ -121,24 +121,23 @@ std::string Territory::toString()
 // Default constructor 
 Map::Map() {
     this->territoryNumber = 0;
-    this->adjMatrix = NULL;
+    std::vector<std::vector<int>> adjMatrix;
 }
 
 // Copy constructor
 Map::Map(const Map &m) {
     this->territoryNumber = m.territoryNumber;
-    this->adjMatrix = new bool[territoryNumber * territoryNumber];
-    for (int i = 0; i < territoryNumber * territoryNumber; i++)
-        this->adjMatrix[i] = m.adjMatrix[i];
+    this->adjMatrix = m.adjMatrix;
 }
+
 
 // Parameterized constructor
 Map::Map(int territoryNumber) {
     this->territoryNumber = territoryNumber;
-    adjMatrix = new bool* [territoryNumber];
-    for (int i = 0; i < territoryNumber; i++)
-    adjMatrix[i] = new bool[territoryNumber]{false};
+    adjMatrix.resize(territoryNumber, vector<int>(territoryNumber, 0));
 }
+
+
 
 // Assignment operator
 Map &Map::operator= (const Map &m)
@@ -156,24 +155,23 @@ std::ostream& operator<<(std::ostream& strm, const Map& m)
 // Destructor
 Map::~Map()
 {
-    for (int i = 0; i < this->territoryNumber; i++)
-        delete[] adjMatrix[i];
-    delete[] adjMatrix;
+    adjMatrix.clear();
 }
 
-// Method to add an edge 
-void addEdge(int i, int j)
+// Method to add an edge
+void Map::addEdge(int i, int j)
 {
-    adjMatrix[i][j] = true;
-    adjMatrix[j][i] = true;
+    adjMatrix[i][j] = 1;
+    adjMatrix[j][i] = 1;
 }
 
 // Method to remove an edge
-void removeEdge(int i, int j)
+void Map::removeEdge(int i, int j)
 {
-    adjMatrix[i][j] = false;
-    adjMatrix[j][i] = false;
+    adjMatrix[i][j] = 0;
+    adjMatrix[j][i] = 0;
 }
+
 
 void Map::toString() {
     for (int i = 0; i < territoryNumber; i++) {
@@ -184,7 +182,7 @@ void Map::toString() {
     }
 }
 
-// Validates graph 
+// Validates graph
 /*
 bool Map::Validate() {
     bool visited[territoryNumber];
@@ -210,7 +208,7 @@ void Map::Traverse(int j, bool visited[]) {
 }
 
 // --------------------------------------------------------------------------------------------------------------
-// MapLoader 
+// MapLoader
 
 // Default constructor
 MapLoader::MapLoader() {}
@@ -256,24 +254,26 @@ void MapLoader::setFileName(string* fileName)
 bool MapLoader::read()
 {
 
+    Map* map = new Map();
+
     std::ifstream in;
+
     in.open(*fileName);
     bool valid = false;
     string line;
-    
-    valid = false;
+
     int sectionsFound = 0;
 
     // Check if file contains countries (territories)
     while(getline(in, line)) {
-        
+
         // Assumes a valid file will have continents, countries, then borders.
         if (line.find("[continents]") != string::npos) {
 
             while (true) {
 
                 getline(in, line);
-                
+
                 // Break out if at end of continents
                 if (line == "") {
                     break;
@@ -288,7 +288,7 @@ bool MapLoader::read()
                     lineSplit[i] = line.substr(0, index);
                     line = line.substr(index);  // Remove first value from line
                 }
-                
+
                 // Only continent name is currently important
                 continents.push_back(new string(lineSplit[0]));
             }
@@ -306,9 +306,9 @@ bool MapLoader::read()
                 }
 
                 const int lineValues = 5;
-                string lineSplit[lineValues]; // num, name, continent index, x, y 
+                string lineSplit[lineValues]; // num, name, continent index, x, y
 
-                
+
 
                 // Break values of country into array
                 for (int i = 0; i < lineValues; i++) {
@@ -353,21 +353,16 @@ bool MapLoader::read()
                     else {
                         // Proceeding values are indexes of adjacent the countries
                         // Add all the adjacent country indexes to adj matrix of target country
-                        addEdge(targetCountryIndex, countryIndex); 
+                        map->addEdge(targetCountryIndex, countryIndex);
                         line = line.substr(delimiterIndex+1);
                     }
                     counter++;
                 }
-
-                
-
             }
             sectionsFound++;
         }
-
         valid = (sectionsFound == 3);
     }
-
     in.close();
 
     // Exit if file is invalid
@@ -380,7 +375,7 @@ bool MapLoader::read()
 }
 
 // Fetch territories list in a .map file
-void MapLoader::getTerritoriesFromFile() 
+void MapLoader::getTerritoriesFromFile()
 {
     string line;
     std::ifstream in;
@@ -389,7 +384,7 @@ void MapLoader::getTerritoriesFromFile()
     getline(in, line);
 
     while(!in.eof()) {
-        
+
     }
 }
 
