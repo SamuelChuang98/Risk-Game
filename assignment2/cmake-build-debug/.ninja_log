@@ -1,0 +1,10 @@
+# ninja log v5
+8	640	6979400852028159	CMakeFiles/assignment1.dir/main.cpp.obj	da4f4b803c9a8097
+16	671	6979400852343856	CMakeFiles/assignment1.dir/OrdersDriver.cpp.obj	5047ab6112679802
+20	733	6979400852965054	CMakeFiles/assignment1.dir/Map.cpp.obj	f5358b86f08cb633
+23	798	6979400853511253	CMakeFiles/assignment1.dir/Orders.cpp.obj	ea16f72f80779e45
+0	831	6979400853953433	CMakeFiles/assignment1.dir/Cards.cpp.obj	556f334e30e630b1
+14	576	7005379423905438	CMakeFiles/assignment1.dir/main.cpp.obj	d430eaaa099c76d1
+20	584	7005379423975434	CMakeFiles/assignment1.dir/OrdersDriver.cpp.obj	201e31bb15e1b339
+8	790	7005379426035965	CMakeFiles/assignment1.dir/Cards.cpp.obj	ee094b9fcdda2b49
+17	886	7005379427001153	CMakeFiles/assignment1.dir/Player.cpp.obj	d83165c28077da9a
