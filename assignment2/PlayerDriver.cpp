@@ -25,8 +25,8 @@ int playerSpace::playerMain()
     OrderList* p2Orders = new OrderList();
 
     // Initialize p1 and p2 with earlier created vectors.
-    Player p1 = {p1Ters, p1Hand, p1Orders};
-    Player p2 = {p2Ters, p2Hand, p2Orders};
+    Player p1 = {1, p1Ters, p1Hand, p1Orders};
+    Player p2 = {2, p2Ters, p2Hand, p2Orders};
 
 
     // Print players' arbitrary lists of territories to be defended and attacked are printed.
