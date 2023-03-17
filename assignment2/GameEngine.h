@@ -3,6 +3,8 @@
 #include <string>
 #include <algorithm>
 
+#include "Player.h"
+
 using namespace std;
 
 namespace GameEngineSpace {
@@ -73,6 +75,11 @@ public:
 
 	friend ostream& operator<<(ostream& out, const GameEngine& _GameEngine);	//output stream operator
 	GameEngine& operator=(const GameEngine& _GameEngine);	//GameEngine assign operator
+
+	void mainGameLoop();
+	void reinforcementPhase(vector<Player*> players);
+	void issueOrdersPhase(vector<Player*> players);
+	void executeOrdersPhase();
 
 private:
 	//pointer to the state object

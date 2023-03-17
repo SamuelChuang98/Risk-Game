@@ -370,3 +370,42 @@ GameEngine& GameEngine::operator=(const GameEngine& _GameEngine) {
 	players = _GameEngine.players;
 	return *this;
 }
+
+// Reinforcement Phase
+void GameEngine::reinforcementPhase(vector<Player*> players)
+{
+	// Loop through all players in a game
+	for(int i = 0; i < players.size(); i++) 
+	{
+		int reinforcement = players[i]->getTerritories().size()/3; // get allowed reinforcement value of player
+
+		// check for continent bonus
+		/*
+		INSERT CODE HERE
+		*/
+
+		int	temporary = players[i]->getReinforcementPool(); // get current reinforcement allocated to player
+		
+		int total = reinforcement+temporary;
+
+		if(total < 3)
+		{
+			total = 3;
+		}
+
+		players[i]->setReinforcementPool(total); // set new reinforcement value allocated to player
+	}
+}
+
+void GameEngine::issueOrdersPhase(vector<Player*> players) 
+{
+	for(int i = 0; i < players.size(); i++)
+	{
+		players[i]->issueOrder();
+	}
+}
+
+void GameEngine::executeOrdersPhase()
+{
+
+}

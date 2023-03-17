@@ -11,7 +11,7 @@ Player::Player()
 }
 
 // Param. constructor
-Player::Player(vector<Territory*> ters, Hand* hand, OrderList* orders) 
+Player::Player(vector<Territory*> ters, Hand* hand, OrderList* orders, int reinforcementPool) 
 {
     for (Territory *ter: ters) {
         this->ters.push_back(new Territory(*ter));
@@ -20,6 +20,8 @@ Player::Player(vector<Territory*> ters, Hand* hand, OrderList* orders)
     this->hand = new Hand(*hand);
 
     this->orders = new OrderList();
+
+    this->reinforcementPool = reinforcementPool;
 }
 
 // Copy constructor - performs deep copy
@@ -32,6 +34,8 @@ Player::Player(Player &p)
    this->hand =  new Hand(*p.hand);
 
    orders = new OrderList(*p.orders);
+
+   this->reinforcementPool = p.reinforcementPool;
 }
 
 
@@ -60,18 +64,19 @@ Player &Player::operator=(const Player &rightSide) {
     this->ters = rightSide.ters;
     this->hand = rightSide.hand;
     this->orders = rightSide.orders;
+    this->reinforcementPool = rightSide.reinforcementPool;
     return *this;
 }
 
-Hand* Player::getHand()
-{
-    return hand;
-}
+// Hand* Player::getHand()
+// {
+//     return hand;
+// }
 
-OrderList* Player::getOrders()
-{
-    return orders;
-}
+// OrderList* Player::getOrders()
+// {
+//     return orders;
+// }
 
 // Stream insertion operator, returns player's first territory as a stream
 std::ostream &operator<<(std::ostream &strm, const Player &p) {
@@ -106,4 +111,48 @@ void Player::issueOrder() {
     orders->set_order_list(order);
 }
 
+// Accessors
 
+vector<Territory*> Player::getTerritories() 
+{
+    return this->ters; 
+} 
+
+Hand* Player::getHand()
+{
+    return this->hand; 
+}
+
+OrderList* Player::getOrders() 
+{
+    return this->orders;
+}
+
+// added for GameEngine (Part 3)
+int Player::getReinforcementPool()
+{
+    return this->reinforcementPool;
+}
+
+// Mutators
+
+void Player::setTerritories(vector<Territory*> ters)
+{
+    this->ters = ters; 
+}
+
+void Player::setHand(Hand* hand)
+{
+    this->hand = hand;
+}
+
+void Player::setOrders(OrderList* orders)
+{
+    this->orders = orders;
+}
+
+// added for GameEngine (Part 3)
+void Player::setReinforcementPool(int reinforcement)
+{
+    this->reinforcementPool = reinforcement;
+}
