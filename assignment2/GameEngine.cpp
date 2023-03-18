@@ -260,7 +260,7 @@ void GameEngine::win()
 		//set the game state to the 'win' state
 		state->setGameState("win");
 		state->win();
-		cout << "Congratulations!!! You WON the warzon game!!!" << endl;
+		cout << "Congratulations!!! You WON the warzone game!!!" << endl;
 	}
 	else
 	{
@@ -383,6 +383,7 @@ void GameEngine::reinforcementPhase(vector<Player*> players)
 		/*
 		INSERT CODE HERE
 		*/
+		vector<Territory*> ter_list = players[i]->getTerritories();
 
 		int	temporary = players[i]->getReinforcementPool(); // get current reinforcement allocated to player
 		
@@ -390,10 +391,10 @@ void GameEngine::reinforcementPhase(vector<Player*> players)
 
 		if(total < 3)
 		{
-			total = 3;
+			players[i]->setReinforcementPool(temporary+3); // minimum reinforcement value of 3
+		} else {
+			players[i]->setReinforcementPool(total); // set new reinforcement value allocated to player
 		}
-
-		players[i]->setReinforcementPool(total); // set new reinforcement value allocated to player
 	}
 }
 
@@ -407,5 +408,27 @@ void GameEngine::issueOrdersPhase(vector<Player*> players)
 
 void GameEngine::executeOrdersPhase()
 {
+	vector<Order*> orderList;
 
+}
+
+void GameEngine::mainGameLoop(vector<Player*> players)
+{
+	while(state->getGameState() != "win")
+	{
+
+		for(int i = 0; i < players.size(); i++) {
+			
+		}
+
+		// Check if game has been won
+		if(true) {
+			win();
+		}
+
+		// Check if a player is eliminated
+		if(true) {
+
+		}
+	}
 }
