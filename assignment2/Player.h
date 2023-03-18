@@ -13,11 +13,10 @@ namespace playerSpace{
 }
 
 class Player {
-    // TODO: Replace strings with their respective types
 
 public:
     Player();
-    Player(vector<Territory*> ters, Hand* hand,OrderList* orders, int reinforcementPool);
+    Player(int pID, vector<Territory*> ters, Hand* hand,OrderList* orders, int reinforcementPool);
     Player(Player &p);
     ~Player();
     Player &operator=(const Player &rightSide);    // Assignment operator
@@ -41,6 +40,7 @@ public:
     void setReinforcementPool(int reinforcement);
 
 private:
+    int playerID;
     vector<Territory*> ters;    // Vector of territories owned by the player
     Hand* hand;                 // Hand of cards owned by the player
     OrderList* orders;          // List of orders owned by the player

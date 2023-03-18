@@ -11,11 +11,13 @@ Player::Player()
 }
 
 // Param. constructor
-Player::Player(vector<Territory*> ters, Hand* hand, OrderList* orders, int reinforcementPool) 
+Player::Player(int pID, vector<Territory*> ters, Hand* hand, OrderList* orders, int reinforcementPool)
 {
     for (Territory *ter: ters) {
         this->ters.push_back(new Territory(*ter));
     }
+
+    this->playerID = pID;
 
     this->hand = new Hand(*hand);
 
@@ -30,6 +32,8 @@ Player::Player(Player &p)
     for (Territory *ter: p.ters) {
         this->ters.push_back(new Territory(*ter));
     }
+
+    this->playerID = p.playerID;
 
    this->hand =  new Hand(*p.hand);
 
@@ -61,6 +65,7 @@ Player::~Player()
 
 // Assignment operator - performs shallow copy
 Player &Player::operator=(const Player &rightSide) {
+    this->playerID = rightSide.playerID;
     this->ters = rightSide.ters;
     this->hand = rightSide.hand;
     this->orders = rightSide.orders;
