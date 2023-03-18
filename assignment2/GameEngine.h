@@ -76,10 +76,10 @@ public:
 	friend ostream& operator<<(ostream& out, const GameEngine& _GameEngine);	//output stream operator
 	GameEngine& operator=(const GameEngine& _GameEngine);	//GameEngine assign operator
 
-	void mainGameLoop();
 	void reinforcementPhase(vector<Player*> players);
 	void issueOrdersPhase(vector<Player*> players);
 	void executeOrdersPhase();
+	void mainGameLoop(vector<Player*> players);
 
 private:
 	//pointer to the state object

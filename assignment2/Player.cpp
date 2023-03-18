@@ -111,9 +111,25 @@ vector<Territory*> Player::toAttack() {
     return attackTers;
 }
 
-void Player::issueOrder() {
+void Player::issueOrder() 
+{
     Order* order = new Order();
     orders->set_order_list(order);
+
+    vector<Territory*> attack = toAttack(); 
+    vector<Territory*> defend = toDefend();
+
+    // Deploy armies until none are left
+    while(getReinforcementPool() != 0 )
+    {
+        int armiesToDeploy = getReinforcementPool();
+
+        for(int i = 0; i < defend.size(); i++)
+        {
+                    
+        }
+
+    }
 }
 
 // Accessors
