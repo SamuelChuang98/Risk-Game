@@ -143,6 +143,7 @@ public:
 
 private:
     vector<Order*> vec_order_list; //store the orders
+    vector<Order *> *get_order_list();
 };
 
 void simulateAttack(Territory*, Territory*, Player*, int*);

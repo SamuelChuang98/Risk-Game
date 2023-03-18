@@ -24,9 +24,7 @@ Order::~Order(){
 //This executes the order
 void Order::execute()
 {
-    if (valid) {
-        cout << "Executing order..." << endl;
-    }
+
 }
 
 //This sets the type id
@@ -281,7 +279,7 @@ bool Advance::validate() const
     }
 
     //If the player doesn't have enough army
-    else if (*amount > source->getNumOfArmies())
+    else if (*amount > source->getNumberOfArmies())
     {
         cout << "You do not have this many armies in this territory!\n" << endl;
         return false;
@@ -309,7 +307,7 @@ bool Airlift::validate() const
         return false;
     }
 
-    else if (*amount > source->getNumOfArmies())
+    else if (*amount > source->getNumberOfArmies())
     {
         cout << "You do not have this many armies in this territory!\n" << endl;
     }
@@ -384,7 +382,7 @@ void Deploy::execute() const
         cout << "Deploying...\n";
 
         //the selected number of armies is added to the number of armies on that territory.
-        target->setNumOfArmies(*amount + target->getNumOfArmies());
+        target->setNumberOfArmies(*amount + target->getNumberOfArmies());
     }
 }
 
@@ -397,16 +395,23 @@ void Advance::execute() const
         //If the source and target territory both belong to the player that issued the order, the army units are moved from the source to the target territory.
         if (source->getTerritoryPlayerID() == target->getTerritoryPlayerID())
         {
-            source->setNumOfArmies(source->getNumOfArmies() - *amount);
-            target->setNumOfArmies(target->getNumOfArmies() + *amount);
+            source->setNumberOfArmies(source->getNumberOfArmies() - *amount);
+            target->setNumberOfArmies(target->getNumberOfArmies() + *amount);
         }
 
         // If the target territory belongs to another player than the player that issued the advance order
         else
         {
-            if (!thisPlayer->canAttack(target->getTerritoryPlayerID()))
-            {
-                cout << "You cannot attack this player!\n" << endl;
+            vector<Territory*> attackableTerritories = thisPlayer->toAttack();
+            bool canAttack = false;
+            for (Territory* t : attackableTerritories) {
+                if (t == target) {
+                    canAttack = true;
+                    break;
+                }
+            }
+            if (!canAttack) {
+                cout << "You cannot attack this territory!" << endl;
                 return;
             }
 
@@ -420,10 +425,19 @@ void Airlift::execute() const
 {
     if (validate())
     {
-        // if player can't the territory
-        if (!thisPlayer->canAttack(target->getTerritoryPlayerID()))
-        {
-            cout << "You cannot attack this player!\n" << endl;
+
+        vector<Territory*> attackableTerritories = thisPlayer->toAttack();
+        bool canAttack = false;
+        // if player can't attack the territory
+        //if (!thisPlayer->canAttack(target->getTerritoryPlayerID()))
+        for (Territory* t : attackableTerritories) {
+            if (t == target) {
+                canAttack = true;
+                break;
+            }
+        }
+        if (!canAttack) {
+            cout << "You cannot attack this territory!" << endl;
             return;
         }
 
@@ -432,8 +446,8 @@ void Airlift::execute() const
         //If both the source and target territories belong to the player that issue the airlift order
         if (source->getTerritoryPlayerID() == target->getTerritoryPlayerID())
         {
-            source->setNumOfArmies(source->getNumOfArmies() - *amount);
-            target->setNumOfArmies(target->getNumOfArmies() + *amount);
+            source->setNumberOfArmies(source->getNumberOfArmies() - *amount);
+            target->setNumberOfArmies(target->getNumberOfArmies() + *amount);
         }
 
     }
@@ -443,15 +457,23 @@ void Bomb::execute() const
 {
     if (validate())
     {
-        if (!thisPlayer->canAttack(target->getTerritoryPlayerID()))
-        {
-            cout << "You cannot attack this player!\n" << endl;
+        vector<Territory*> attackableTerritories = thisPlayer->toAttack();
+        bool canAttack = false;
+        for (Territory* t : attackableTerritories) {
+            if (t == target) {
+                canAttack = true;
+                break;
+            }
+        }
+        if (!canAttack) {
+            cout << "You cannot attack this territory!" << endl;
             return;
         }
 
+
         cout << "Bombing... \n";
         // If the target belongs to an enemy player, half of the armies are removed from this territory
-        target->setNumOfArmies(target->getNumOfArmies() / 2);
+        target->setNumberOfArmies(target->getNumberOfArmies() / 2);
     }
 }
 
@@ -462,7 +484,7 @@ void Blockade::execute() const
         cout << "Blocking... \n";
 
         //If the target territory belongs to the player issuing the order, (Else of the validate statement)
-        target->setNumOfArmies(target->getNumOfArmies() * 2);
+        target->setNumberOfArmies(target->getNumberOfArmies() * 2);
 
         //the ownership of the territory is transferred to the Neutral player
         target->setTerritoryPlayerID(-1);
