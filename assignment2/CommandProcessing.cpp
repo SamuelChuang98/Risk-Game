@@ -8,18 +8,28 @@ void Command::saveEffect(string str) {
     effect = str;
 }
 
-// TARGET - CommandProcessor //
+// TARGET - CommandProcessor // ------------------------------------------
 
+// Param. constructor
 CommandProcessor::CommandProcessor(GameState& gs) {
     this->gs = gs;
 }
 
+// Destructor
 CommandProcessor::~CommandProcessor() {
     // Delete the dynamically allocated commands
     for(auto c : commands){
         delete c;
     }
     commands.clear();   // Clear the vector to avoid dangling pointers
+}
+
+// Copy constructor - performs deep copy
+CommandProcessor::CommandProcessor(CommandProcessor &c) {
+    for (Command *command: c.commands) {
+        this->commands.push_back(new Command(*command));
+    }
+    this->gs = GameState(gs);
 }
 
 // Prompt for and read a command through console
@@ -75,6 +85,7 @@ void CommandProcessor::validate(Command &c) {
 
 }
 
+// Saves a command to a commands vector
 void CommandProcessor::saveCommand(string c_str) {
     Command* c = new Command();
     c->name = c_str;
@@ -82,34 +93,94 @@ void CommandProcessor::saveCommand(string c_str) {
     validate(*c);
 }
 
+
+// Stream insertion operator
+std::ostream &operator<<(std::ostream &strm, const CommandProcessor &c){
+    return strm << c.commands.back()->name;
+}
+
+// Assignment operator - performs shallow copy
+CommandProcessor &CommandProcessor::operator=(const CommandProcessor &rightSide) {
+    this->commands = rightSide.commands;
+    this->gs = rightSide.gs;
+    return *this;
+}
+
+// Returns last command object
 Command CommandProcessor::getCommand() {
     string command = readCommand();
     saveCommand(command);
     return *commands.back();
 }
 
-// ADAPTEE - FileLineReader //
+// ADAPTEE - FileLineReader // -------------------------------------------
 
+// Param. constructor
 FileLineReader::FileLineReader(string file) {
+    this->file = file;
     fs.open(file, ios::in);
 }
 
+// Copy constructor
+FileLineReader::FileLineReader(FileLineReader &c) {
+    this->file = c.file;
+    fs.open(c.file, ios::in);
+}
+
+// Assignment operator
+FileLineReader &FileLineReader::operator=(const FileLineReader &rightSide){
+    this->file = rightSide.file;
+    fs.open(rightSide.file, ios::in);
+    return *this;
+}
+
+// Reads and returns the next line in file
 string FileLineReader::readLineFromFile() {
     string str;
     getline(fs, str);
     return str;
 }
 
+// Returns end-of-file status for this file
 bool FileLineReader::isEof() {
     return fs.eof();
 }
 
-// ADAPTER - FileCommandProcessorAdapter
+// Stream insertion operator
+std::ostream &operator<<(std::ostream &strm, const FileLineReader &flr){
+    return strm << flr.file;
+}
 
+// ADAPTER - FileCommandProcessorAdapter // ------------------------------
+
+// Param. constructor
 FileCommandProcessorAdapter::FileCommandProcessorAdapter(GameState &gs, string file) : CommandProcessor(gs) {
     flr = new FileLineReader(file);
 }
 
+// Copy constructor
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(FileCommandProcessorAdapter &c) : CommandProcessor(c) {
+    for (Command *command: c.commands) {
+        this->commands.push_back(new Command(*command));
+    }
+    this->gs = GameState(gs);
+    this->flr = c.flr;
+}
+
+// Assignment operator
+FileCommandProcessorAdapter &FileCommandProcessorAdapter::operator=(const FileCommandProcessorAdapter &rightSide) {
+    this->commands = rightSide.commands;
+    this->gs = rightSide.gs;
+    this->flr = rightSide.flr;
+    return *this;
+}
+
+// Overwrite reads file line by line instead of retrieving user-input
 string FileCommandProcessorAdapter::readCommand() {
     return flr->readLineFromFile();
+}
+
+// Stream insertion operator
+std::ostream &operator<<(std::ostream &strm, const FileCommandProcessorAdapter &c){
+    return strm << c.commands.back();
 }

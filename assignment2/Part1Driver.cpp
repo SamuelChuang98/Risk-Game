@@ -12,12 +12,14 @@ int main(int argc, char *argv[]) {
     CommandProcessor* cmdProc;
     GameState gs;
 
+    // Will assign a CommandProcessor or FileCommandProcessorAdapter
+    // depending on command-line arguments
     for(int i = 0; ; i++){
         if (strcmp(argv[i], "-console") == 0){
             cmdProc = new CommandProcessor(gs);
             break;
         }
-        // If at last arg, -file is not possible. Default to console.
+            // If at last arg, -file is not possible. Default to console.
         else if (i == argc - 1){
             cmdProc = new CommandProcessor(gs);
             break;
@@ -28,6 +30,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    // Get every command, and randomly save an effect to some commands
     while(true) {
         Command c = cmdProc->getCommand();
         if (c.name.empty()) break;
