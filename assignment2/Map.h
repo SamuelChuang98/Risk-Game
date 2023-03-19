@@ -32,6 +32,28 @@ public:
     void setName(string pname);
 };
 
+class Continent
+{
+private:
+    string continentName;
+    int armyNumber;
+    string color;
+public:
+    Continent();
+    Continent(string continentName, int armyNumber, string color);
+    ~Continent();
+
+    string getContinentName();
+    int getArmyNumber();
+    string getColor();
+
+    void setContinentName(string continentName);
+    void setArmyNumber(int armyNumber);
+    void setColor(string color);
+
+    friend std::ostream& operator<<(std::ostream& os, const Continent& c);
+
+};
 
 class Territory
 {
@@ -78,10 +100,9 @@ class Map
 {
 private:
     // Private data members
-    vector<string> continents;
+    vector<Continent*> continents;
     vector<vector<int>> borders;
     vector<Territory*> territories;
-    int num;
 
     // Stream insertion operator
     friend std::ostream& operator<<(std::ostream& os, const Map& m);
@@ -89,13 +110,13 @@ private:
 public:
     Map();                          // Default constructor
     Map(const Map& m);              // Copy constructor
-    Map(vector<string> continents, vector<Territory*> territories, vector<vector<int>> borders);       // Parameterized constructor
+    Map(vector<Continent*> continents, vector<Territory*> territories, vector<vector<int>> borders);       // Parameterized constructor
     Map& operator= (const Map& m);  // Assignment operator
     ~Map();                         // Destructor
 
     // Method to add an edge to the adjacency matrix
     void addBorder(vector<int> border);
-    void addContinent(string continent);
+    void addContinent(Continent* continent);
     void addTerritory(Territory* territory);
 
     // Validate method
@@ -104,18 +125,18 @@ public:
     // Traverse method
     void Traverse(int j, vector<bool> visited);
 
+    // Load continents, countries and borders to map
+    void mapLoad(string fileName);
+
     //Mutators
-    void setContinents(vector<string> continents);
+    void setContinents(vector<Continent*> continents);
     void setBorders(vector<vector<int>> borders);
     void setTerritories(vector<Territory*> territories);
 
     //Accessors
-    vector<string> getContinents();
+    vector<Continent*> getContinents();
     vector<vector<int>> getBorders();
     vector<Territory*> getTerritories();
-
-    int getNum();
-    void setNum(int n);
 };
 
 class MapLoader
@@ -123,7 +144,6 @@ class MapLoader
 private:
     // Private data member 
     string fileName;
-    Map* map;
 
     // Stream insertion operator
     friend std::ostream& operator<<(std::ostream& strm, const MapLoader& mL);
@@ -131,17 +151,16 @@ private:
 public:
     MapLoader();                                // Default constructor
     MapLoader(const MapLoader& m);              // Copy constructor
-    MapLoader(string fileName, Map* map);       // Parameterized constructor
+    MapLoader(string fileName);                 // Parameterized constructor
     MapLoader& operator= (const MapLoader& m);  // Assignment operator
     ~MapLoader();                               // Destructor
 
-    bool read(); // Check if file is valid
+    // Check if file is valid
+    bool fileChecker();
 
     // Accessor
     string getFileName();
-    Map* getMap();
 
     // Mutator
     void setFileName(string fileName);
-    void setMap(Map* map);
 };
