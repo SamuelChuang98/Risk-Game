@@ -88,7 +88,6 @@ public:
     int getY();
     TemporaryPlayer* getPlayerName();
     int getNumberOfArmies();
-    int getTerritoryPlayer();
 
     // Mutators
     void setTerritoryNumber(int newNumber);
@@ -98,7 +97,6 @@ public:
     void setY(int y);
     void setPlayerName(TemporaryPlayer* newPlayerName);
     void setNumberOfArmies(int newArmyCount);
-    void setTerritoryPlayer(int playerID);
 };
 
 class Map

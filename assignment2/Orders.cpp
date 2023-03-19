@@ -563,7 +563,10 @@ void Blockade::execute() const
         target->setNumberOfArmies(target->getNumberOfArmies() * 2);
 
         //the ownership of the territory is transferred to the Neutral player
-        target->setTerritoryPlayer(-1);
+
+        TemporaryPlayer* neutral = new TemporaryPlayer();
+
+        target->setPlayerName(neutral);
 
         //Notify(this);
     }
@@ -630,7 +633,7 @@ void simulateAttack(Territory* source, Territory* target, Player* thisPlayer, in
     if (targetArmyNum == 0 && sourceArmyNum > 0) {
         cout << "Attackers win!" << endl;
 
-        source->setTerritoryPlayer(thisPlayer->getPlayerID());
+        source->setPlayerName(*thisPlayer);
         thisPlayer->getTerritories().push_back(target);
         target->setNumberOfArmies(sourceArmyNum);
         //thisPlayer->getGE()->Notify(); // Notify stats observer since a player conquered a territory
