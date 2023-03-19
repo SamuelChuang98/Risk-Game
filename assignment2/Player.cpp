@@ -88,18 +88,23 @@ std::ostream &operator<<(std::ostream &strm, const Player &p) {
     return strm << "Player(" << p.ters.at(0)->getTerritoryName() << ")";
 }
 
-
+// Get territories a player must defend
 vector<Territory*> Player::toDefend() {
+    
     vector<Territory*> defenseTers;
 
-    // Return half the territories from this player for now.
-    for (int i = 0; i < ters.size(); i = i + 2) {
-        defenseTers.push_back(ters.at(i));
+    cout << "List of territories to defend: " << endl;
+
+    // push territories owned by player to a new vector
+    for (int i = 0; i < ters.size(); i++) {
+        cout << ters[i]->getTerritoryName() << endl;
+        defenseTers.push_back(ters[i]);
     }
 
     return defenseTers;
 }
 
+// Get territories a player must attack
 vector<Territory*> Player::toAttack() {
     vector<Territory*> attackTers;
 
@@ -111,22 +116,37 @@ vector<Territory*> Player::toAttack() {
     return attackTers;
 }
 
-void Player::issueOrder() 
+void Player::issueOrder(vector<Territory*> t) 
 {
     Order* order = new Order();
     orders->set_order_list(order);
 
-    vector<Territory*> attack = toAttack(); 
     vector<Territory*> defend = toDefend();
+    vector<Territory*> attack = toAttack();
 
     // Deploy armies until none are left
-    while(getReinforcementPool() != 0 )
+    while(getReinforcementPool() != 0)
     {
         int armiesToDeploy = getReinforcementPool();
+        int toDeploy = 0;
 
         for(int i = 0; i < defend.size(); i++)
         {
-                    
+
+            // get user input
+            cout << "Territory: " << defend[i]->getTerritoryName() << endl;
+            cout << "How many armies do you want to deploy to this territory: " << endl;
+            cin >> toDeploy;
+
+            // if only one army is remaining to deploy
+            if(armiesToDeploy == 1)
+            {
+                defend[i]->setNumberOfArmies(defend[i]->getNumberOfArmies() + 1);
+                setReinforcementPool(0);
+            } else {
+                defend[i]->setNumberOfArmies(defend[i]->getNumberOfArmies() + toDeploy);
+                setReinforcementPool(getReinforcementPool()-toDeploy);
+            }
         }
 
     }
@@ -158,7 +178,6 @@ OrderList* Player::getOrders()
     return this->orders;
 }
 
-// added for GameEngine (Part 3)
 int Player::getReinforcementPool()
 {
     return this->reinforcementPool;
@@ -190,7 +209,6 @@ void Player::setOrders(OrderList* orders)
     this->orders = orders;
 }
 
-// added for GameEngine (Part 3)
 void Player::setReinforcementPool(int reinforcement)
 {
     this->reinforcementPool = reinforcement;

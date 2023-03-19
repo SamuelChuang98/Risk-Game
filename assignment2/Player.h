@@ -24,7 +24,7 @@ public:
     // OrderList* getOrders();
     vector<Territory*> toDefend();
     vector<Territory*> toAttack();
-    void issueOrder();
+    void issueOrder(vector<Territory*> t);
     void addFriendly(Player &p);
 
 

@@ -423,7 +423,7 @@ void GameEngine::issueOrdersPhase(vector<Player*> players)
 {
 	for (int i = 0; i < players.size(); i++)
 	{
-		players[i]->issueOrder();
+		players[i]->issueOrder(players[i]->getTerritories());
 	}
 }
 
@@ -437,6 +437,7 @@ void GameEngine::executeOrdersPhase()
 // Main Game Loop
 void GameEngine::mainGameLoop(vector<Player*> players)
 {
+
 	while (state->getGameState() != "win")
 	{
 
@@ -455,9 +456,13 @@ void GameEngine::mainGameLoop(vector<Player*> players)
 
 		}
 
-		reinforcementPhase(players);
-		issueOrdersPhase(players);
-		executeOrdersPhase();
+		reinforcementPhase(players); // reinforcement phase
+		
+		issueOrder();
+		issueOrdersPhase(players); // issue orders phase
+		endIssueOrders();
 
+		executeOrdersPhase(); // execute orders phase
+		endExecOrders();
 	}
 }

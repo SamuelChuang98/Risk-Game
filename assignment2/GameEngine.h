@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include "Map.h"
+#include "Player.h"
 
 using namespace std;
 
