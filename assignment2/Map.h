@@ -3,124 +3,164 @@
 #include <vector>
 #include <fstream>
 
+
 using namespace std;
-namespace mapSpace{
+namespace mapSpace {
     int mapMain();
 }
 
-// Temporary Player class
 class TemporaryPlayer
 {
-    private:
-        // Private data member
-        string name;
+private:
+    // Private data member
+    string name;
 
-    public:
-        TemporaryPlayer();                               // Default constructor
-        TemporaryPlayer(const TemporaryPlayer &p);                // Copy constructor
-        TemporaryPlayer(string pname);                   // Parameterized constructor
-        TemporaryPlayer &operator= (const TemporaryPlayer &p);    // Assignment operator
-        ~TemporaryPlayer();                              // Destructor
+    // stream insertion operator
+    friend std::ostream& operator<<(std::ostream& os, const TemporaryPlayer& t);
 
-        // Accessor
-        string getName();
+public:
+    TemporaryPlayer();                               // Default constructor
+    TemporaryPlayer(const TemporaryPlayer& p);                // Copy constructor
+    TemporaryPlayer(string pname);                   // Parameterized constructor
+    TemporaryPlayer& operator= (const TemporaryPlayer& p);    // Assignment operator
+    ~TemporaryPlayer();                              // Destructor
 
-        // Mutator
-        void setName(string pname); 
+    // Accessor
+    string getName();
+
+    // Mutator
+    void setName(string pname);
 };
 
-class Territory 
+class Continent
 {
-    private:
-        // Private data members
-        string territoryName;
-        string continent;
-        TemporaryPlayer* playerName;
-        int numberOfArmies;
+private:
+    string continentName;
+    int armyNumber;
+    string color;
+public:
+    Continent();
+    Continent(string continentName, int armyNumber, string color);
+    ~Continent();
 
-        // stream insertion operator
-        friend std::ostream &operator<<(std::ostream &os, const Territory &t); 
+    string getContinentName();
+    int getArmyNumber();
+    string getColor();
 
-    public:
-        Territory();                                                                                     // Default constructor
-        Territory(Territory &territory);                                                                 // Copy constructor
-        Territory(string territoryName, string continent, TemporaryPlayer* playerName, int numberOfArmies);       // Parameterized constructor
-        Territory &operator= (const Territory &t);                                                       // Assignment operator
-        ~Territory();                                                                                    // Destructor
+    void setContinentName(string continentName);
+    void setArmyNumber(int armyNumber);
+    void setColor(string color);
 
-        // Accessors
-        string getTerritoryName();
-        string getContinent();
-        TemporaryPlayer* getPlayerName();
-        int getNumberOfArmies();
-            
-        // Mutators
-        void setTerritoryName(string newName);
-        void setContinent(string newContinent);
-        void setPlayerName(TemporaryPlayer* newPlayerName);
-        void setNumberOfArmies(int newArmyCount);
+    friend std::ostream& operator<<(std::ostream& os, const Continent& c);
 
-        // toString() method
-        std::string toString();
+};
+
+class Territory
+{
+private:
+    // Private data members
+    int territoryNumber;
+    string territoryName;
+    int continent;
+    int x;
+    int y;
+    TemporaryPlayer* player;
+    int numberOfArmies;
+
+    // stream insertion operator
+    friend std::ostream& operator<<(std::ostream& os, const Territory& t);
+
+public:
+    Territory();                                                                                     // Default constructor
+    Territory(Territory& territory);                                                                 // Copy constructor
+    Territory(int territoryNumber,string territoryName, int continent,int x,int y, TemporaryPlayer* player, int numberOfArmies);       // Parameterized constructor
+    Territory& operator= (const Territory& t);                                                       // Assignment operator
+    ~Territory();                                                                                    // Destructor
+
+    // Accessors
+    int getTerritoryNumber();
+    string getTerritoryName();
+    int getContinent();
+    int getX();
+    int getY();
+    TemporaryPlayer* getPlayerName();
+    int getNumberOfArmies();
+
+    // Mutators
+    void setTerritoryNumber(int newNumber);
+    void setTerritoryName(string newName);
+    void setContinent(int newContinent);
+    void setX(int x);
+    void setY(int y);
+    void setPlayerName(TemporaryPlayer* newPlayerName);
+    void setNumberOfArmies(int newArmyCount);
 };
 
 class Map
 {
-    private:
-        // Private data members
-        int territoryNumber;
-        std::vector<std::vector<int>> adjMatrix;
+private:
+    // Private data members
+    vector<Continent*> continents;
+    vector<vector<int>> borders;
+    vector<Territory*> territories;
 
-        // Stream insertion operator
-        friend std::ostream &operator<<(std::ostream &os, const Map &m); 
+    // Stream insertion operator
+    friend std::ostream& operator<<(std::ostream& os, const Map& m);
 
-    public:
-        Map();                          // Default constructor
-        Map(const Map &m);              // Copy constructor
-        Map(int territoryNumber);       // Parameterized constructor
-        Map &operator= (const Map &m);  // Assignment operator
-        ~Map();                         // Destructor
+public:
+    Map();                          // Default constructor
+    Map(const Map& m);              // Copy constructor
+    Map(vector<Continent*> continents, vector<Territory*> territories, vector<vector<int>> borders);       // Parameterized constructor
+    Map& operator= (const Map& m);  // Assignment operator
+    ~Map();                         // Destructor
 
-        // Method to add an edge to the adjacency matrix
-        void addEdge(int i, int j);
-        
-        // Method to remove an edge from the adjacency matrix
-        void removeEdge(int i, int j);
-        
-        // Validate method
-        bool Validate();
+    // Method to add an edge to the adjacency matrix
+    void addBorder(vector<int> border);
+    void addContinent(Continent* continent);
+    void addTerritory(Territory* territory);
 
-        // Traverse method
-        void Traverse(int j, bool visited[]);
+    // Validate method
+    bool Validate();
 
+    // Traverse method
+    void Traverse(int j, vector<bool> visited);
+
+    // Load continents, countries and borders to map
+    void mapLoad(string fileName);
+
+    //Mutators
+    void setContinents(vector<Continent*> continents);
+    void setBorders(vector<vector<int>> borders);
+    void setTerritories(vector<Territory*> territories);
+
+    //Accessors
+    vector<Continent*> getContinents();
+    vector<vector<int>> getBorders();
+    vector<Territory*> getTerritories();
 };
 
 class MapLoader
 {
-    private:
-       // Private data member 
-       string* fileName;
-       vector<string*> continents;
-       vector<Territory*> territories;
+private:
+    // Private data member 
+    string fileName;
 
-        // Stream insertion operator
-        friend std::ostream& operator<<(std::ostream& strm, const MapLoader& mL);
+    // Stream insertion operator
+    friend std::ostream& operator<<(std::ostream& strm, const MapLoader& mL);
 
-    public:
-        MapLoader();                                // Default constructor
-        MapLoader(const MapLoader &m);              // Copy constructor
-        MapLoader(string* fileName);                // Parameterized constructor
-        MapLoader &operator= (const MapLoader &m);  // Assignment operator
-        ~MapLoader();                               // Destructor
+public:
+    MapLoader();                                // Default constructor
+    MapLoader(const MapLoader& m);              // Copy constructor
+    MapLoader(string fileName);                 // Parameterized constructor
+    MapLoader& operator= (const MapLoader& m);  // Assignment operator
+    ~MapLoader();                               // Destructor
 
-        // Accessor
-        string* getFileName();
+    // Check if file is valid
+    bool fileChecker();
 
-        // Mutator
-        void setFileName(string* fileName);    
+    // Accessor
+    string getFileName();
 
-        bool read(); // Check if file is valid
-
-        void getTerritoriesFromFile(); // Get the territories from valid files
-
+    // Mutator
+    void setFileName(string fileName);
 };

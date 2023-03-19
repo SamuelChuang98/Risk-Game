@@ -1,39 +1,35 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <fstream>
-
 #include "Map.h"
 
 int mapSpace::mapMain()
 {
 
     // Create Players
-    TemporaryPlayer* player1 = new TemporaryPlayer("Alex");
-    TemporaryPlayer* player2 = new TemporaryPlayer("Samuel");
+    TemporaryPlayer* player1 = new TemporaryPlayer("player 1");
+    TemporaryPlayer* player2 = new TemporaryPlayer("player 2");
 
     //------------------------------------------------------------------------------------
     // Territory class tests
 
     // Create territories
-    Territory* NA_Territory1 = new Territory("Canada", "NA", player1, 10);
-    Territory* NA_Territory2 = new Territory("USA", "NA", player2, 28);
-    Territory* NA_Territory3 = new Territory("Mexico", "NA", player1, 7);
-
-    cout << NA_Territory1->toString() << "\n";
-    cout << NA_Territory2->toString() << "\n";
-    cout << NA_Territory3->toString() << "\n";
-
+    Territory* t1 = new Territory(1,"Canada", 5,30,353, player1, 10);
+    Territory* t2 = new Territory(2, "Lebanon", 4, 233, 64, player2, 1);
+    Territory* t3 = new Territory(3, "Mars", 2, 31, 312, player1, 3);
     //------------------------------------------------------------------------------------
     // Map/MapLoader tests
+    
+    Map* map = new Map();
 
     // Declare file
-    string* fileName = new string("C:/Users/samue/CLionProjects/Maps/bigeurope/bigeurope.map");
-
+    string fileName = "C:\\Users\\aitan\\Documents\\visual studio workspace\\A2\\germany2.map";
     // Store file in MapLoader Object
-    MapLoader* mL = new MapLoader(fileName);
+    MapLoader mapLoader = MapLoader(fileName, map);
 
-    mL->read();
+    mapLoader.read();
+
 
     return 0;
+}
+
+int main() {
+    mapSpace::mapMain();
 }

@@ -1,8 +1,3 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <fstream>
-
 #include "Map.h"
 
 using namespace std;
@@ -16,7 +11,7 @@ TemporaryPlayer::TemporaryPlayer() {
 }
 
 // copy constructor
-TemporaryPlayer::TemporaryPlayer(const TemporaryPlayer &TemporaryPlayer) {
+TemporaryPlayer::TemporaryPlayer(const TemporaryPlayer& TemporaryPlayer) {
     this->name = TemporaryPlayer.name;
 }
 
@@ -26,7 +21,7 @@ TemporaryPlayer::TemporaryPlayer(string pname) {
 }
 
 // Assignment operator
-TemporaryPlayer &TemporaryPlayer::operator=(const TemporaryPlayer &TemporaryPlayer)
+TemporaryPlayer& TemporaryPlayer::operator=(const TemporaryPlayer& TemporaryPlayer)
 {
     this->name = TemporaryPlayer.name;
     return *this;
@@ -45,167 +40,225 @@ void TemporaryPlayer::setName(string pname) {
     this->name = pname;
 }
 
+std::ostream& operator<<(ostream& os, const TemporaryPlayer& t) {
+    return os << t.name;
+}
+
+// --------------------------------------------------------------------------------------------------------------
+// Continent
+
+Continent::Continent() {
+    this->continentName = "";
+    this->armyNumber = 0;
+    this->color = "";
+}
+
+Continent::Continent(string continentName, int armyNumber, string color) {
+    this->continentName = continentName;
+    this->armyNumber = armyNumber;
+    this->color = color;
+}
+
+Continent::~Continent(){}
+
+string Continent::getContinentName() { return this->continentName; }
+int Continent::getArmyNumber() { return this->armyNumber; }
+string Continent::getColor() { return this->color; }
+
+void Continent::setContinentName(string continentName) { this->continentName = continentName; }
+void Continent::setArmyNumber(int armyNumber) { this->armyNumber = armyNumber; }
+void Continent::setColor(string color) { this->color = color; }
+
+std::ostream& operator<<(std::ostream& os, const Continent& c) {
+    return os << "Name: " << c.continentName << "\tArmy Number: " << c.armyNumber << "\tColor: " << c.color;
+}
+
+
 // --------------------------------------------------------------------------------------------------------------
 // Territory
 
 // Default constructor
 Territory::Territory() {
-    this->territoryName = "None";
-    this->continent = "None";
+    this->territoryNumber = 0;
+    this->territoryName = "";
+    this->continent = 0;
+    this->x = 0;
+    this->y = 0;
     this->numberOfArmies = 0;
-    this->playerName = new TemporaryPlayer();
+    this->player = nullptr;
 }
 
 // Copy constructor
-Territory::Territory(Territory &t)
+Territory::Territory(Territory& t)
 {
+    this->territoryNumber = t.territoryNumber;
     this->territoryName = t.territoryName;
     this->continent = t.continent;
-    this->playerName = t.playerName;
+    this->x = t.x;
+    this->y = t.y;
+    this->player = t.player;
     this->numberOfArmies = t.numberOfArmies;
 }
 
 // Parameterized constructor
-Territory::Territory(string territoryName, string continent, TemporaryPlayer* playerName, int numberOfArmies)
+Territory::Territory(int territoryNumber, string territoryName, int continent, int x, int y, TemporaryPlayer* player, int numberOfArmies)
 {
+    this->territoryNumber = territoryNumber;
     this->territoryName = territoryName;
     this->continent = continent;
-    this->playerName = playerName;
+    this->x = x;
+    this->y = y;
+    this->player = player;
     this->numberOfArmies = numberOfArmies;
 }
 
 // Territory assignment operator
-Territory &Territory::operator= (const Territory &t)
+Territory& Territory::operator= (const Territory& t)
 {
+    this->territoryNumber = t.territoryNumber;
     this->territoryName = t.territoryName;
     this->continent = t.continent;
-    this->playerName = t.playerName;
+    this->x = t.x;
+    this->y = t.y;
+    this->player = t.player;
     this->numberOfArmies = t.numberOfArmies;
     return *this;
 }
 
 // Territory stream insertion operator
-std::ostream &operator<<(ostream &os, const Territory &t) {
-    return os << "Territory(" << t.territoryName << t.continent << t.playerName << t.numberOfArmies << ")";
+std::ostream& operator<<(ostream& os, const Territory& t) {
+    return os << "Number: " << t.territoryNumber << "\tName: " << t.territoryName << "\tContinent: " << t.continent << "\tx: " << t.x << "\ty: " << t.y  << "\tNumber of armies: " << t.numberOfArmies << endl;
 }
 
 // Territory destructor
 Territory::~Territory()
 {
-    delete playerName;
-    // playerName.clear();
-    playerName = NULL;
+    player = nullptr;
 }
 
 // Territory accessors
+int Territory::getTerritoryNumber() { return territoryNumber; }
 string Territory::getTerritoryName() { return territoryName; }
-string Territory::getContinent() { return continent; }
-TemporaryPlayer* Territory::getPlayerName() { return playerName; }
+int Territory::getContinent() { return continent; }
+int Territory::getX() { return x; }
+int Territory::getY() { return y; }
+TemporaryPlayer* Territory::getPlayerName() { return player; }
 int Territory::getNumberOfArmies() { return numberOfArmies; }
 
 // Territory mutators
+void Territory::setTerritoryNumber(int newNumber) { this->territoryNumber = newNumber; }
 void Territory::setTerritoryName(string newTerritoryName) { this->territoryName = newTerritoryName; }
-void Territory::setContinent(string newContinent) { this->continent = newContinent; }
-void Territory::setPlayerName(TemporaryPlayer* newPlayerName) { this->playerName = newPlayerName; }
+void Territory::setContinent(int newContinent) { this->continent = newContinent; }
+void Territory::setX(int x) { this->x = x; }
+void Territory::setY(int y) { this->y = y; }
+void Territory::setPlayerName(TemporaryPlayer* newPlayerName) { this->player = newPlayerName; }
 void Territory::setNumberOfArmies(int newArmyCount) { this->numberOfArmies = newArmyCount; }
-
-// Territory toString() method
-std::string Territory::toString()
-{
-    return getTerritoryName() + " " + getContinent() + " " + to_string(getNumberOfArmies());
-}
 
 // --------------------------------------------------------------------------------------------------------------
 // Map 
 
 // Default constructor 
-Map::Map() {
-    this->territoryNumber = 0;
-    std::vector<std::vector<int>> adjMatrix;
+Map::Map() 
+{ 
+    
 }
 
 // Copy constructor
-Map::Map(const Map &m) {
-    this->territoryNumber = m.territoryNumber;
-    this->adjMatrix = m.adjMatrix;
+Map::Map(const Map& m) {
+    this->continents = m.continents;
+    this->borders = m.borders;
+    this->territories = m.territories;
 }
 
 
 // Parameterized constructor
-Map::Map(int territoryNumber) {
-    this->territoryNumber = territoryNumber;
-    adjMatrix.resize(territoryNumber, vector<int>(territoryNumber, 0));
+Map::Map(vector<Continent*> continents, vector<Territory*> territories, vector<vector<int>> borders){
+    this->continents = continents;
+    this->borders = borders;
+    this->territories = territories;
 }
 
+//Accessors
+vector<Continent*> Map::getContinents() { return this->continents; }
+vector<vector<int>> Map::getBorders() { return this->borders; }
+vector<Territory*> Map::getTerritories() { return this->territories; }
 
+//Mutators
+void Map::setContinents(vector<Continent*> continents) { this->continents = continents; }
+void Map::setBorders(vector<vector<int>> borders) { this->borders = borders; }
+void Map::setTerritories(vector<Territory*> territories) { this->territories = territories; }
 
 // Assignment operator
-Map &Map::operator= (const Map &m)
+Map& Map::operator= (const Map& m)
 {
-    this->territoryNumber = m.territoryNumber;
+    this->continents = m.continents;
+    this->borders = m.borders;
+    this->territories = m.territories;
     return *this;
 }
 
 // Stream insertion operator
 std::ostream& operator<<(std::ostream& strm, const Map& m)
 {
-    return strm << "Map(" << m.territoryNumber << ")";
+
+    int bordersNum = 0;
+    for (int i = 0; i < m.borders.size(); i++)
+    {
+        for (int j = 1; j < m.borders[i].size(); j++)
+        {
+            bordersNum++;
+        }
+    }
+
+    return strm << "Continents: " << m.continents.size() << "\tBorders: " << bordersNum << "\tTerritories: " << m.territories.size();
 }
 
 // Destructor
 Map::~Map()
 {
-    adjMatrix.clear();
+    for (int i = 0; i < this->territories.size(); i++) { delete territories[i]; }
 }
 
 // Method to add an edge
-void Map::addEdge(int i, int j)
+void Map::addBorder(vector<int> border)
 {
-    adjMatrix[i][j] = 1;
-    adjMatrix[j][i] = 1;
+    this->borders.push_back(border);
 }
 
-// Method to remove an edge
-void Map::removeEdge(int i, int j)
+void Map::addContinent(Continent* continent)
 {
-    adjMatrix[i][j] = 0;
-    adjMatrix[j][i] = 0;
+    this->continents.push_back(continent);
 }
 
-
-void Map::toString() {
-    for (int i = 0; i < territoryNumber; i++) {
-        for (int j = 0; j < territoryNumber; j++) {
-            cout << adjMatrix[i][j] << " ";
-        }
-        cout << endl;
-    }
+void Map::addTerritory(Territory* territory)
+{
+    this->territories.push_back(territory);
 }
+
 
 // Validates graph
-/*
-bool Map::Validate() {
-    bool visited[territoryNumber];
-    for (int j = 0; j < territoryNumber; j++) {
-        // memset(visited, false, sizeof(visited));
-        Traverse(j, visited);
-        for (int i = 0; i < territoryNumber; i++){
-            if (!visited[i]) return false;
-        }
-    }
-    return true;
-}
-*/
+//bool Map::Validate(){
+//    vector<bool> visited(this->territoryNumber);
+//    for (int j = 0; j < territoryNumber; j++) {
+//        // memset(visited, false, sizeof(visited));
+//        Traverse(j, visited);
+//        for (int i = 0; i < territoryNumber; i++){
+//            if (!visited[i]) return false;
+//        }
+//    }
+//    return true;
+//}
+
 
 // Traverses a graph
-void Map::Traverse(int j, bool visited[]) {
-    visited[j] = true;
-    for (int v = 0; v < territoryNumber; v++){
-        if (adjMatrix[j][v] && !visited[v]){
-            Traverse(v, visited);
-        }
-    }
-}
+//void Map::Traverse(int j, vector<bool> visited) {
+//    visited[j] = true;
+//    for (int v = 0; v < territoryNumber; v++) {
+//        if (borders[j][v] && !visited[v]) {
+//            Traverse(v, visited);
+//        }
+//    }
+//}
 
 // --------------------------------------------------------------------------------------------------------------
 // MapLoader
@@ -216,56 +269,44 @@ MapLoader::MapLoader() {}
 // Copy constructor
 MapLoader::MapLoader(const MapLoader& m)
 {
-    this->fileName = new string(*m.fileName);
+    this->fileName = m.fileName;
 }
 
 // Param. constructor
-MapLoader::MapLoader(string* fileName)
+MapLoader::MapLoader(string fileName)
 {
     this->fileName = fileName;
 }
 
 // Assignment operator
-MapLoader &MapLoader::operator= (const MapLoader& mL)
+MapLoader& MapLoader::operator= (const MapLoader& mL)
 {
     this->fileName = mL.fileName;
     return *this;
 }
 
 // Destructor
-MapLoader::~MapLoader()
-{
-    delete fileName;
-}
+MapLoader::~MapLoader() { }
 
 // Accessor
-string* MapLoader::getFileName()
+string MapLoader::getFileName()
 {
     return this->fileName;
 }
 
 // Mutator
-void MapLoader::setFileName(string* fileName)
+void MapLoader::setFileName(string fileName)
 {
     this->fileName = fileName;
 }
 
-// Validate File
-bool MapLoader::read()
+void Map::mapLoad(string fileName)
 {
-
-    Map* map = new Map();
-
-    std::ifstream in;
-
-    in.open(*fileName);
-    bool valid = false;
     string line;
+    ifstream in(fileName);
 
-    int sectionsFound = 0;
-
-    // Check if file contains countries (territories)
-    while(getline(in, line)) {
+    // keep reading until end of file
+    while (getline(in, line)) {
 
         // Assumes a valid file will have continents, countries, then borders.
         if (line.find("[continents]") != string::npos) {
@@ -279,18 +320,199 @@ bool MapLoader::read()
                     break;
                 }
 
-                const int lineValues = 3;
-                string lineSplit[lineValues]; // name, army value, color
+                vector<string> newContinent;
+                string continent = "";
 
-                // Break values of continent into array
-                for (int i = 0; i < lineValues; i++) {
-                    int index = line.find(' '); // Index of first space
-                    lineSplit[i] = line.substr(0, index);
-                    line = line.substr(index);  // Remove first value from line
+                //break values into newContinent
+                for (int i = 0; i < line.size(); i++) 
+                {
+                    if (line[i] == ' ')
+                    {
+                        newContinent.push_back(continent);
+                        continent = "";
+                    }
+                    else if (i == line.size() - 1)
+                    {
+                        continent = continent + line[i];
+                        newContinent.push_back(continent);
+                        continent = "";
+                    }
+                    else {
+                        continent = continent + line[i];
+                    }
+                } 
+                this->addContinent(new Continent(newContinent[0], stoi(newContinent[1]), newContinent[2]));
+            }
+        }
+        else if (line.find("[countries]") != string::npos) {
+
+            while (true) {
+
+                getline(in, line);
+
+                // Break out if at end of countries
+                if (line == "") {
+                    break;
                 }
 
-                // Only continent name is currently important
-                continents.push_back(new string(lineSplit[0]));
+                vector<string> newCountry;
+                string country = "";
+
+                //break values into countriesChecker
+                for (int i = 0; i < line.size(); i++) {
+                    if (line[i] == ' ')
+                    {
+                        newCountry.push_back(country);
+                        country = "";
+                    }
+                    else if (i == line.size() - 1)
+                    {
+                        country = country + line[i];
+                        newCountry.push_back(country);
+                        country = "";
+                    }
+                    else {
+                        country = country + line[i];
+                    }
+                }
+                // add territory to map
+                this->addTerritory(new Territory(stoi(newCountry[0]), newCountry[1], stoi(newCountry[2]), stoi(newCountry[3]), stoi(newCountry[4]), nullptr, 0));
+            }
+        }
+        else if (line.find("[borders]") != string::npos) {
+
+            while (true) {
+                //read current line
+                getline(in, line);
+
+                // Break out if at end of borders
+                if (line == "") {
+                    break;
+                }
+
+                vector<string> newBorder;
+                string border = "";
+
+                //break values into newBorder
+                for (int i = 0; i < line.size(); i++) {
+                    if (line[i] == ' ')
+                    {
+                        newBorder.push_back(border);
+                        border = "";
+                    }
+                    else if (i == line.size() - 1)
+                    {
+                        border = border + line[i];
+                        newBorder.push_back(border);
+                        border = "";
+                    }
+                    else {
+                        border = border + line[i];
+                    }
+                }
+
+                vector<int> borderVec;
+                for (int i = 0; i < newBorder.size(); i++)
+                {
+                    borderVec.push_back(stoi(newBorder[i]));
+                }
+                // add border to map
+                this->addBorder(borderVec);
+            }
+        }
+    }
+    in.close();
+}
+
+// Check if file is Valid
+bool MapLoader::fileChecker()
+{
+    bool valid = false;
+    string line;
+    int sectionsFound = 0;
+    std::ifstream in;
+
+    size_t dot_pos = fileName.find_last_of(".");
+    
+    if (dot_pos == string::npos)
+    {
+        return false;
+    }
+    else if (dot_pos != string::npos)
+    {
+        string fileExtension = fileName.substr(dot_pos + 1);
+        if (fileExtension != "map") { return false; }
+    }
+
+    //check if file exists in directory
+    try
+    {
+        in.open(fileName);
+    }
+    catch (exception e)
+    {
+        cout << "file not found";
+        return false;
+    }
+    
+    // Check if file contains countries (territories)
+    while (getline(in, line)) {
+
+        // Assumes a valid file will have continents, countries, then borders.
+        if (line.find("[continents]") != string::npos) {
+
+            while (true) {
+
+                getline(in, line);
+
+                // Break out if at end of continents
+                if (line == "") {
+                    break;
+                }
+
+                vector<string> continentsChecker; // name, army value, color
+                string checker = "";
+
+                //break values into continentsChecker
+                for (int i = 0; i < line.size(); i++) {
+                    if (line[i] == ' ')
+                    {
+                        continentsChecker.push_back(checker);
+                        checker = "";
+                    }
+                    else if (i == line.size() - 1)
+                    {
+                        checker = checker + line[i];
+                        continentsChecker.push_back(checker);
+                        checker = "";
+                    }
+                    else {
+                        checker = checker + line[i];
+                    }
+                }
+                //check if data members number is correct
+                if (continentsChecker.size() != 3) 
+                {
+                    cout << "file does not match continent data members" << endl;
+                    return false;
+                }
+                //check if a data memeber is empty
+                for (int i = 0; i < 3; i++)
+                {
+                    if (continentsChecker[i] == "" || continentsChecker[i] == " ") 
+                    { 
+                        cout << "file does not match continent data members" << endl;
+                        return false; 
+                    }
+                }
+                //check if armyNumber is int
+                try {
+                    int i = stoi(continentsChecker[1]);
+                }
+                catch (exception e) {
+                    cout << "file does not match continent data members" << endl;
+                    return false;
+                }
             }
             sectionsFound++;
         }
@@ -305,32 +527,59 @@ bool MapLoader::read()
                     break;
                 }
 
-                const int lineValues = 5;
-                string lineSplit[lineValues]; // num, name, continent index, x, y
+                vector<string> countriesChecker; // num, name, continent, x, y
+                string checker = "";
 
-
-
-                // Break values of country into array
-                for (int i = 0; i < lineValues; i++) {
-                    int index = line.find(' ');
-                    lineSplit[i] = line.substr(0, index);
-                    line = line.substr(index+1);
+                //break values into countriesChecker
+                for (int i = 0; i < line.size(); i++) {
+                    if (line[i] == ' ')
+                    {
+                        countriesChecker.push_back(checker);
+                        checker = "";
+                    }
+                    else if (i == line.size() - 1)
+                    {
+                        checker = checker + line[i];
+                        countriesChecker.push_back(checker);
+                        checker = "";
+                    }
+                    else {
+                        checker = checker + line[i];
+                    }
                 }
-
-                int continentIndex = stoi(lineSplit[2])-1;
-                string* continent = continents.at(continentIndex);
-
-                Territory* t = new Territory();
-                t->setTerritoryName(lineSplit[1]);
-                t->setContinent(*continent);
-                territories.push_back(t);
+                //check if data members number is correct
+                if (countriesChecker.size() != 5)
+                {
+                    cout << "file does not match countries data members" << endl;
+                    return false;
+                }
+                //check if a data memeber is empty
+                for (int i = 0; i < 5; i++)
+                {
+                    if (countriesChecker[i] == "" || countriesChecker[i] == " ")
+                    {
+                        cout << "file does not match countries data members" << endl;
+                        return false;
+                    }
+                }
+                //check if TerritoryNum, armies, x, y are int
+                try {
+                    int i = stoi(countriesChecker[0]);
+                    int j = stoi(countriesChecker[2]);
+                    int k = stoi(countriesChecker[3]);
+                    int l = stoi(countriesChecker[4]);
+                }
+                catch (exception e) {
+                    cout << "file does not match countries data members" << endl;
+                    return false;
+                }
             }
             sectionsFound++;
         }
         else if (line.find("[borders]") != string::npos) {
 
             while (true) {
-
+                //read current line
                 getline(in, line);
 
                 // Break out if at end of borders
@@ -338,25 +587,45 @@ bool MapLoader::read()
                     break;
                 }
 
-                int targetCountryIndex = 0;
-                vector<int*> adjacentIndexes;
+                vector<string> bordersChecker;
+                string checker = "";
 
-                // Break values of country into array
-                int counter = 0;
-                while (line.find(' ') != string::npos) {
-                    int delimiterIndex = line.find(' ');
-                    int countryIndex = stoi(line.substr(0, delimiterIndex));
-                    if (counter == 0) {
-                        // First value is a country that has adjacent countries
-                        targetCountryIndex = countryIndex;
+                //break values into bordersChecker
+                for (int i = 0; i < line.size(); i++) {
+                    if (line[i] == ' ')
+                    {
+                        bordersChecker.push_back(checker);
+                        checker = "";
+                    }
+                    else if (i == line.size() - 1)
+                    {
+                        checker = checker + line[i];
+                        bordersChecker.push_back(checker);
+                        checker = "";
                     }
                     else {
-                        // Proceeding values are indexes of adjacent the countries
-                        // Add all the adjacent country indexes to adj matrix of target country
-                        map->addEdge(targetCountryIndex, countryIndex);
-                        line = line.substr(delimiterIndex+1);
+                        checker = checker + line[i];
                     }
-                    counter++;
+                }
+                //check if a data memeber is empty
+                for (int i = 0; i < bordersChecker.size(); i++)
+                {
+                    if (bordersChecker[i] == "" || bordersChecker[i] == " ")
+                    {
+                        cout << "invalid border" << endl;
+                        return false;
+                    }
+                }
+                //check if TerritoryNum, armies, x, y are int
+                try {
+                    for (int i = 0; i < bordersChecker.size(); i++)
+                    {
+                        int j = stoi(bordersChecker[i]);
+                    }
+                }
+                catch (exception e) {
+                    cout << "invalid border" << endl;
+                    return false;
                 }
             }
             sectionsFound++;
@@ -365,31 +634,11 @@ bool MapLoader::read()
     }
     in.close();
 
-    // Exit if file is invalid
-    if(!valid) {
-        cout << "Invalid File";
-        exit(0);
-    }
-
     return valid;
-}
-
-// Fetch territories list in a .map file
-void MapLoader::getTerritoriesFromFile()
-{
-    string line;
-    std::ifstream in;
-    in.open(*fileName);
-
-    getline(in, line);
-
-    while(!in.eof()) {
-
-    }
 }
 
 // Stream assignment operator
 std::ostream& operator<<(std::ostream& strm, const MapLoader& mL)
 {
-    return strm << "MapLoader(" << mL.fileName << ")";
+    return strm << "File name: " << mL.fileName << endl;
 }
