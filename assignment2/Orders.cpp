@@ -197,8 +197,6 @@ Blockade::Blockade(const Blockade& other)
 Airlift::Airlift()
 {
     set_id(4);
-    //validate();
-    //execute();
 }
 
 Airlift::~Airlift() {
@@ -218,8 +216,6 @@ Airlift::Airlift(const Airlift& other)
 Negotiate::Negotiate()
 {
     set_id(5);
-    //validate();
-    //execute();
 }
 
 Negotiate::~Negotiate() {}
@@ -238,7 +234,18 @@ bool Deploy::validate() const
     cout << "Validating Deploy...\n";
 
     //If the target territory does not belong to the player that issued the order, the order is invalid
-    if (target->getTerritoryPlayer() != thisPlayer->getPlayerID())
+
+    vector<Territory*> pTerritories = thisPlayer->getTerritories();
+    bool belongs = false;
+
+    for(int i=0; i<pTerritories.size();i++){
+        if(pTerritories[i] == target){
+            belongs=true;
+        }
+    }
+
+    //if (target->getTerritoryPlayer() != thisPlayer->getPlayerID())
+    if(!belongs)
     {
         cout << "You do not own this territory!\n" << endl;
         return false;
@@ -265,7 +272,18 @@ bool Advance::validate() const
     cout << "Validating Advance...\n";
 
     //If the source territory does not belong to the player that issued the order, the order is invalid.
-    if (source->getTerritoryPlayer() != thisPlayer->getPlayerID())
+    //if (source->getTerritoryPlayer() != thisPlayer->getPlayerID())
+
+    vector<Territory*> pTerritories = thisPlayer->getTerritories();
+    bool belongs = false;
+
+    for(int i=0; i<pTerritories.size();i++){
+        if(pTerritories[i] == source){
+            belongs=true;
+        }
+    }
+
+    if(!belongs)
     {
         cout << "The source territory is not your own!\n" << endl;
         return false;
@@ -301,7 +319,30 @@ bool Airlift::validate() const
     //The target territory does not need to be adjacent to the source territory.
 
     //If the source or target does not belong to the player that issued the order, the order is invalid.
-    if (source->getTerritoryPlayer() != thisPlayer->getPlayerID() && target->getTerritoryPlayer() != thisPlayer->getPlayerID())
+
+
+    vector<Territory*> pTerritories = thisPlayer->getTerritories();
+    bool valid = false;
+
+    //First check if it belongs in target
+    for(int i=0; i<pTerritories.size();i++){
+        if(pTerritories[i] == target){
+            valid=true;
+            break;
+        }
+    }
+
+    bool valid2 = false;
+
+    //Then check if it belongs in source
+    for(int i=0; i<pTerritories.size();i++){
+        if(pTerritories[i] == target){
+            valid2=true;
+            break;
+        }
+    }
+
+    if (valid != true || valid2 != true)
     {
         cout << "The source and/or target territory is not your own!\n" << endl;
         return false;
@@ -326,7 +367,18 @@ bool Bomb::validate() const
     cout << "Validating Bomb...\n";
 
     //If the target belongs to the player that issued the order, the order is invalid.
-    if (target->getTerritoryPlayer() == thisPlayer->getPlayerID())
+
+    vector<Territory*> pTerritories = thisPlayer->getTerritories();
+    bool belongs = false;
+
+    for(int i=0; i<pTerritories.size();i++){
+        if(pTerritories[i] == target){
+            belongs=true;
+        }
+    }
+
+    if (belongs)
+    //if (target->getTerritoryPlayer() == thisPlayer->getPlayerID())
     {
         cout << "This territory is your own!\n" << endl;
         return false;
@@ -347,7 +399,18 @@ bool Blockade::validate() const
     cout << "Validating Blockade...\n";
 
     //If the target territory belongs to an enemy player, the order is declared invalid
-    if (target->getTerritoryPlayer() != thisPlayer->getPlayerID())
+    //if (target->getTerritoryPlayer() != thisPlayer->getPlayerID())
+
+    vector<Territory*> pTerritories = thisPlayer->getTerritories();
+    bool belongs = false;
+
+    for(int i=0; i<pTerritories.size();i++){
+        if(pTerritories[i] == target){
+            belongs=true;
+        }
+    }
+
+    if(!belongs)
     {
         cout << "This is not your territory! This order can only be played on your own territory!\n" << endl;
         return false;
@@ -362,7 +425,18 @@ bool Negotiate::validate() const
 {
     cout << "Validating Negotiate...\n";
 
-    if (targetPlayer->getPlayerID() == thisPlayer->getPlayerID())
+    //if (targetPlayer->getPlayerID() == thisPlayer->getPlayerID())
+
+    vector<Territory*> pTerritories = thisPlayer->getTerritories();
+    bool belongs = false;
+
+    for(int i=0; i<pTerritories.size();i++){
+        if(pTerritories[i] == target){
+            belongs=true;
+        }
+    }
+
+    if(belongs)
     {
         cout << "You cannot negotiate with yourself!\n" << endl;
         return false;
@@ -383,6 +457,8 @@ void Deploy::execute() const
 
         //the selected number of armies is added to the number of armies on that territory.
         target->setNumberOfArmies(*amount + target->getNumberOfArmies());
+
+
     }
 }
 
@@ -488,18 +564,21 @@ void Blockade::execute() const
 
         //the ownership of the territory is transferred to the Neutral player
         target->setTerritoryPlayer(-1);
+
+        //Notify(this);
     }
 }
 
-void Negotiate::execute() const
-{
+void Negotiate::execute() const {
     if (validate())
     {
         cout << "Negotiating... \n";
         //If the target is an enemy player (Else of the validate statement)
 
-        thisPlayer->addFriendly(targetPlayer);
-        targetPlayer->addFriendly(thisPlayer);
+        thisPlayer->addFriendly(*targetPlayer);
+        targetPlayer->addFriendly(*thisPlayer);
+
+        //Notify(this);
     }
 
 }
@@ -552,11 +631,13 @@ void simulateAttack(Territory* source, Territory* target, Player* thisPlayer, in
         cout << "Attackers win!" << endl;
 
         source->setTerritoryPlayer(thisPlayer->getPlayerID());
-        thisPlayer->getTerritoryList()->push_back(target);
+        thisPlayer->getTerritories().push_back(target);
         target->setNumberOfArmies(sourceArmyNum);
-        thisPlayer->getGE()->Notify(); // Notify stats observer since a player conquered a territory
+        //thisPlayer->getGE()->Notify(); // Notify stats observer since a player conquered a territory
+
 
         // give thisPlayer 1 card
+
     }
 
     else {
@@ -566,6 +647,15 @@ void simulateAttack(Territory* source, Territory* target, Player* thisPlayer, in
     }
 
 
+}
 
-
+void Order::StringTolog() {
+    ofstream output;
+    output.open("log.txt", ios::app);
+    if (output.is_open()) {
+        output << get_type() << endl;
+        output.close();
+    } else {
+        cerr << "unable to open output file" << endl;
+    }
 }

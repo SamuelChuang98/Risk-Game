@@ -119,6 +119,34 @@ build CMakeFiles/assignment1.dir/Part1Driver.cpp.obj: CXX_COMPILER__assignment1_
   OBJECT_DIR = CMakeFiles\assignment1.dir
   OBJECT_FILE_DIR = CMakeFiles\assignment1.dir
 
+build CMakeFiles/assignment1.dir/LogObserver.cpp.obj: CXX_COMPILER__assignment1_Debug C$:/xampp/htdocs/comp345/assignment2/LogObserver.cpp || cmake_object_order_depends_target_assignment1
+  DEP_FILE = CMakeFiles\assignment1.dir\LogObserver.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++20
+  INCLUDES = -IC:/xampp/htdocs/comp345/assignment2/.
+  OBJECT_DIR = CMakeFiles\assignment1.dir
+  OBJECT_FILE_DIR = CMakeFiles\assignment1.dir
+
+build CMakeFiles/assignment1.dir/Subject.cpp.obj: CXX_COMPILER__assignment1_Debug C$:/xampp/htdocs/comp345/assignment2/Subject.cpp || cmake_object_order_depends_target_assignment1
+  DEP_FILE = CMakeFiles\assignment1.dir\Subject.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++20
+  INCLUDES = -IC:/xampp/htdocs/comp345/assignment2/.
+  OBJECT_DIR = CMakeFiles\assignment1.dir
+  OBJECT_FILE_DIR = CMakeFiles\assignment1.dir
+
+build CMakeFiles/assignment1.dir/ILoggable.cpp.obj: CXX_COMPILER__assignment1_Debug C$:/xampp/htdocs/comp345/assignment2/ILoggable.cpp || cmake_object_order_depends_target_assignment1
+  DEP_FILE = CMakeFiles\assignment1.dir\ILoggable.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++20
+  INCLUDES = -IC:/xampp/htdocs/comp345/assignment2/.
+  OBJECT_DIR = CMakeFiles\assignment1.dir
+  OBJECT_FILE_DIR = CMakeFiles\assignment1.dir
+
+build CMakeFiles/assignment1.dir/GameEngine.cpp.obj: CXX_COMPILER__assignment1_Debug C$:/xampp/htdocs/comp345/assignment2/GameEngine.cpp || cmake_object_order_depends_target_assignment1
+  DEP_FILE = CMakeFiles\assignment1.dir\GameEngine.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++20
+  INCLUDES = -IC:/xampp/htdocs/comp345/assignment2/.
+  OBJECT_DIR = CMakeFiles\assignment1.dir
+  OBJECT_FILE_DIR = CMakeFiles\assignment1.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target assignment1
@@ -127,7 +155,7 @@ build CMakeFiles/assignment1.dir/Part1Driver.cpp.obj: CXX_COMPILER__assignment1_
 #############################################
 # Link the executable assignment1.exe
 
-build assignment1.exe: CXX_EXECUTABLE_LINKER__assignment1_Debug CMakeFiles/assignment1.dir/Cards.cpp.obj CMakeFiles/assignment1.dir/CardsDriver.cpp.obj CMakeFiles/assignment1.dir/main.cpp.obj CMakeFiles/assignment1.dir/Player.cpp.obj CMakeFiles/assignment1.dir/PlayerDriver.cpp.obj CMakeFiles/assignment1.dir/OrdersDriver.cpp.obj CMakeFiles/assignment1.dir/Orders.cpp.obj CMakeFiles/assignment1.dir/Map.cpp.obj CMakeFiles/assignment1.dir/CommandProcessing.cpp.obj CMakeFiles/assignment1.dir/Part1Driver.cpp.obj
+build assignment1.exe: CXX_EXECUTABLE_LINKER__assignment1_Debug CMakeFiles/assignment1.dir/Cards.cpp.obj CMakeFiles/assignment1.dir/CardsDriver.cpp.obj CMakeFiles/assignment1.dir/main.cpp.obj CMakeFiles/assignment1.dir/Player.cpp.obj CMakeFiles/assignment1.dir/PlayerDriver.cpp.obj CMakeFiles/assignment1.dir/OrdersDriver.cpp.obj CMakeFiles/assignment1.dir/Orders.cpp.obj CMakeFiles/assignment1.dir/Map.cpp.obj CMakeFiles/assignment1.dir/CommandProcessing.cpp.obj CMakeFiles/assignment1.dir/Part1Driver.cpp.obj CMakeFiles/assignment1.dir/LogObserver.cpp.obj CMakeFiles/assignment1.dir/Subject.cpp.obj CMakeFiles/assignment1.dir/ILoggable.cpp.obj CMakeFiles/assignment1.dir/GameEngine.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\assignment1.dir

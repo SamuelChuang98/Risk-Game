@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include "Player.h"
+#include "Subject.h"
+#include "ILoggable.h"
 
 class Player;
 class Order;
@@ -18,7 +20,7 @@ class Territory;
 namespace orderSpace{
     int orderMain();
 }
-class Order
+class Order : public Subject, public ILoggable
 {
     public :
         Order();
@@ -30,6 +32,7 @@ class Order
         void set_id(int num);
         string get_type();
 
+        void StringTolog() override;
     protected:
         Player *thisPlayer;
 
@@ -37,6 +40,7 @@ class Order
         bool valid;
         vector<string> vec_type1 = { "deploy", "advance", "bomb", "blockade", "airlift", "negotiate" };
         int type_id;
+        vector<Territory*> pTerritories;
 };
 
 class Deploy : public Order
@@ -126,7 +130,8 @@ private:
     bool validate() const;
     void execute() const;
 
-    Player targetPlayer;
+    Player *targetPlayer;
+    Territory *target;
 
 };
 
@@ -144,9 +149,10 @@ public:
     void move(int position, int new_position);
     void execute_orders();
 
+    vector<Order *> *get_order_list();
+
 private:
     vector<Order*> vec_order_list; //store the orders
-    vector<Order *> *get_order_list();
 };
 
 void simulateAttack(Territory*, Territory*, Player*, int*);
