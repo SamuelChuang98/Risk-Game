@@ -21,37 +21,39 @@ namespace cardSpace {
 class Cards {
 private:
     cardType *type;
+    friend std::ostream &operator<<(std::ostream &strm, const Cards &c); //Stream insertion
 public:
     //Default constructor
     Cards();
-
     //copy constructor
     Cards(Cards &card);
-
     //param constructor
     Cards(cardType *theType);
-
+    //assignment operator
+    Cards& operator=(const Cards _c);
     //destructor
     ~Cards();
-
     //getter
     cardType getType();
 
     void setType(cardType &theType);
 
     void play(); // To implement using orders
-    void printCard();
+    string printCard();
 
 };
 
 class Hand {
 private:
     std::vector<Cards *> cards;
+    friend std::ostream &operator<<(std::ostream &strm, const Hand &h); //Stream insertion
 public:
     //Default constructor
     Hand();
     //copy constructor
     Hand(Hand &hand);
+    //assignment operator
+    Hand& operator=(const Hand _h);
     //destructor
     ~Hand();
     /*
@@ -74,6 +76,7 @@ public:
 class Deck {
 private:
     std::vector<Cards *> cards;
+    friend std::ostream &operator<<(std::ostream &strm, const Deck &d); //Stream insertion
 public:
     //default constructor
     Deck();

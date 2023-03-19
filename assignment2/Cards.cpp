@@ -20,6 +20,13 @@ Cards::Cards() { type = new cardType(diplomacy); }
 Cards::Cards(Cards &card) { type = new cardType(card.getType()); }
 //param constructor
 Cards::Cards(cardType *theType) { this->type = new cardType(*theType); }
+//assignment operator
+Cards& Cards::operator=(const Cards _c){
+    delete type;
+    type = new cardType(*_c.type);
+    return *this;
+}
+
 //Destructor
 Cards::~Cards(){
     delete type;
@@ -47,27 +54,24 @@ void Cards::play() {
 /**
  * prints out current card
  */
-void Cards::printCard() {
+string Cards::printCard() {
+    string theCard;
     switch (*type) {
-        case bomb:
-            cout << " bomb" << endl;
+        case bomb: theCard = "bomb";
             break;
-        case reinforcement:
-            cout << " reinforcement" << endl;
+        case reinforcement: theCard = "reinforcement";
             break;
-        case blockade:
-            cout << " blockade" << endl;
+        case blockade: theCard = "blockade";
             break;
-        case airlift:
-            cout << " airlift" << endl;
+        case airlift: theCard = "airlift";
             break;
-        case diplomacy:
-            cout << " diplomacy" << endl;
+        case diplomacy: theCard = "diplomacy";
             break;
-        default:
-            cout << "Current card : is null" << endl;
+        default: theCard = "null";
     }
+    return theCard;
 }
+std::ostream& operator<<(std::ostream& strm,  Cards& c) { return strm << "Card(" << c.printCard()<< ")"; } // Stream assignment
 /**
  * Hand Class implementation
  */
@@ -78,6 +82,13 @@ Hand::Hand(Hand &hand) {
     for(Cards *car: hand.cards){
         this->cards.push_back(new Cards(*car));
     }
+}
+//assignment operator
+Hand& Hand::operator=(const Hand _h){
+    for(Cards *car: _h.cards){
+        cards.push_back(car);
+    }
+    return *this;
 }
 //destructor
 Hand::~Hand() {
@@ -92,11 +103,9 @@ Hand::~Hand() {
  * then prints out the cardType
  * @param card
  */
-
 void Hand::addToHand(Cards &card) {
     cards.push_back(&card);
-    cout << " You got card: ";
-    card.printCard();
+    cout << " Added to Hand: "<< card << endl;
 }
 /**
  *  * represents the action of removing a card from the players hand.
@@ -124,6 +133,16 @@ void Hand::printHand() {
         cards.at(i)->printCard();
     }
 }
+std::ostream& operator<<(std::ostream& strm, const Hand& h) {
+    int i = 1;
+    strm << "Cards[" << endl;
+    for(Cards* car : h.cards){
+        strm << i << " : " << car->printCard() << endl;
+        ++i;
+    }
+    strm << "]";
+    return strm;
+} // Stream assignment
 /**
  * Deck Class implementation
  */
@@ -150,6 +169,7 @@ Deck::~Deck() {
     }
     cards.clear();
 }
+
 /**
  * represents the action of picking up a card from the deck and returning it,
  * initializes a pointer using Cards copy constructor of a card at the random position
@@ -157,7 +177,6 @@ Deck::~Deck() {
  * @return *card
  */
 Cards *Deck::draw() {
-
     int theLuckyOne = das(engine);
     Cards *card = new Cards(*cards.at(theLuckyOne));
     cards.erase(cards.begin() + theLuckyOne);
@@ -173,3 +192,11 @@ void Deck::printDeck() {
         cards.at(i)->printCard();
     }
 }
+std::ostream& operator<<(std::ostream& strm, const Deck& d) {
+    strm << "Cards[" << endl;
+    for(Cards* car : d.cards){
+        strm << car->printCard() << endl;
+    }
+    strm << "]";
+    return strm;
+} // Stream assignment
