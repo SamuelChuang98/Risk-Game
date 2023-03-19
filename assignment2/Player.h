@@ -25,6 +25,7 @@ public:
     vector<Territory*> toDefend();
     vector<Territory*> toAttack();
     void issueOrder();
+    void addFriendly(Player &p);
 
 
     // Accessors
@@ -32,6 +33,8 @@ public:
     Hand* getHand();
     OrderList* getOrders();
     int getReinforcementPool();
+    vector<Player*> getFriendlies();
+
 
     // Mutators
     void setTerritories(vector<Territory*> ters);
@@ -46,5 +49,6 @@ private:
     OrderList* orders;          // List of orders owned by the player
     int reinforcementPool;      // Reinforcement allocated to a player
     friend std::ostream &operator<<(std::ostream &strm, const Player &p); // stream insertion operator
+    vector<Player*> friendlies; // Vector of allies of the player
 };
 

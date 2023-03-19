@@ -116,6 +116,10 @@ void Player::issueOrder() {
     orders->set_order_list(order);
 }
 
+void Player::addFriendly(Player &p) {
+    friendlies.push_back(&p);
+}
+
 // Accessors
 
 vector<Territory*> Player::getTerritories() 
@@ -137,6 +141,10 @@ OrderList* Player::getOrders()
 int Player::getReinforcementPool()
 {
     return this->reinforcementPool;
+}
+
+vector<Player*> Player::getFriendlies() {
+    return friendlies;
 }
 
 // Mutators
