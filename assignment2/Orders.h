@@ -4,7 +4,9 @@
 #include <string>
 #include <vector>
 
-
+class Player;
+class Order;
+class Territory;
 
 using namespace std;
 
