@@ -29,14 +29,15 @@ public:
 
 
     // Accessors
+    int getPlayerID();
     vector<Territory*> getTerritories();
     Hand* getHand();
     OrderList* getOrders();
     int getReinforcementPool();
     vector<Player*> getFriendlies();
 
-
     // Mutators
+    void setPlayerID(int id);
     void setTerritories(vector<Territory*> ters);
     void setHand(Hand* hand);
     void setOrders(OrderList* orders);

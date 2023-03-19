@@ -138,6 +138,11 @@ void Player::addFriendly(Player &p) {
 
 // Accessors
 
+int Player::getPlayerID()
+{
+    return this->playerID;
+}
+
 vector<Territory*> Player::getTerritories() 
 {
     return this->ters; 
@@ -164,6 +169,11 @@ vector<Player*> Player::getFriendlies() {
 }
 
 // Mutators
+
+void Player::setPlayerID(int id)
+{
+    this->playerID = id;
+}
 
 void Player::setTerritories(vector<Territory*> ters)
 {

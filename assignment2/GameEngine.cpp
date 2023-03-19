@@ -377,27 +377,24 @@ void GameEngine::reinforcementPhase(vector<Player*> players)
 	// Loop through all players in a game
 	for(int i = 0; i < players.size(); i++) 
 	{
-		int reinforcement = players[i]->getTerritories().size()/3; // get allowed reinforcement value of player
+		int reinforcement = floor(players[i]->getTerritories().size()/3); // get allowed reinforcement value of player
 
 		// check for continent bonus
 		/*
 		INSERT CODE HERE
 		*/
 		vector<Territory*> ter_list = players[i]->getTerritories();
-
-		int	temporary = players[i]->getReinforcementPool(); // get current reinforcement allocated to player
-		
-		int total = reinforcement+temporary;
-
-		if(total < 3)
+        
+		if(reinforcement < 3)
 		{
-			players[i]->setReinforcementPool(temporary+3); // minimum reinforcement value of 3
+			players[i]->setReinforcementPool(players[i]->getReinforcementPool()+3); // minimum reinforcement value of 3
 		} else {
-			players[i]->setReinforcementPool(total); // set new reinforcement value allocated to player
+			players[i]->setReinforcementPool(players[i]->getReinforcementPool()+reinforcement); // set new reinforcement value allocated to player
 		}
 	}
 }
 
+// Order Issuing Phase
 void GameEngine::issueOrdersPhase(vector<Player*> players) 
 {
 	for(int i = 0; i < players.size(); i++)
@@ -406,29 +403,37 @@ void GameEngine::issueOrdersPhase(vector<Player*> players)
 	}
 }
 
+// Order Execution Phase
 void GameEngine::executeOrdersPhase()
 {
 	vector<Order*> orderList;
 
 }
 
+// Main Game Loop
 void GameEngine::mainGameLoop(vector<Player*> players)
 {
 	while(state->getGameState() != "win")
-	{
+    {
 
 		for(int i = 0; i < players.size(); i++) {
-			
+
+            // Check if a player is eliminated
+            if(players[i]->getTerritories().empty()) {
+                players.erase(players.begin() + i);
+            }
+
+            // Check if game has been won
+            if(players.size() == 1) {
+                win();
+				cout << "Player" << players[i]->getPlayerID() << "won the game!" << endl;
+            }
+
 		}
 
-		// Check if game has been won
-		if(true) {
-			win();
-		}
+        reinforcementPhase(players);
+        issueOrdersPhase(players);
+        executeOrdersPhase();
 
-		// Check if a player is eliminated
-		if(true) {
-
-		}
 	}
 }
