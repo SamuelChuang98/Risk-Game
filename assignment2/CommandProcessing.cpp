@@ -4,8 +4,24 @@
 
 using namespace std;
 
+// COMMAND //
+
 void Command::saveEffect(string str) {
     effect = str;
+    StringTolog();
+}
+
+void Command::StringTolog() {
+    ofstream output;
+    output.open("log.txt", ios::app);
+    if (output.is_open()){
+        output << "CommandProcessor saveEffect(): " << effect << endl;
+        output.close();
+    }
+    else{
+        cerr << "unable to open output file" << endl;
+    }
+    output.close();
 }
 
 // TARGET - CommandProcessor // ------------------------------------------
@@ -90,6 +106,7 @@ void CommandProcessor::saveCommand(string c_str) {
     Command* c = new Command();
     c->name = c_str;
     commands.push_back(c);
+    StringTolog();
     validate(*c);
 }
 
@@ -111,6 +128,20 @@ Command CommandProcessor::getCommand() {
     string command = readCommand();
     saveCommand(command);
     return *commands.back();
+}
+
+void CommandProcessor::StringTolog() {
+    ofstream output;
+    output.open("log.txt", ios::app);
+    if (output.is_open()){
+        Command* lastCommand = commands.back();
+        output << "CommandProcessor saveCommand(): " << lastCommand->name << endl;
+        output.close();
+    }
+    else{
+        cerr << "unable to open output file" << endl;
+    }
+    output.close();
 }
 
 // ADAPTEE - FileLineReader // -------------------------------------------

@@ -5,18 +5,21 @@
 #include <fstream>
 
 #include "GameEngine.h"
+#include "Subject.h"
+#include "ILoggable.h"
 
 using namespace std;
 
 // Command stores commands as an aggregate structure with a name and effect
-struct Command {
+struct Command : public Subject, public ILoggable{
     void saveEffect(string str);    // Saves the effect of a command
+    void StringTolog() override;
     string name;
     string effect;
 };
 
 // Target; Processes game commands
-class CommandProcessor {
+class CommandProcessor : public Subject, public ILoggable {
 
 private:
     virtual string readCommand();       // Read command from console
@@ -35,6 +38,7 @@ public:
     CommandProcessor(CommandProcessor &c);     // Copy constructor
     CommandProcessor &operator=(const CommandProcessor &rightSide);    // Assignment operator
     Command getCommand();   // Get command object
+    void StringTolog() override;
 
 };
 
