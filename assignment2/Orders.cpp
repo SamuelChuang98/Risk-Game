@@ -1,5 +1,4 @@
 #include "Orders.h"
-#include "Orders.h"
 #include "Map.h"
 #include "Player.h"
 #include "Cards.h"
@@ -7,18 +6,18 @@
 using std::cout;
 using std::endl;
 
-Order::Order(){
-    thisPlayer=nullptr;
+Order::Order() {
+    thisPlayer = nullptr;
 }
-Order::~Order(){
+Order::~Order() {
     thisPlayer = nullptr;
 }
 
 //This validates the order
 /*void Order::validate()
 {
-	cout << "Validating order..." << endl;
-	valid = true;
+    cout << "Validating order..." << endl;
+    valid = true;
 }*/
 
 //This executes the order
@@ -83,10 +82,10 @@ void OrderList::execute_orders()
 }
 
 //OrderList copy constructor
-OrderList::OrderList(OrderList const &other)
+OrderList::OrderList(OrderList const& other)
 {
     // Copy the vector of Order pointers
-    vec_order_list = *(other.get_order_list());
+    //vec_order_list = *(other.get_order_list());
 
     // Create copies of the Order objects and update the vector to point to the copies
     for (int i = 0; i < vec_order_list.size(); i++)
@@ -95,6 +94,8 @@ OrderList::OrderList(OrderList const &other)
     }
 }
 
+OrderList::~OrderList() {}
+OrderList::OrderList() {}
 
 //This moves a position from its current to a new position
 void OrderList::move(int position, int newPosition)
@@ -102,7 +103,7 @@ void OrderList::move(int position, int newPosition)
 
     int listSize = vec_order_list.size();
 
-    if (position >= 0 && position < listSize && newPosition >= 0 && newPosition < listSize )
+    if (position >= 0 && position < listSize && newPosition >= 0 && newPosition < listSize)
     {
         Order* temp = vec_order_list[position];
         vec_order_list.erase(vec_order_list.begin() + position);
@@ -120,10 +121,9 @@ Deploy::Deploy()
     target = nullptr;
     amount = nullptr;
 
-    execute();
 }
 
-Deploy::~Deploy(){
+Deploy::~Deploy() {
     delete amount;
 }
 
@@ -144,11 +144,11 @@ Deploy::Deploy(const Deploy& other)
 Advance::Advance()
 {
     set_id(1);
-    validate();
-    execute();
+    //validate();
+    //execute();
 }
 
-Advance::~Advance(){
+Advance::~Advance() {
     delete amount;
 }
 
@@ -164,11 +164,11 @@ Advance::Advance(const Advance& other)
 Bomb::Bomb()
 {
     set_id(2);
-    validate();
-    execute();
+    //validate();
+    //execute();
 }
 
-Bomb::~Bomb(){}
+Bomb::~Bomb() {}
 
 
 // Copy constructor
@@ -181,11 +181,11 @@ Bomb::Bomb(const Bomb& other)
 Blockade::Blockade()
 {
     set_id(3);
-    validate();
-    execute();
+    //validate();
+    //execute();
 }
 
-Blockade::~Blockade(){}
+Blockade::~Blockade() {}
 
 // Copy constructor
 Blockade::Blockade(const Blockade& other)
@@ -197,11 +197,11 @@ Blockade::Blockade(const Blockade& other)
 Airlift::Airlift()
 {
     set_id(4);
-    validate();
-    execute();
+    //validate();
+    //execute();
 }
 
-Airlift::~Airlift(){
+Airlift::~Airlift() {
     delete amount;
 }
 
@@ -218,11 +218,11 @@ Airlift::Airlift(const Airlift& other)
 Negotiate::Negotiate()
 {
     set_id(5);
-    validate();
-    execute();
+    //validate();
+    //execute();
 }
 
-Negotiate::~Negotiate(){}
+Negotiate::~Negotiate() {}
 
 // Copy constructor
 Negotiate::Negotiate(const Negotiate& other)
@@ -301,7 +301,7 @@ bool Airlift::validate() const
     //The target territory does not need to be adjacent to the source territory.
 
     //If the source or target does not belong to the player that issued the order, the order is invalid.
-    if (source->getTerritoryPlayerID() != thisPlayer->getPlayerID() && target -> getTerritoryPlayerID() != thisPlayer->getPlayerID())
+    if (source->getTerritoryPlayerID() != thisPlayer->getPlayerID() && target->getTerritoryPlayerID() != thisPlayer->getPlayerID())
     {
         cout << "The source and/or target territory is not your own!\n" << endl;
         return false;
@@ -326,7 +326,7 @@ bool Bomb::validate() const
     cout << "Validating Bomb...\n";
 
     //If the target belongs to the player that issued the order, the order is invalid.
-    if(target->getTerritoryPlayerID() == thisPlayer->getPlayerID())
+    if (target->getTerritoryPlayerID() == thisPlayer->getPlayerID())
     {
         cout << "This territory is your own!\n" << endl;
         return false;
@@ -347,7 +347,7 @@ bool Blockade::validate() const
     cout << "Validating Blockade...\n";
 
     //If the target territory belongs to an enemy player, the order is declared invalid
-    if(target->getTerritoryPlayerID() != thisPlayer->getPlayerID())
+    if (target->getTerritoryPlayerID() != thisPlayer->getPlayerID())
     {
         cout << "This is not your territory! This order can only be played on your own territory!\n" << endl;
         return false;
@@ -362,7 +362,7 @@ bool Negotiate::validate() const
 {
     cout << "Validating Negotiate...\n";
 
-    if(targetPlayer->getPlayerID() == thisPlayer->getPlayerID())
+    if (targetPlayer->getPlayerID() == thisPlayer->getPlayerID())
     {
         cout << "You cannot negotiate with yourself!\n" << endl;
         return false;
@@ -504,7 +504,7 @@ void Negotiate::execute() const
 
 }
 
-void simulateAttack(Territory* source, Territory* target, Player* thisPlayer, int* amount){
+void simulateAttack(Territory* source, Territory* target, Player* thisPlayer, int* amount) {
 
     //Removes the army from source (movement)
     source->setNumberOfArmies(source->getNumberOfArmies() - *amount);
@@ -514,55 +514,55 @@ void simulateAttack(Territory* source, Territory* target, Player* thisPlayer, in
     int attKills = 0; // Num of dead offense
 
     // Each attacking army unit involved has 60% chances of killing one defending army.
-    for (int i=0; i < *amount ; i++){
+    for (int i = 0; i < *amount; i++) {
 
         //Rand num between 1 - 100
         int roll = rand() % 100 + 1;
 
-        if (roll <= 60){
+        if (roll <= 60) {
             defKills++;
         }
     }
 
     // At the same time, each defending army unit has 70% chances of killing one attacking army unit.
-    for (int i=0; i < *amount ; i++){
+    for (int i = 0; i < *amount; i++) {
 
         //Rand num between 1 - 100
         int roll = rand() % 100 + 1;
 
-        if (roll <= 70){
+        if (roll <= 70) {
             attKills++;
         }
     }
 
-    int targetArmyNum = target ->getNumberOfArmies() - defKills;
+    int targetArmyNum = target->getNumberOfArmies() - defKills;
     int sourceArmyNum = *amount - attKills;
 
-    if (targetArmyNum < 0){
+    if (targetArmyNum < 0) {
         targetArmyNum = 0;
     }
 
-    if (sourceArmyNum < 0){
+    if (sourceArmyNum < 0) {
         sourceArmyNum = 0;
     }
 
     // If all the defender's armies are eliminated, the attacker captures the territory. The attacking army units that survived the battle then occupy the conquered territory.
     // A player receives a card at the end of his turn if they successfully conquered at least one territory during their turn.
-    if(targetArmyNum == 0 && sourceArmyNum > 0){
+    if (targetArmyNum == 0 && sourceArmyNum > 0) {
         cout << "Attackers win!" << endl;
 
-        source -> setTerritoryPlayerID(thisPlayer->getPlayerID());
-        thisPlayer -> getTerritoryList() -> push_back(target);
-        target ->setNumberOfArmies(sourceArmyNum);
-        thisPlayer -> getGE() -> Notify(); // Notify stats observer since a player conquered a territory
+        source->setTerritoryPlayerID(thisPlayer->getPlayerID());
+        thisPlayer->getTerritoryList()->push_back(target);
+        target->setNumberOfArmies(sourceArmyNum);
+        thisPlayer->getGE()->Notify(); // Notify stats observer since a player conquered a territory
 
         // give thisPlayer 1 card
     }
 
-    else{
+    else {
         cout << "Attackers lost" << endl;
         source->setNumberOfArmies(source->getNumberOfArmies() + sourceArmyNum);
-        target ->setNumberOfArmies(targetArmyNum);
+        target->setNumberOfArmies(targetArmyNum);
     }
 
 
