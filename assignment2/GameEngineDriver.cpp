@@ -3,9 +3,13 @@
 int GameEngineSpace::GameEngineMain()
 {
 	GameState s = GameState();	//creating a game state object
-	GameEngine game = GameEngine(&s, 0);	//creating a GameEngine object with GameState pointing at GameState s
+	GameEngine game = GameEngine(&s);	//creating a GameEngine object with GameState pointing at GameState s
 	string command = "play"; //command string that will be responsible to get the input from the user
 	int playersCount = 0;	//number of players in the game
+	Map map = Map();
+	string filePath = "C:\\Users\\aitan\\Documents\\visual studio workspace\\A2\\";
+	string mapName = "";
+	MapLoader mapLoader = MapLoader();
 
 	cout << "welcome to warzone!!!\n" << endl;
 
@@ -24,13 +28,44 @@ int GameEngineSpace::GameEngineMain()
 
 		//transition the state of the program depending on the command that the user entered
 		//if the user entered a command that does not exist, the program will not transition and print an error and ask the user to enter a valid command
-		if (command == "load map" || command == "loadmap")
+		if (command.find("load map") != std::string::npos || command.find("loadmap") != std::string::npos )
 		{
-			game.loadMap();
+			cout << "in load map" << endl;
+			string temp = "";
+			vector<string> tempVec;
+
+			//break values into tempVec
+			for (int i = 0; i < command.size(); i++) {
+				if (command[i] == ' ')
+				{
+					tempVec.push_back(temp);
+					temp = "";
+				}
+				else if (i == command.size() - 1)
+				{
+					temp = temp + command[i];
+					tempVec.push_back(temp);
+					temp = "";
+				}
+				else {
+					temp = temp + command[i];
+				}
+			}
+			for (int i = 0; i < tempVec.size(); i++)
+			{
+				if (tempVec[i] != "load" || tempVec[i] != "map" || tempVec[i] != "loadmap" || tempVec[i] != " " || tempVec[i] != "")
+				{
+					mapName = tempVec[i];
+				}
+			}
+			
+			mapLoader.setFileName(filePath + mapName + ".map");
+			game.loadMap(mapLoader, map);
+			cin.clear();
 		}
 		else if (command == "validate map" || command == "validatemap")
 		{
-			game.validateMap();
+			game.validateMap(map);
 		}
 		else if (command == "add player" || command == "addplayer")
 		{
@@ -43,10 +78,10 @@ int GameEngineSpace::GameEngineMain()
 			//clear the input buffer to allow the program to accept multiple inputs
 			cin.clear();
 			cin.ignore(numeric_limits<int>::max(), '\n');
-			
+
 			try
 			{
-				
+
 				if (temp.length() > 1)
 				{
 					throw exception();
@@ -66,7 +101,7 @@ int GameEngineSpace::GameEngineMain()
 		}
 		else if (command == "assign countries" || command == "assigncountries")
 		{
-			game.assignCountries();
+			game.gameStart();
 		}
 		else if (command == "issue order" || command == "issueorder")
 		{
@@ -102,7 +137,13 @@ int GameEngineSpace::GameEngineMain()
 		{
 			cout << "ERROR: command '" << command << "' does not exist\nPlease choose one of the available commands\n" << endl;
 		}
-		cout << "========================================" << game.getPlayers()<< endl;
 	}
 	return 0;
 }
+
+int main()
+{
+	GameEngineSpace::GameEngineMain();
+}
+
+

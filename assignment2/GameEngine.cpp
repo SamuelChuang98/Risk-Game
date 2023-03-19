@@ -23,7 +23,7 @@ ostream& operator<<(ostream& out, const GameState& _GameState)
 //GameState deconstructor
 GameState::~GameState()
 {
-	
+
 }
 
 //start state
@@ -96,13 +96,16 @@ GameState& GameState::operator=(const GameState& _GameState) {
 //GameEngine default constructor
 GameEngine::GameEngine() {
 	state = nullptr;
-	players = 0;
 }
 
 //GameEngine parametrized constructor
-GameEngine::GameEngine(GameState* _GameState, int _players) {
+GameEngine::GameEngine(GameState* _GameState, vector<Player*> _players) {
 	state = _GameState;
 	players = _players;
+}
+
+GameEngine::GameEngine(GameState* _GameState) {
+	state = _GameState;
 }
 
 //GameEngine copy constructor
@@ -118,14 +121,20 @@ GameEngine::~GameEngine() {
 }
 
 //command responsible to load the map into the game
-void GameEngine::loadMap() {
+void GameEngine::loadMap(MapLoader mapLoader, Map map) {
 	//if the user enters this command while not being in the 'start' or 'mapLoaded' state, this command will not be executed and will result in an error
 	if (state->getGameState() == "start" || state->getGameState() == "mapLoaded")
 	{
-		//set the game state to the 'mapLoaded' state
-		state->setGameState("mapLoaded");
-		state->mapLoaded();
-		cout << "Map Loaded Successfully" << endl;
+		// if file is valid, load map
+		if (mapLoader.fileChecker())
+		{
+			// load the map
+			map.mapLoad(mapLoader.getFileName());
+			//set the game state to the 'mapLoaded' state
+			state->setGameState("mapLoaded");
+			state->mapLoaded();
+			cout << "Map Loaded Successfully" << endl;
+		}
 	}
 	else
 	{
@@ -134,14 +143,18 @@ void GameEngine::loadMap() {
 }
 
 //command responsible to validate the map of the game
-void GameEngine::validateMap() {
+void GameEngine::validateMap(Map map) {
 	//if the user enters this command while not being in the 'mapLoaded' state, this command will not be executed and will result in an error
 	if (state->getGameState() == "mapLoaded")
 	{
-		//set the game state to the 'mapValidated' state
-		state->setGameState("mapValidated");
-		state->mapValidated();
-		cout << "Map Validated Successfully" << endl;
+		if (map.Validate())
+		{
+			//set the game state to the 'mapValidated' state
+			state->setGameState("mapValidated");
+			state->mapValidated();
+			cout << "Map Validated Successfully" << endl;
+		}
+		
 	}
 	else
 	{
@@ -154,8 +167,17 @@ void GameEngine::addPlayer(int _players) {
 	//if the user enters this command while not being in the 'mapValidated' or 'playersAdded' state, this command will not be executed and will result in an error
 	if (state->getGameState() == "mapValidated" || state->getGameState() == "playersAdded")
 	{
+		Player* p = new Player();
+
 		//set the number of players in the game
-		players = _players;
+		for (int i = 0; i < _players; i++) {
+			p->setPlayerID(i + 1);
+			p->setReinforcementPool(50);
+			this->players.push_back(p);
+		}
+		delete p;
+		p = nullptr;
+
 		//set the game state to the 'playersAdded' state
 		state->setGameState("playersAdded");
 		state->playersAdded();
@@ -168,10 +190,11 @@ void GameEngine::addPlayer(int _players) {
 }
 
 //command responsible to assign countries
-void GameEngine::assignCountries() {
+void GameEngine::gameStart() {
 	//if the user enters this command while not being in the 'playersAdded' state, this command will not be executed and will result in an error
 	if (state->getGameState() == "playersAdded")
 	{
+		
 		//set the game state to the 'assignReinforcement' state
 		state->setGameState("assignReinforcement");
 		state->assignReinforcement();
@@ -260,7 +283,7 @@ void GameEngine::win()
 		//set the game state to the 'win' state
 		state->setGameState("win");
 		state->win();
-		cout << "Congratulations!!! You WON the warzone game!!!" << endl;
+		cout << "Congratulations!!! You WON the warzon game!!!" << endl;
 	}
 	else
 	{
@@ -312,15 +335,15 @@ GameState* GameEngine::getState()
 	return state;
 }
 
-void GameEngine::setPlayers(int _players)
+void GameEngine::setPlayers(vector<Player*> _players)
 {
-	players = _players;
+	this->players = _players;
 }
 
 //players accessor
-int GameEngine::getPlayers()
+vector<Player*> GameEngine::getPlayers()
 {
-	return players;
+	return this->players;
 }
 
 //output stream operator for GameEngine
@@ -375,29 +398,30 @@ GameEngine& GameEngine::operator=(const GameEngine& _GameEngine) {
 void GameEngine::reinforcementPhase(vector<Player*> players)
 {
 	// Loop through all players in a game
-	for(int i = 0; i < players.size(); i++) 
+	for (int i = 0; i < players.size(); i++)
 	{
-		int reinforcement = floor(players[i]->getTerritories().size()/3); // get allowed reinforcement value of player
+		int reinforcement = floor(players[i]->getTerritories().size() / 3); // get allowed reinforcement value of player
 
 		// check for continent bonus
 		/*
 		INSERT CODE HERE
 		*/
 		vector<Territory*> ter_list = players[i]->getTerritories();
-        
-		if(reinforcement < 3)
+
+		if (reinforcement < 3)
 		{
-			players[i]->setReinforcementPool(players[i]->getReinforcementPool()+3); // minimum reinforcement value of 3
-		} else {
-			players[i]->setReinforcementPool(players[i]->getReinforcementPool()+reinforcement); // set new reinforcement value allocated to player
+			players[i]->setReinforcementPool(players[i]->getReinforcementPool() + 3); // minimum reinforcement value of 3
+		}
+		else {
+			players[i]->setReinforcementPool(players[i]->getReinforcementPool() + reinforcement); // set new reinforcement value allocated to player
 		}
 	}
 }
 
 // Order Issuing Phase
-void GameEngine::issueOrdersPhase(vector<Player*> players) 
+void GameEngine::issueOrdersPhase(vector<Player*> players)
 {
-	for(int i = 0; i < players.size(); i++)
+	for (int i = 0; i < players.size(); i++)
 	{
 		players[i]->issueOrder();
 	}
@@ -413,27 +437,27 @@ void GameEngine::executeOrdersPhase()
 // Main Game Loop
 void GameEngine::mainGameLoop(vector<Player*> players)
 {
-	while(state->getGameState() != "win")
-    {
+	while (state->getGameState() != "win")
+	{
 
-		for(int i = 0; i < players.size(); i++) {
+		for (int i = 0; i < players.size(); i++) {
 
-            // Check if a player is eliminated
-            if(players[i]->getTerritories().empty()) {
-                players.erase(players.begin() + i);
-            }
+			// Check if a player is eliminated
+			if (players[i]->getTerritories().empty()) {
+				players.erase(players.begin() + i);
+			}
 
-            // Check if game has been won
-            if(players.size() == 1) {
-                win();
+			// Check if game has been won
+			if (players.size() == 1) {
+				win();
 				cout << "Player" << players[i]->getPlayerID() << "won the game!" << endl;
-            }
+			}
 
 		}
 
-        reinforcementPhase(players);
-        issueOrdersPhase(players);
-        executeOrdersPhase();
+		reinforcementPhase(players);
+		issueOrdersPhase(players);
+		executeOrdersPhase();
 
 	}
 }
