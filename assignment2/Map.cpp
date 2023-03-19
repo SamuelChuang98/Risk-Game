@@ -3,48 +3,6 @@
 using namespace std;
 
 // --------------------------------------------------------------------------------------------------------------
-// Player (temporary)
-
-// default constructor
-TemporaryPlayer::TemporaryPlayer() {
-    this->name = "No Name";
-}
-
-// copy constructor
-TemporaryPlayer::TemporaryPlayer(const TemporaryPlayer& TemporaryPlayer) {
-    this->name = TemporaryPlayer.name;
-}
-
-// Parameterized constructor
-TemporaryPlayer::TemporaryPlayer(string pname) {
-    this->name = pname;
-}
-
-// Assignment operator
-TemporaryPlayer& TemporaryPlayer::operator=(const TemporaryPlayer& TemporaryPlayer)
-{
-    this->name = TemporaryPlayer.name;
-    return *this;
-}
-
-// Destructor
-TemporaryPlayer::~TemporaryPlayer() {}
-
-// Accessor
-string TemporaryPlayer::getName() {
-    return this->name;
-}
-
-// Mutator
-void TemporaryPlayer::setName(string pname) {
-    this->name = pname;
-}
-
-std::ostream& operator<<(ostream& os, const TemporaryPlayer& t) {
-    return os << t.name;
-}
-
-// --------------------------------------------------------------------------------------------------------------
 // Continent
 
 Continent::Continent() {
@@ -85,7 +43,6 @@ Territory::Territory() {
     this->x = 0;
     this->y = 0;
     this->numberOfArmies = 0;
-    this->player = nullptr;
 }
 
 // Copy constructor
@@ -101,7 +58,7 @@ Territory::Territory(Territory& t)
 }
 
 // Parameterized constructor
-Territory::Territory(int territoryNumber, string territoryName, int continent, int x, int y, TemporaryPlayer* player, int numberOfArmies)
+Territory::Territory(int territoryNumber, string territoryName, int continent, int x, int y, Player* player, int numberOfArmies)
 {
     this->territoryNumber = territoryNumber;
     this->territoryName = territoryName;
@@ -111,6 +68,17 @@ Territory::Territory(int territoryNumber, string territoryName, int continent, i
     this->player = player;
     this->numberOfArmies = numberOfArmies;
 }
+
+// Parameterized constructor
+//Territory::Territory(int territoryNumber, string territoryName, int continent, int x, int y, int numberOfArmies)
+//{
+//    this->territoryNumber = territoryNumber;
+//    this->territoryName = territoryName;
+//    this->continent = continent;
+//    this->x = x;
+//    this->y = y;
+//    this->numberOfArmies = numberOfArmies;
+//}
 
 // Territory assignment operator
 Territory& Territory::operator= (const Territory& t)
@@ -127,7 +95,7 @@ Territory& Territory::operator= (const Territory& t)
 
 // Territory stream insertion operator
 std::ostream& operator<<(ostream& os, const Territory& t) {
-    return os << "Number: " << t.territoryNumber << "\tName: " << t.territoryName << "\tContinent: " << t.continent << "\tx: " << t.x << "\ty: " << t.y  << "\tNumber of armies: " << t.numberOfArmies << endl;
+    return os << "Number: " << t.territoryNumber << "\tName: " << t.territoryName << "\tContinent: " << t.continent << "\tx: " << t.x << "\ty: " << t.y  << "\tPlayer ID: " << t.player->getPlayerID() << "\tNumber of armies: " << t.numberOfArmies << endl;
 }
 
 // Territory destructor
@@ -142,7 +110,7 @@ string Territory::getTerritoryName() { return territoryName; }
 int Territory::getContinent() { return continent; }
 int Territory::getX() { return x; }
 int Territory::getY() { return y; }
-TemporaryPlayer* Territory::getPlayerName() { return player; }
+Player* Territory::getPlayer() { return player; }
 int Territory::getNumberOfArmies() { return numberOfArmies; }
 
 // Territory mutators
@@ -151,7 +119,7 @@ void Territory::setTerritoryName(string newTerritoryName) { this->territoryName 
 void Territory::setContinent(int newContinent) { this->continent = newContinent; }
 void Territory::setX(int x) { this->x = x; }
 void Territory::setY(int y) { this->y = y; }
-void Territory::setPlayerName(TemporaryPlayer* newPlayerName) { this->player = newPlayerName; }
+void Territory::setPlayer(Player* newPlayerName) { this->player = newPlayerName; }
 void Territory::setNumberOfArmies(int newArmyCount) { this->numberOfArmies = newArmyCount; }
 
 // --------------------------------------------------------------------------------------------------------------
@@ -183,12 +151,10 @@ vector<Continent*> Map::getContinents() { return this->continents; }
 vector<vector<int>> Map::getBorders() { return this->borders; }
 vector<Territory*> Map::getTerritories() { return this->territories; }
 
-
 //Mutators
 void Map::setContinents(vector<Continent*> continents) { this->continents = continents; }
 void Map::setBorders(vector<vector<int>> borders) { this->borders = borders; }
 void Map::setTerritories(vector<Territory*> territories) { this->territories = territories; }
-
 
 // Assignment operator
 Map& Map::operator= (const Map& m)
@@ -238,19 +204,44 @@ void Map::addTerritory(Territory* territory)
 }
 
 
-// Validates graph
-//bool Map::Validate(){
-//    vector<bool> visited(this->territoryNumber);
-//    for (int j = 0; j < territoryNumber; j++) {
-//        // memset(visited, false, sizeof(visited));
-//        Traverse(j, visited);
-//        for (int i = 0; i < territoryNumber; i++){
-//            if (!visited[i]) return false;
-//        }
-//    }
-//    return true;
-//}
+// Validates Map
+bool Map::Validate(){
 
+    // check if countries are connected
+    for (int i = 0; i < borders.size(); i++)
+    {
+        if (borders[i].size() < 2)
+        {
+            cout << "countries are not connected" << endl;
+            return false;
+        }
+    }
+    return true;
+}
+
+    //vector<bool> validate;
+    //int currentBorderIndex = 0;
+    //for (int i = 0; i < this->borders.size();i++)
+    //{
+    //    for (int j = 1; j < this->borders[i].size(); j++)
+    //    {
+    //        currentBorderIndex = this->borders[i][j] - 1;
+    //        vector<int> temp;
+    //        for (int k = 1; k < this->borders[currentBorderIndex].size(); k++)
+    //        {
+    //            if (borders[currentBorderIndex][k] == this->borders[i][0])
+    //            {
+    //                break;
+    //            }
+    //            else if(k = this->borders[currentBorderIndex].size() - 1)
+    //            {
+    //                return false;
+    //            }
+    //            
+    //        }            
+    //    }
+    //    cout << "checking for " << this->borders[i][0];
+    //}
 
 // Traverses a graph
 //void Map::Traverse(int j, vector<bool> visited) {
@@ -309,12 +300,10 @@ void Map::mapLoad(string fileName)
 
     // keep reading until end of file
     while (getline(in, line)) {
-
         // Assumes a valid file will have continents, countries, then borders.
         if (line.find("[continents]") != string::npos) {
 
             while (true) {
-
                 getline(in, line);
 
                 // Break out if at end of continents
@@ -349,7 +338,6 @@ void Map::mapLoad(string fileName)
         else if (line.find("[countries]") != string::npos) {
 
             while (true) {
-
                 getline(in, line);
 
                 // Break out if at end of countries
@@ -424,6 +412,7 @@ void Map::mapLoad(string fileName)
         }
     }
     in.close();
+    cout << *this << endl;
 }
 
 // Check if file is Valid
@@ -446,17 +435,14 @@ bool MapLoader::fileChecker()
         if (fileExtension != "map") { return false; }
     }
 
+    in.open(fileName);
     //check if file exists in directory
-    try
+    if (in.fail())
     {
-        in.open(fileName);
-    }
-    catch (exception e)
-    {
-        cout << "file not found";
+        cout << "file not found" << endl;
         return false;
     }
-    
+
     // Check if file contains countries (territories)
     while (getline(in, line)) {
 
@@ -464,6 +450,7 @@ bool MapLoader::fileChecker()
         if (line.find("[continents]") != string::npos) {
 
             while (true) {
+                
 
                 getline(in, line);
 

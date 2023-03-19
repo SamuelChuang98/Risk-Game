@@ -5,34 +5,14 @@
 #include <vector>
 #include <fstream>
 
+#include "Player.h"
 
 using namespace std;
+
 namespace mapSpace {
     int mapMain();
 }
 
-class TemporaryPlayer
-{
-private:
-    // Private data member
-    string name;
-
-    // stream insertion operator
-    friend std::ostream& operator<<(std::ostream& os, const TemporaryPlayer& t);
-
-public:
-    TemporaryPlayer();                               // Default constructor
-    TemporaryPlayer(const TemporaryPlayer& p);                // Copy constructor
-    TemporaryPlayer(string pname);                   // Parameterized constructor
-    TemporaryPlayer& operator= (const TemporaryPlayer& p);    // Assignment operator
-    ~TemporaryPlayer();                              // Destructor
-
-    // Accessor
-    string getName();
-
-    // Mutator
-    void setName(string pname);
-};
 
 class Continent
 {
@@ -66,9 +46,8 @@ private:
     int continent;
     int x;
     int y;
-    TemporaryPlayer* player;
+    Player* player;
     int numberOfArmies;
-    int playerID;
 
     // stream insertion operator
     friend std::ostream& operator<<(std::ostream& os, const Territory& t);
@@ -76,7 +55,8 @@ private:
 public:
     Territory();                                                                                     // Default constructor
     Territory(Territory& territory);                                                                 // Copy constructor
-    Territory(int territoryNumber,string territoryName, int continent,int x,int y, TemporaryPlayer* player, int numberOfArmies);       // Parameterized constructor
+    Territory(int territoryNumber,string territoryName, int continent,int x,int y, Player* player, int numberOfArmies);       // Parameterized constructor
+    //Territory(int territoryNumber, string territoryName, int continent, int x, int y, int numberOfArmies);
     Territory& operator= (const Territory& t);                                                       // Assignment operator
     ~Territory();                                                                                    // Destructor
 
@@ -86,7 +66,7 @@ public:
     int getContinent();
     int getX();
     int getY();
-    TemporaryPlayer* getPlayerName();
+    Player* getPlayer();
     int getNumberOfArmies();
 
     // Mutators
@@ -95,7 +75,7 @@ public:
     void setContinent(int newContinent);
     void setX(int x);
     void setY(int y);
-    void setPlayerName(TemporaryPlayer* newPlayerName);
+    void setPlayer(Player* newPlayer);
     void setNumberOfArmies(int newArmyCount);
 };
 
@@ -124,9 +104,6 @@ public:
 
     // Validate method
     bool Validate();
-
-    // Traverse method
-    void Traverse(int j, vector<bool> visited);
 
     // Load continents, countries and borders to map
     void mapLoad(string fileName);
