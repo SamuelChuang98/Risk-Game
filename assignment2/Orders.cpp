@@ -469,7 +469,27 @@ void Advance::execute() const
         cout << "Advancing... \n";
 
         //If the source and target territory both belong to the player that issued the order, the army units are moved from the source to the target territory.
-        if (source->getTerritoryPlayer() == target->getTerritoryPlayer())
+
+        vector<Territory*> pTerritories = thisPlayer->getTerritories();
+        bool belongs = false;
+        bool belongs2 = false;
+
+        for(int i=0; i<pTerritories.size();i++){
+            if(pTerritories[i] == target){
+                belongs=true;
+                break;
+            }
+        }
+
+        for(int i=0; i<pTerritories.size();i++){
+            if(pTerritories[i] == source){
+                belongs2=true;
+                break;
+            }
+        }
+
+        //if (source->getTerritoryPlayer() == target->getTerritoryPlayer())
+        if(belongs == true && belongs2 == true)
         {
             source->setNumberOfArmies(source->getNumberOfArmies() - *amount);
             target->setNumberOfArmies(target->getNumberOfArmies() + *amount);
@@ -520,7 +540,26 @@ void Airlift::execute() const
         cout << "Airlifting... \n";
 
         //If both the source and target territories belong to the player that issue the airlift order
-        if (source->getTerritoryPlayer() == target->getTerritoryPlayer())
+        vector<Territory*> pTerritories = thisPlayer->getTerritories();
+        bool belongs = false;
+        bool belongs2 = false;
+
+        for(int i=0; i<pTerritories.size();i++){
+            if(pTerritories[i] == target){
+                belongs=true;
+                break;
+            }
+        }
+
+        for(int i=0; i<pTerritories.size();i++){
+            if(pTerritories[i] == source){
+                belongs2=true;
+                break;
+            }
+        }
+
+        //if (source->getTerritoryPlayer() == target->getTerritoryPlayer())
+        if(belongs == true && belongs2 == true)
         {
             source->setNumberOfArmies(source->getNumberOfArmies() - *amount);
             target->setNumberOfArmies(target->getNumberOfArmies() + *amount);
