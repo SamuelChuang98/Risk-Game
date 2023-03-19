@@ -183,10 +183,18 @@ vector<Continent*> Map::getContinents() { return this->continents; }
 vector<vector<int>> Map::getBorders() { return this->borders; }
 vector<Territory*> Map::getTerritories() { return this->territories; }
 
+int Territory::getTerritoryPlayer() {
+    return this->playerID;
+}
+
 //Mutators
 void Map::setContinents(vector<Continent*> continents) { this->continents = continents; }
 void Map::setBorders(vector<vector<int>> borders) { this->borders = borders; }
 void Map::setTerritories(vector<Territory*> territories) { this->territories = territories; }
+
+void Territory::setTerritoryPlayer(int playerID) {
+    this->playerID = playerID;
+}
 
 // Assignment operator
 Map& Map::operator= (const Map& m)

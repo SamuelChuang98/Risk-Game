@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include "Player.h"
 
 class Player;
 class Order;
@@ -125,7 +126,7 @@ private:
     bool validate() const;
     void execute() const;
 
-    Player *targetPlayer;
+    Player targetPlayer;
 
 };
 

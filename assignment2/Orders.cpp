@@ -238,7 +238,7 @@ bool Deploy::validate() const
     cout << "Validating Deploy...\n";
 
     //If the target territory does not belong to the player that issued the order, the order is invalid
-    if (target->getTerritoryPlayerID() != thisPlayer->getPlayerID())
+    if (target->getTerritoryPlayer() != thisPlayer->getPlayerID())
     {
         cout << "You do not own this territory!\n" << endl;
         return false;
@@ -265,7 +265,7 @@ bool Advance::validate() const
     cout << "Validating Advance...\n";
 
     //If the source territory does not belong to the player that issued the order, the order is invalid.
-    if (source->getTerritoryPlayerID() != thisPlayer->getPlayerID())
+    if (source->getTerritoryPlayer() != thisPlayer->getPlayerID())
     {
         cout << "The source territory is not your own!\n" << endl;
         return false;
@@ -301,7 +301,7 @@ bool Airlift::validate() const
     //The target territory does not need to be adjacent to the source territory.
 
     //If the source or target does not belong to the player that issued the order, the order is invalid.
-    if (source->getTerritoryPlayerID() != thisPlayer->getPlayerID() && target->getTerritoryPlayerID() != thisPlayer->getPlayerID())
+    if (source->getTerritoryPlayer() != thisPlayer->getPlayerID() && target->getTerritoryPlayer() != thisPlayer->getPlayerID())
     {
         cout << "The source and/or target territory is not your own!\n" << endl;
         return false;
@@ -326,7 +326,7 @@ bool Bomb::validate() const
     cout << "Validating Bomb...\n";
 
     //If the target belongs to the player that issued the order, the order is invalid.
-    if (target->getTerritoryPlayerID() == thisPlayer->getPlayerID())
+    if (target->getTerritoryPlayer() == thisPlayer->getPlayerID())
     {
         cout << "This territory is your own!\n" << endl;
         return false;
@@ -347,7 +347,7 @@ bool Blockade::validate() const
     cout << "Validating Blockade...\n";
 
     //If the target territory belongs to an enemy player, the order is declared invalid
-    if (target->getTerritoryPlayerID() != thisPlayer->getPlayerID())
+    if (target->getTerritoryPlayer() != thisPlayer->getPlayerID())
     {
         cout << "This is not your territory! This order can only be played on your own territory!\n" << endl;
         return false;
@@ -393,7 +393,7 @@ void Advance::execute() const
         cout << "Advancing... \n";
 
         //If the source and target territory both belong to the player that issued the order, the army units are moved from the source to the target territory.
-        if (source->getTerritoryPlayerID() == target->getTerritoryPlayerID())
+        if (source->getTerritoryPlayer() == target->getTerritoryPlayer())
         {
             source->setNumberOfArmies(source->getNumberOfArmies() - *amount);
             target->setNumberOfArmies(target->getNumberOfArmies() + *amount);
@@ -429,7 +429,7 @@ void Airlift::execute() const
         vector<Territory*> attackableTerritories = thisPlayer->toAttack();
         bool canAttack = false;
         // if player can't attack the territory
-        //if (!thisPlayer->canAttack(target->getTerritoryPlayerID()))
+        //if (!thisPlayer->canAttack(target->getTerritoryPlayer()))
         for (Territory* t : attackableTerritories) {
             if (t == target) {
                 canAttack = true;
@@ -444,7 +444,7 @@ void Airlift::execute() const
         cout << "Airlifting... \n";
 
         //If both the source and target territories belong to the player that issue the airlift order
-        if (source->getTerritoryPlayerID() == target->getTerritoryPlayerID())
+        if (source->getTerritoryPlayer() == target->getTerritoryPlayer())
         {
             source->setNumberOfArmies(source->getNumberOfArmies() - *amount);
             target->setNumberOfArmies(target->getNumberOfArmies() + *amount);
@@ -487,7 +487,7 @@ void Blockade::execute() const
         target->setNumberOfArmies(target->getNumberOfArmies() * 2);
 
         //the ownership of the territory is transferred to the Neutral player
-        target->setTerritoryPlayerID(-1);
+        target->setTerritoryPlayer(-1);
     }
 }
 
@@ -498,8 +498,8 @@ void Negotiate::execute() const
         cout << "Negotiating... \n";
         //If the target is an enemy player (Else of the validate statement)
 
-        thisPlayer->addFriendly(targetPlayer->getPlayerID());
-        targetPlayer->addFriendly(thisPlayer->getPlayerID());
+        thisPlayer->addFriendly(targetPlayer);
+        targetPlayer->addFriendly(thisPlayer);
     }
 
 }
@@ -551,7 +551,7 @@ void simulateAttack(Territory* source, Territory* target, Player* thisPlayer, in
     if (targetArmyNum == 0 && sourceArmyNum > 0) {
         cout << "Attackers win!" << endl;
 
-        source->setTerritoryPlayerID(thisPlayer->getPlayerID());
+        source->setTerritoryPlayer(thisPlayer->getPlayerID());
         thisPlayer->getTerritoryList()->push_back(target);
         target->setNumberOfArmies(sourceArmyNum);
         thisPlayer->getGE()->Notify(); // Notify stats observer since a player conquered a territory
