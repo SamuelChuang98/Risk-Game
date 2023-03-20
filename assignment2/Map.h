@@ -60,7 +60,7 @@ public:
     Territory& operator= (const Territory& t);                                                       // Assignment operator
     ~Territory();                                                                                    // Destructor
 
-    bool isAdjacent(Territory& territory);
+    bool isAdjacent(Territory& target);
 
     // Accessors
     int getTerritoryNumber();

@@ -93,7 +93,8 @@ Territory& Territory::operator= (const Territory& t)
     return *this;
 }
 
-bool Territory::isAdjacent(Territory& territory){
+bool Territory::isAdjacent(Territory& target){
+
     return true;
 }
 
@@ -101,7 +102,7 @@ bool Territory::isAdjacent(Territory& territory){
 
 // Territory stream insertion operator
 std::ostream& operator<<(ostream& os, const Territory& t) {
-    return os << "Number: " << t.territoryNumber << "\tName: " << t.territoryName << "\tContinent: " << t.continent << "\tx: " << t.x << "\ty: " << t.y  << "\tPlayer ID: " << t.player->getPlayerID() << "\tNumber of armies: " << t.numberOfArmies << endl;
+    return os << "Number: " << t.territoryNumber << "\tName: " << t.territoryName << "\tContinent: " << t.continent << "\tx: " << t.x << "\ty: " << t.y << "\tNumber of armies: " << t.numberOfArmies << endl;
 }
 
 // Territory destructor
