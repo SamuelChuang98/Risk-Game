@@ -8,7 +8,7 @@ using namespace std;
 
 void Command::saveEffect(string str) {
     effect = str;
-    StringTolog();
+    Notify(this);
 }
 
 void Command::StringTolog() {
@@ -106,7 +106,7 @@ void CommandProcessor::saveCommand(string c_str) {
     Command* c = new Command();
     c->name = c_str;
     commands.push_back(c);
-    StringTolog();
+    Notify(this);
     validate(*c);
 }
 

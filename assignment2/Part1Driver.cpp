@@ -2,6 +2,7 @@
 #include <cstring>
 
 #include "CommandProcessing.h"
+#include "LogObserver.h"
 
 using namespace std;
 
@@ -11,6 +12,7 @@ int main(int argc, char *argv[]) {
 
     CommandProcessor* cmdProc;
     GameState gs;
+
 
     // Will assign a CommandProcessor or FileCommandProcessorAdapter
     // depending on command-line arguments
@@ -30,6 +32,9 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    LogObserver* observer = new LogObserver();
+    cmdProc->Attach(observer);
+
     // Get every command, and randomly save an effect to some commands
     while(true) {
         Command c = cmdProc->getCommand();
@@ -38,6 +43,8 @@ int main(int argc, char *argv[]) {
             c.saveEffect("test effect");
         cout << c.name << " | " << c.effect << endl;
     }
+
+    delete observer;
 
     return 0;
 }
