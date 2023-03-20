@@ -8,7 +8,10 @@
 #include "Map.h"
 
 using namespace std;
-namespace playerSpace{
+
+
+
+namespace playerSpace {
     int playerMain();
 }
 
@@ -16,44 +19,46 @@ class Player {
 
 public:
     Player();
-    Player(int pID, vector<Territory*> ters, Hand* hand,OrderList* orders, int reinforcementPool, bool hasContinentBonus);
-    Player(Player &p);
+    Player(int pID, vector<Territory*> ters, Hand* hand, OrderList* orders, int reinforcementPool);
+    Player(Player& p);
     ~Player();
-    Player &operator=(const Player &rightSide);    // Assignment operator
+    Player& operator=(const Player& rightSide);    // Assignment operator
     // Hand* getHand();
     // OrderList* getOrders();
     vector<Territory*> toDefend();
     vector<Territory*> toAttack();
-    void issueOrder(vector<Territory*> t);
-    void addFriendly(Player &p);
+    void issueOrder();
+    void addFriendly(Player& p);
+    void addPlayerTerritory(Territory* t);
 
-    bool ContinentBonus(vector<Territory*> continent); // get continent bonus value
 
     // Accessors
-    int getPiD();
+    int getPlayerID();
     vector<Territory*> getTerritories();
     Hand* getHand();
     OrderList* getOrders();
     int getReinforcementPool();
     vector<Player*> getFriendlies();
-    bool getContinentBonus();
+    string getPlayerName();
+    int getPiD();
 
     // Mutators
-    void setPiD(int pID);
+    void setPlayerID(int id);
     void setTerritories(vector<Territory*> ters);
     void setHand(Hand* hand);
     void setOrders(OrderList* orders);
     void setReinforcementPool(int reinforcement);
-    void setContinentBonus(bool CB);
+    void setPlayerName(string playerName);
+    void setPiD(int pID);
 
 private:
-    int pID; // player ID
+    int playerID;
+    int pID;
+    string playerName;
     vector<Territory*> ters;    // Vector of territories owned by the player
     Hand* hand;                 // Hand of cards owned by the player
     OrderList* orders;          // List of orders owned by the player
     int reinforcementPool;      // Reinforcement allocated to a player
-    friend std::ostream &operator<<(std::ostream &strm, const Player &p); // stream insertion operator
+    friend std::ostream& operator<<(std::ostream& strm, const Player& p); // stream insertion operator
     vector<Player*> friendlies; // Vector of allies of the player
-    bool hasContinentBonus; // continent bonus
 };
-

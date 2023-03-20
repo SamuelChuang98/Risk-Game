@@ -69,16 +69,6 @@ Territory::Territory(int territoryNumber, string territoryName, int continent, i
     this->numberOfArmies = numberOfArmies;
 }
 
-// Parameterized constructor
-//Territory::Territory(int territoryNumber, string territoryName, int continent, int x, int y, int numberOfArmies)
-//{
-//    this->territoryNumber = territoryNumber;
-//    this->territoryName = territoryName;
-//    this->continent = continent;
-//    this->x = x;
-//    this->y = y;
-//    this->numberOfArmies = numberOfArmies;
-//}
 
 // Territory assignment operator
 Territory& Territory::operator= (const Territory& t)
@@ -93,16 +83,9 @@ Territory& Territory::operator= (const Territory& t)
     return *this;
 }
 
-bool Territory::isAdjacent(Territory& target){
-
-    return true;
-}
-
-
-
 // Territory stream insertion operator
 std::ostream& operator<<(ostream& os, const Territory& t) {
-    return os << "Number: " << t.territoryNumber << "\tName: " << t.territoryName << "\tContinent: " << t.continent << "\tx: " << t.x << "\ty: " << t.y << "\tNumber of armies: " << t.numberOfArmies << endl;
+    return os << "Number: " << t.territoryNumber << "\tName: " << t.territoryName << "\tContinent: " << t.continent << "\tx: " << t.x << "\ty: " << t.y  << "\tPlayer ID: " << t.player->getPlayerID() << "\tNumber of armies: " << t.numberOfArmies << endl;
 }
 
 // Territory destructor
@@ -225,40 +208,6 @@ bool Map::Validate(){
     }
     return true;
 }
-
-    //vector<bool> validate;
-    //int currentBorderIndex = 0;
-    //for (int i = 0; i < this->borders.size();i++)
-    //{
-    //    for (int j = 1; j < this->borders[i].size(); j++)
-    //    {
-    //        currentBorderIndex = this->borders[i][j] - 1;
-    //        vector<int> temp;
-    //        for (int k = 1; k < this->borders[currentBorderIndex].size(); k++)
-    //        {
-    //            if (borders[currentBorderIndex][k] == this->borders[i][0])
-    //            {
-    //                break;
-    //            }
-    //            else if(k = this->borders[currentBorderIndex].size() - 1)
-    //            {
-    //                return false;
-    //            }
-    //            
-    //        }            
-    //    }
-    //    cout << "checking for " << this->borders[i][0];
-    //}
-
-// Traverses a graph
-//void Map::Traverse(int j, vector<bool> visited) {
-//    visited[j] = true;
-//    for (int v = 0; v < territoryNumber; v++) {
-//        if (borders[j][v] && !visited[v]) {
-//            Traverse(v, visited);
-//        }
-//    }
-//}
 
 // --------------------------------------------------------------------------------------------------------------
 // MapLoader

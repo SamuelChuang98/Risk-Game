@@ -59,9 +59,7 @@ public:
     //Territory(int territoryNumber, string territoryName, int continent, int x, int y, int numberOfArmies);
     Territory& operator= (const Territory& t);                                                       // Assignment operator
     ~Territory();                                                                                    // Destructor
-
-    bool isAdjacent(Territory& target);
-
+    
     // Accessors
     int getTerritoryNumber();
     string getTerritoryName();
