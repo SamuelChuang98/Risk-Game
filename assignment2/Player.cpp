@@ -11,8 +11,10 @@ Player::Player()
 }
 
 // Param. constructor
-Player::Player(vector<Territory*> ters, Hand* hand, OrderList* orders, int reinforcementPool)
+Player::Player(int pID, vector<Territory*> ters, Hand* hand, OrderList* orders, int reinforcementPool, bool hasContinentBonus)
 {
+    this->pID = pID;
+
     for (Territory *ter: ters) {
         this->ters.push_back(new Territory(*ter));
     }
@@ -22,26 +24,32 @@ Player::Player(vector<Territory*> ters, Hand* hand, OrderList* orders, int reinf
     this->orders = new OrderList();
 
     this->reinforcementPool = reinforcementPool;
+
+    this->hasContinentBonus = false;
 }
 
 // Copy constructor - performs deep copy
-Player::Player(Player &p) 
+Player::Player(Player &p)
 {
+    this->pID = p.pID;
+
     for (Territory *ter: p.ters) {
         this->ters.push_back(new Territory(*ter));
     }
 
+    this->hand =  new Hand(*p.hand);
 
-   this->hand =  new Hand(*p.hand);
+    orders = new OrderList(*p.orders);
 
-   orders = new OrderList(*p.orders);
+    this->reinforcementPool = p.reinforcementPool;
 
-   this->reinforcementPool = p.reinforcementPool;
+    this->hasContinentBonus = p.hasContinentBonus;
+
 }
 
 
 // Destructor
-Player::~Player() 
+Player::~Player()
 {
     // Delete dynamically allocated territories pointed to in ters vector
     for (Territory *ter: ters) {
@@ -49,10 +57,10 @@ Player::~Player()
     }
     ters.clear();    // Remove pointers from ters
 
-   /* for (string *hand: hands) {
-        delete hand;
-    }
-    hands.clear();*/
+    /* for (string *hand: hands) {
+         delete hand;
+     }
+     hands.clear();*/
     delete hand;
     hand = NULL;
 
@@ -86,7 +94,7 @@ std::ostream &operator<<(std::ostream &strm, const Player &p) {
 
 // Get territories a player must defend
 vector<Territory*> Player::toDefend() {
-    
+
     vector<Territory*> defenseTers;
 
     cout << "List of territories to defend: " << endl;
@@ -112,7 +120,7 @@ vector<Territory*> Player::toAttack() {
     return attackTers;
 }
 
-void Player::issueOrder(vector<Territory*> t) 
+void Player::issueOrder(vector<Territory*> t)
 {
     Order* order = new Order();
     orders->set_order_list(order);
@@ -148,23 +156,49 @@ void Player::issueOrder(vector<Territory*> t)
     }
 }
 
+// check if a continent is controlled by one player
+bool Player::ContinentBonus(vector<Territory*> c)
+{
+    bool samePlayer = false;
+
+    for(int i = 0; i < c.size(); i++) {
+        for(int k = i+1; c.size(); k++){
+            if(k == c.size()){
+                break;
+            }
+            if(c[i]->getPlayer() == c[k]->getPlayer()){
+                samePlayer = true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    return samePlayer;
+}
+
 void Player::addFriendly(Player &p) {
     friendlies.push_back(&p);
 }
 
-// Accessors
+//
 
-vector<Territory*> Player::getTerritories() 
+int Player::getPiD()
 {
-    return this->ters; 
-} 
+    return this->pID;
+}
+
+vector<Territory*> Player::getTerritories()
+{
+    return this->ters;
+}
 
 Hand* Player::getHand()
 {
-    return this->hand; 
+    return this->hand;
 }
 
-OrderList* Player::getOrders() 
+OrderList* Player::getOrders()
 {
     return this->orders;
 }
@@ -174,17 +208,24 @@ int Player::getReinforcementPool()
     return this->reinforcementPool;
 }
 
+bool Player::getContinentBonus() {
+    return this->hasContinentBonus;
+}
+
 vector<Player*> Player::getFriendlies() {
     return friendlies;
 }
 
 // Mutators
 
-
+void Player::setPiD(int pID)
+{
+    this->pID = pID;
+}
 
 void Player::setTerritories(vector<Territory*> ters)
 {
-    this->ters = ters; 
+    this->ters = ters;
 }
 
 void Player::setHand(Hand* hand)
@@ -200,4 +241,8 @@ void Player::setOrders(OrderList* orders)
 void Player::setReinforcementPool(int reinforcement)
 {
     this->reinforcementPool = reinforcement;
+}
+
+void Player::setContinentBonus(bool CB) {
+    this->hasContinentBonus = CB;
 }
