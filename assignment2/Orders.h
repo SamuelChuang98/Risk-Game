@@ -53,7 +53,7 @@ public:
     string* get_type();
 
     bool validate() const;
-    void execute() const;
+    void execute();
 
 protected:
     Player *currentPlayer;
@@ -72,7 +72,7 @@ public:
     Advance(const Advance& other);
 private:
     bool validate() const;
-    void execute() const;
+    void execute();
 
     Territory *source;
     Territory *target;
@@ -87,7 +87,7 @@ public:
     Bomb(const Bomb& other);
 private:
     bool validate() const;
-    void execute() const;
+    void execute();
 
     Territory *target;
 };
@@ -100,7 +100,7 @@ public:
     Blockade(const Blockade& other);
 private:
     bool validate() const;
-    void execute() const;
+    void execute();
 
     Territory *target;
 };
@@ -113,7 +113,7 @@ public:
     Airlift(const Airlift& other);
 private:
     bool validate() const;
-    void execute() const;
+    void execute();
 
     Territory *source;
     Territory *target;
@@ -128,7 +128,7 @@ public:
     Negotiate(const Negotiate& other);
 private:
     bool validate() const;
-    void execute() const;
+    void execute();
 
     Player *targetPlayer;
     Territory *target;

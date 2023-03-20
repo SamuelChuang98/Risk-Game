@@ -290,7 +290,7 @@ bool Advance::validate() const
     }
 
     //If the target territory is not adjacent to the source territory, the order is invalid.
-    else if (!source->isAdjacent(target))
+    else if (!source->isAdjacent(*target))
     {
         cout << "The target territory is not adjacent to the source territory!\n" << endl;
         return false;
@@ -385,10 +385,11 @@ bool Bomb::validate() const
     }
 
     //If the target territory is not adjacent to one of the territory owned by the player issuing the order, then the order is invalid.
-    else if (!target->isAdjacent( /** Insert player territory list here **/))
-    {
-        cout << "The target territory is not adjacent to the source territory!\n" << endl;
-        return false;
+    for(int i=0; i<pTerritories.size();i++){
+        if(!target->isAdjacent(*pTerritories[i])){
+            cout << "The target territory is not adjacent to the source territory!\n" << endl;
+            return false;
+        };
     }
 
     return true;
@@ -449,8 +450,7 @@ bool Negotiate::validate() const
 
 // ===================================== Execute method for each order ======================================
 
-void Deploy::execute() const
-{
+void Deploy::execute() {
     if (validate())
     {
         cout << "Deploying...\n";
@@ -458,12 +458,11 @@ void Deploy::execute() const
         //the selected number of armies is added to the number of armies on that territory.
         target->setNumberOfArmies(*amount + target->getNumberOfArmies());
 
-
+        Notify(this);
     }
 }
 
-void Advance::execute() const
-{
+void Advance::execute() {
     if (validate())
     {
         cout << "Advancing... \n";
@@ -513,12 +512,12 @@ void Advance::execute() const
 
             simulateAttack(source, target, thisPlayer, amount);
         }
+        Notify(this);
 
     }
 }
 
-void Airlift::execute() const
-{
+void Airlift::execute() {
     if (validate())
     {
 
@@ -564,12 +563,11 @@ void Airlift::execute() const
             source->setNumberOfArmies(source->getNumberOfArmies() - *amount);
             target->setNumberOfArmies(target->getNumberOfArmies() + *amount);
         }
-
+        Notify(this);
     }
 }
 
-void Bomb::execute() const
-{
+void Bomb::execute() {
     if (validate())
     {
         vector<Territory*> attackableTerritories = thisPlayer->toAttack();
@@ -589,10 +587,12 @@ void Bomb::execute() const
         cout << "Bombing... \n";
         // If the target belongs to an enemy player, half of the armies are removed from this territory
         target->setNumberOfArmies(target->getNumberOfArmies() / 2);
+
+        Notify(this);
     }
 }
 
-void Blockade::execute() const
+void Blockade::execute()
 {
     if (validate())
     {
@@ -603,15 +603,15 @@ void Blockade::execute() const
 
         //the ownership of the territory is transferred to the Neutral player
 
-        TemporaryPlayer* neutral = new TemporaryPlayer();
+        Player* neutral = new Player();
 
-        target->setPlayerName(neutral);
+        target->setPlayer(neutral);
 
-        //Notify(this);
+        Notify(this);
     }
 }
 
-void Negotiate::execute() const {
+void Negotiate::execute() {
     if (validate())
     {
         cout << "Negotiating... \n";
@@ -620,7 +620,7 @@ void Negotiate::execute() const {
         thisPlayer->addFriendly(*targetPlayer);
         targetPlayer->addFriendly(*thisPlayer);
 
-        //Notify(this);
+        Notify(this);
     }
 
 }
@@ -672,14 +672,13 @@ void simulateAttack(Territory* source, Territory* target, Player* thisPlayer, in
     if (targetArmyNum == 0 && sourceArmyNum > 0) {
         cout << "Attackers win!" << endl;
 
-        source->setPlayerName(*thisPlayer);
+        source->setPlayer(thisPlayer);
         thisPlayer->getTerritories().push_back(target);
         target->setNumberOfArmies(sourceArmyNum);
-        //thisPlayer->getGE()->Notify(); // Notify stats observer since a player conquered a territory
-
 
         // give thisPlayer 1 card
-
+        Deck deck;
+        thisPlayer->getHand()->addToHand(*deck.draw());
     }
 
     else {
@@ -687,8 +686,6 @@ void simulateAttack(Territory* source, Territory* target, Player* thisPlayer, in
         source->setNumberOfArmies(source->getNumberOfArmies() + sourceArmyNum);
         target->setNumberOfArmies(targetArmyNum);
     }
-
-
 }
 
 void Order::StringTolog() {

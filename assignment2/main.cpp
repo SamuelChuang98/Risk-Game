@@ -6,6 +6,7 @@
 // #include "Orders.h"
 // #include "Map.h"
 #include "GameEngine.h"
+#include "LogObserver.h"
 
 int main() {
     //cardSpace::cardsMain();
@@ -13,4 +14,11 @@ int main() {
     // orderSpace::orderMain();
     // mapSpace::mapMain();
     GameEngineSpace::GameEngineMain();
+
+    Order *order = new Order();
+    LogObserver *observer = new LogObserver();
+
+    order->Attach(observer);
+    delete observer;
+    delete order;
 }
