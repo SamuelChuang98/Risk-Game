@@ -15,7 +15,7 @@ Player::Player(int pID, vector<Territory*> ters, Hand* hand, OrderList* orders, 
 {
     this->pID = pID;
 
-    for (Territory *ter: ters) {
+    for (Territory* ter : ters) {
         this->ters.push_back(new Territory(*ter));
     }
 
@@ -29,15 +29,15 @@ Player::Player(int pID, vector<Territory*> ters, Hand* hand, OrderList* orders, 
 }
 
 // Copy constructor - performs deep copy
-Player::Player(Player &p)
+Player::Player(Player& p)
 {
     this->pID = p.pID;
 
-    for (Territory *ter: p.ters) {
+    for (Territory* ter : p.ters) {
         this->ters.push_back(new Territory(*ter));
     }
 
-    this->hand =  new Hand(*p.hand);
+    this->hand = new Hand(*p.hand);
 
     orders = new OrderList(*p.orders);
 
@@ -52,7 +52,7 @@ Player::Player(Player &p)
 Player::~Player()
 {
     // Delete dynamically allocated territories pointed to in ters vector
-    for (Territory *ter: ters) {
+    for (Territory* ter : ters) {
         delete ter;
     }
     ters.clear();    // Remove pointers from ters
@@ -69,7 +69,7 @@ Player::~Player()
 }
 
 // Assignment operator - performs shallow copy
-Player &Player::operator=(const Player &rightSide) {
+Player& Player::operator=(const Player& rightSide) {
     this->ters = rightSide.ters;
     this->hand = rightSide.hand;
     this->orders = rightSide.orders;
@@ -88,7 +88,7 @@ Player &Player::operator=(const Player &rightSide) {
 // }
 
 // Stream insertion operator, returns player's first territory as a stream
-std::ostream &operator<<(std::ostream &strm, const Player &p) {
+std::ostream& operator<<(std::ostream& strm, const Player& p) {
     return strm << "Player(" << p.ters.at(0)->getTerritoryName() << ")";
 }
 
@@ -129,12 +129,12 @@ void Player::issueOrder(vector<Territory*> t)
     vector<Territory*> attack = toAttack();
 
     // Deploy armies until none are left
-    while(getReinforcementPool() != 0)
+    while (getReinforcementPool() != 0)
     {
         int armiesToDeploy = getReinforcementPool();
         int toDeploy = 0;
 
-        for(int i = 0; i < defend.size(); i++)
+        for (int i = 0; i < defend.size(); i++)
         {
 
             // get user input
@@ -143,13 +143,14 @@ void Player::issueOrder(vector<Territory*> t)
             cin >> toDeploy;
 
             // if only one army is remaining to deploy
-            if(armiesToDeploy == 1)
+            if (armiesToDeploy == 1)
             {
                 defend[i]->setNumberOfArmies(defend[i]->getNumberOfArmies() + 1);
                 setReinforcementPool(0);
-            } else {
+            }
+            else {
                 defend[i]->setNumberOfArmies(defend[i]->getNumberOfArmies() + toDeploy);
-                setReinforcementPool(getReinforcementPool()-toDeploy);
+                setReinforcementPool(getReinforcementPool() - toDeploy);
             }
         }
 
@@ -161,14 +162,15 @@ bool Player::ContinentBonus(vector<Territory*> c)
 {
     bool samePlayer = false;
 
-    for(int i = 0; i < c.size(); i++) {
-        for(int k = i+1; c.size(); k++){
-            if(k == c.size()){
+    for (int i = 0; i < c.size(); i++) {
+        for (int k = i + 1; c.size(); k++) {
+            if (k == c.size()) {
                 break;
             }
-            if(c[i]->getPlayer() == c[k]->getPlayer()){
+            if (c[i]->getPlayer() == c[k]->getPlayer()) {
                 samePlayer = true;
-            } else {
+            }
+            else {
                 return false;
             }
         }
@@ -177,7 +179,7 @@ bool Player::ContinentBonus(vector<Territory*> c)
     return samePlayer;
 }
 
-void Player::addFriendly(Player &p) {
+void Player::addFriendly(Player& p) {
     friendlies.push_back(&p);
 }
 
@@ -212,6 +214,10 @@ bool Player::getContinentBonus() {
     return this->hasContinentBonus;
 }
 
+int Player::getPlayerID() {
+    return this->getPlayerID();
+}
+
 vector<Player*> Player::getFriendlies() {
     return friendlies;
 }
@@ -221,6 +227,11 @@ vector<Player*> Player::getFriendlies() {
 void Player::setPiD(int pID)
 {
     this->pID = pID;
+}
+
+void Player::setPlayerID(int playerId)
+{
+    this->playerID = playerId;
 }
 
 void Player::setTerritories(vector<Territory*> ters)
@@ -245,4 +256,14 @@ void Player::setReinforcementPool(int reinforcement)
 
 void Player::setContinentBonus(bool CB) {
     this->hasContinentBonus = CB;
+}
+
+string Player::getPlayerName()
+{
+    return playerName;
+}
+
+void Player::setPlayerName(string playerName)
+{
+    this->playerName = playerName;
 }
