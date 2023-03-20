@@ -68,6 +68,7 @@ public:
 	void win();						//transition from 'execute orders' state to 'win' state
 	void play();					//transition from 'win' state to 'start' state
 	void end();						//exit 'win' state and terminates the program
+	void startupPhase(MapLoader& mapLoader, Map& map);
 
 	//state accessor
 	GameState* getState();

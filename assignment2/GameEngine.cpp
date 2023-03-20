@@ -141,7 +141,6 @@ void GameEngine::loadMap(MapLoader mapLoader, Map &map) {
 		// if file is valid, load map
 		if (mapLoader.fileChecker())
 		{
-			cout << "after file checker" << endl;
 			// load the map
 			map.mapLoad(mapLoader.getFileName());
 			//set the game state to the 'mapLoaded' state
@@ -194,7 +193,7 @@ void GameEngine::addPlayer(string playerName, int playerID) {
 		//set the game state to the 'playersAdded' state
 		state->setGameState("playersAdded");
 		state->playersAdded();
-		cout << "Players Added Successfully" << endl;
+		cout << "Player Added Successfully\nNumber of players: " << playerID << endl;
 	}
 	else
 	{
@@ -236,8 +235,9 @@ void GameEngine::gameStart(Map& map) {
 			//assign 50 armies to each player
 			this->getPlayers()[i]->setReinforcementPool(50);
 		}
+		cout << "number of countries per player: " << countriesPerPlayer << endl;
 		
-		
+
 		vector<Player*> playerTemp;
 		vector<Player*> playerTurn;
 		
@@ -254,12 +254,15 @@ void GameEngine::gameStart(Map& map) {
 			playerTemp.erase(playerTemp.begin() + random);
 		}
 
+		cout << "Order: ";
+
 		for (int i = 0; i < this->getPlayers().size(); i++)
 		{
-			this->getPlayers()[i] = playerTurn[i];
-			cout << this->getPlayers()[i]->getPlayerName() << "\t";
+			this->setPlayers(playerTurn);
+			cout << playerTurn[i]->getPlayerName() << " ";
 		}
 
+		cout << endl;
 
 		//set the game state to the 'assignReinforcement' state
 		state->setGameState("assignReinforcement");
@@ -462,111 +465,111 @@ GameEngine& GameEngine::operator=(const GameEngine& _GameEngine) {
 }
 
 // Reinforcement Phase
-void GameEngine::reinforcementPhase(vector<Player*> players, Map* map)
-{
-
-	// get all territories of a map
-	vector<Territory*> T = map->getTerritories();
-	vector<Territory*> c1, c2, c3, c4;
-
-	// group territories of a continent together
-	for (int i = 0; i < T.size(); i++)
-	{
-		if (T[i]->getContinent() == 1) {
-			c1.push_back(T[i]);
-		}
-		else if (T[i]->getContinent() == 2) {
-			c2.push_back(T[i]);
-		}
-		else if (T[i]->getContinent() == 3) {
-			c3.push_back(T[i]);
-		}
-		else if (T[i]->getContinent() == 4) {
-			c4.push_back(T[i]);
-		}
-	}
-
-	// Loop through all players in a game
-	for (int i = 0; i < players.size(); i++)
-	{
-		int reinforcement = floor(players[i]->getTerritories().size() / 3); // get allowed reinforcement value of player
-
-		// check if players[i] controls a certain continent
-		bool c1Bonus = players[i]->ContinentBonus(c1);
-		bool c2Bonus = players[i]->ContinentBonus(c2);
-		bool c3Bonus = players[i]->ContinentBonus(c3);
-		bool c4Bonus = players[i]->ContinentBonus(c4);
-
-		// assign bonus to player's reinforcement
-		if (c1Bonus && (players[i] == c1[0]->getPlayer())) {
-			reinforcement += 2;
-		}
-		else if (c2Bonus && (players[i] == c2[0]->getPlayer())) {
-			reinforcement += 2;
-		}
-		else if (c3Bonus && (players[i] == c3[0]->getPlayer())) {
-			reinforcement += 2;
-		}
-		else if (c4Bonus && (players[i] == c4[0]->getPlayer())) {
-			reinforcement += 2;
-		}
-
-		if (reinforcement < 3)
-		{
-			players[i]->setReinforcementPool(players[i]->getReinforcementPool() + 3); // minimum reinforcement value of 3
-		}
-		else {
-			players[i]->setReinforcementPool(players[i]->getReinforcementPool() + reinforcement); // set new reinforcement value allocated to player
-		}
-	}
-}
-
-// Order Issuing Phase
-void GameEngine::issueOrdersPhase(vector<Player*> players)
-{
-	for (int i = 0; i < players.size(); i++)
-	{
-		players[i]->issueOrder(players[i]->getTerritories());
-	}
-}
-
-// Order Execution Phase
-void GameEngine::executeOrdersPhase()
-{
-	vector<Order*> orderList;
-
-}
-
-// Main Game Loop
-void GameEngine::mainGameLoop(vector<Player*> players, Map* map)
-{
-
-	// loop until someone wins the game
-	while (state->getGameState() != "win")
-	{
-
-		for (int i = 0; i < players.size(); i++) {
-
-			// Check if a player is eliminated
-			if (players[i]->getTerritories().empty()) {
-				players.erase(players.begin() + i);
-			}
-
-			// Check if game has been won
-			if (players.size() == 1) {
-				win();
-				cout << "Player" << players[i]->getPiD() << "won the game!" << endl;
-			}
-
-		}
-
-		reinforcementPhase(players, map); // reinforcement phase
-
-		issueOrder();
-		issueOrdersPhase(players); // issue orders phase
-		endIssueOrders();
-
-		executeOrdersPhase(); // execute orders phase
-		endExecOrders();
-	}
-}
+//void GameEngine::reinforcementPhase(vector<Player*> players, Map* map)
+//{
+//
+//	// get all territories of a map
+//	vector<Territory*> T = map->getTerritories();
+//	vector<Territory*> c1, c2, c3, c4;
+//
+//	// group territories of a continent together
+//	for (int i = 0; i < T.size(); i++)
+//	{
+//		if (T[i]->getContinent() == 1) {
+//			c1.push_back(T[i]);
+//		}
+//		else if (T[i]->getContinent() == 2) {
+//			c2.push_back(T[i]);
+//		}
+//		else if (T[i]->getContinent() == 3) {
+//			c3.push_back(T[i]);
+//		}
+//		else if (T[i]->getContinent() == 4) {
+//			c4.push_back(T[i]);
+//		}
+//	}
+//
+//	// Loop through all players in a game
+//	for (int i = 0; i < players.size(); i++)
+//	{
+//		int reinforcement = floor(players[i]->getTerritories().size() / 3); // get allowed reinforcement value of player
+//
+//		// check if players[i] controls a certain continent
+//		bool c1Bonus = players[i]->ContinentBonus(c1);
+//		bool c2Bonus = players[i]->ContinentBonus(c2);
+//		bool c3Bonus = players[i]->ContinentBonus(c3);
+//		bool c4Bonus = players[i]->ContinentBonus(c4);
+//
+//		// assign bonus to player's reinforcement
+//		if (c1Bonus && (players[i] == c1[0]->getPlayer())) {
+//			reinforcement += 2;
+//		}
+//		else if (c2Bonus && (players[i] == c2[0]->getPlayer())) {
+//			reinforcement += 2;
+//		}
+//		else if (c3Bonus && (players[i] == c3[0]->getPlayer())) {
+//			reinforcement += 2;
+//		}
+//		else if (c4Bonus && (players[i] == c4[0]->getPlayer())) {
+//			reinforcement += 2;
+//		}
+//
+//		if (reinforcement < 3)
+//		{
+//			players[i]->setReinforcementPool(players[i]->getReinforcementPool() + 3); // minimum reinforcement value of 3
+//		}
+//		else {
+//			players[i]->setReinforcementPool(players[i]->getReinforcementPool() + reinforcement); // set new reinforcement value allocated to player
+//		}
+//	}
+//}
+//
+//// Order Issuing Phase
+//void GameEngine::issueOrdersPhase(vector<Player*> players)
+//{
+//	for (int i = 0; i < players.size(); i++)
+//	{
+//		players[i]->issueOrder(players[i]->getTerritories());
+//	}
+//}
+//
+//// Order Execution Phase
+//void GameEngine::executeOrdersPhase()
+//{
+//	vector<Order*> orderList;
+//
+//}
+//
+//// Main Game Loop
+//void GameEngine::mainGameLoop(vector<Player*> players, Map* map)
+//{
+//
+//	// loop until someone wins the game
+//	while (state->getGameState() != "win")
+//	{
+//
+//		for (int i = 0; i < players.size(); i++) {
+//
+//			// Check if a player is eliminated
+//			if (players[i]->getTerritories().empty()) {
+//				players.erase(players.begin() + i);
+//			}
+//
+//			// Check if game has been won
+//			if (players.size() == 1) {
+//				win();
+//				cout << "Player" << players[i]->getPiD() << "won the game!" << endl;
+//			}
+//
+//		}
+//
+//		reinforcementPhase(players, map); // reinforcement phase
+//
+//		issueOrder();
+//		issueOrdersPhase(players); // issue orders phase
+//		endIssueOrders();
+//
+//		executeOrdersPhase(); // execute orders phase
+//		endExecOrders();
+//	}
+//}
