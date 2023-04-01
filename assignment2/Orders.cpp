@@ -378,7 +378,6 @@ bool Bomb::validate() const
     }
 
     if (belongs)
-    //if (target->getTerritoryPlayer() == thisPlayer->getPlayerID())
     {
         cout << "This territory is your own!\n" << endl;
         return false;
@@ -524,7 +523,6 @@ void Airlift::execute() {
         vector<Territory*> attackableTerritories = thisPlayer->toAttack();
         bool canAttack = false;
         // if player can't attack the territory
-        //if (!thisPlayer->canAttack(target->getTerritoryPlayer()))
         for (Territory* t : attackableTerritories) {
             if (t == target) {
                 canAttack = true;

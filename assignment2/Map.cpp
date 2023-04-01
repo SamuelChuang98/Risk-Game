@@ -69,6 +69,10 @@ Territory::Territory(int territoryNumber, string territoryName, int continent, i
     this->numberOfArmies = numberOfArmies;
 }
 
+bool isAdjacent(Territory* target){
+    return true;
+}
+
 
 // Territory assignment operator
 Territory& Territory::operator= (const Territory& t)

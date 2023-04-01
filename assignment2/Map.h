@@ -108,6 +108,8 @@ public:
     // Load continents, countries and borders to map
     void mapLoad(string fileName);
 
+    bool isAdjacent(Territory* territory);
+
     //Mutators
     void setContinents(vector<Continent*> continents);
     void setBorders(vector<vector<int>> borders);

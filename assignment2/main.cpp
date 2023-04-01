@@ -2,8 +2,8 @@
 // Created by Ben on 2023-02-08.
 //
 //#include "Cards.h"
-//#include "Player.h"
-// #include "Orders.h"
+#include "Player.h"
+#include "Orders.h"
 // #include "Map.h"
 #include "GameEngine.h"
 #include "LogObserver.h"
@@ -11,9 +11,9 @@
 int main() {
     //cardSpace::cardsMain();
     //playerSpace::playerMain();
-    // orderSpace::orderMain();
+    orderSpace::orderMain();
     // mapSpace::mapMain();
-    GameEngineSpace::GameEngineMain();
+    //GameEngineSpace::GameEngineMain();
 
     Order *order = new Order();
     LogObserver *observer = new LogObserver();

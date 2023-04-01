@@ -12,7 +12,7 @@ int cardSpace::cardsMain() {
     //populate hand with 5 card for testing
     for (int i = 0; i < 5; ++i) {
         if (!deck.isEmpty()) {
-            hand.addToHand(deck.draw());
+            hand.addToHand(*deck.draw());
         } else {
             cout << "ERROR:  Cannot draw, Deck is Empty";
         }
