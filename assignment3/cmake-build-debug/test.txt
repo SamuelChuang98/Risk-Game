@@ -1,0 +1,7 @@
+loadmap example.map
+validatemap
+addplayer Player1
+gamestart
+replay
+quit
+someInvalidCommand
