@@ -28,6 +28,8 @@ Player::Player(int pID, vector<Territory*> ters, Hand* hand, OrderList* orders, 
     this->hasContinentBonus = false;
 }
 
+
+
 // Copy constructor - performs deep copy
 Player::Player(Player& p)
 {
@@ -118,6 +120,42 @@ vector<Territory*> Player::toAttack() {
     }
 
     return attackTers;
+}
+
+void Player::issueOrder(Order order){
+    orders->set_order_list(order);
+    
+    vector<Territory*> defend = toDefend();
+    vector<Territory*> attack = toAttack();
+    
+    // Deploy armies until none are left
+    
+    while (getReinforcementPool() != 0)
+    {
+        int armiesToDeploy = getReinforcementPool();
+        int toDeploy = 0;
+        
+        for (int i = 0; i < defend.size(); i++)
+        {
+            
+            // get user input
+            cout << "Territory: " << defend[i]->getTerritoryName() << endl;
+            cout << "How many armies do you want to deploy to this territory: " << endl;
+            cin >> toDeploy;
+            
+            // if only one army is remaining to deploy
+            if (armiesToDeploy == 1)
+            {
+                defend[i]->setNumberOfArmies(defend[i]->getNumberOfArmies() + 1);
+                setReinforcementPool(0);
+            }
+            else {
+                defend[i]->setNumberOfArmies(defend[i]->getNumberOfArmies() + toDeploy);
+                setReinforcementPool(getReinforcementPool() - toDeploy);
+            }
+        }
+        
+    }
 }
 
 void Player::issueOrder(vector<Territory*> t)
@@ -220,6 +258,16 @@ int Player::getPlayerID() {
 
 vector<Player*> Player::getFriendlies() {
     return friendlies;
+}
+
+Territory Player::getStrenghtestTerritory() {
+    Territory strongest = *ters.at(0);
+    for (int i = 1; i < ters.size(); i++) {
+        if (ters.at(i)->getNumberOfArmies() > strongest.getNumberOfArmies()) {
+            strongest = *ters.at(i);
+        }
+    }
+    return strongest*;
 }
 
 // Mutators

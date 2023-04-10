@@ -68,6 +68,10 @@ public:
     int getY();
     Player* getPlayer();
     int getNumberOfArmies();
+    Territory getStrongestAdjacentEnemyTerritory();
+    Territory getWeakestAdjacentEnemyTerritory();
+    Territory getStrongestAdjacentFriendlyTerritory();
+    Territory getWeakestAdjacentFriendlyTerritory();
 
     // Mutators
     void setTerritoryNumber(int newNumber);

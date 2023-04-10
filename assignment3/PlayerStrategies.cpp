@@ -3,6 +3,18 @@
 //
 
 #include "PlayerStrategies.h"
+#include "Player.h"
+#include "Cards.h"
+#include "Orders.h"
+#include "Map.h"
+#include "GameEngine.h"
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <random>
+#include <chrono>
+
 
 /*Using the Strategy design pattern, implement different kinds of players that make different decisions during the
 issuing orders phase by implementing different versions of issueOrder(), toAttack() and toDefend() in
@@ -39,46 +51,46 @@ void HumanPlayerStrategy::issueOrder(Player *player, string orderType) {
     cout << "HumanPlayerStrategy::issueOrder()" << endl;
     if (orderType == "deploy") {
         cout << "Enter the territory you want to deploy to: " << endl;
-        string territoryName;
-        cin >> territoryName;
+        int territoryId;
+        cin >> territoryId;
         cout << "Enter the number of armies you want to deploy: " << endl;
         int numArmies;
         cin >> numArmies;
-        player->issueOrder(new Deploy(player, player->getTerritory(territoryName), numArmies));
+        player->issueOrder(new Deploy(player, player->getTerritory(territoryId), numArmies));
     } else if (orderType == "advance") {
         cout << "Enter the territory you want to advance from: " << endl;
-        string fromTerritoryName;
-        cin >> fromTerritoryName;
+        int sourceTerritoryId;
+        cin >> sourceTerritoryId;
         cout << "Enter the territory you want to advance to: " << endl;
-        string toTerritoryName;
-        cin >> toTerritoryName;
+        int targetTerritoryId;
+        cin >> targetTerritoryId;
         cout << "Enter the number of armies you want to advance: " << endl;
         int numArmies;
         cin >> numArmies;
-        player->issueOrder(new Advance(player, player->getTerritory(fromTerritoryName),
-                                       player->getTerritory(toTerritoryName), numArmies));
+        player->issueOrder(new Advance(player, player->getTerritory(sourceTerritoryId),
+                                       player->getTerritory(targetTerritoryId), numArmies));
     } else if (orderType == "bomb") {
         cout << "Enter the territory you want to bomb: " << endl;
-        string territoryName;
-        cin >> territoryName;
-        player->issueOrder(new Bomb(player, player->getTerritory(territoryName)));
+        int territoryId;
+        cin >> territoryId;
+        player->issueOrder(new Bomb(player, player->getTerritory(territoryId)));
     } else if (orderType == "blockade") {
         cout << "Enter the territory you want to blockade: " << endl;
-        string territoryName;
-        cin >> territoryName;
-        player->issueOrder(new Blockade(player, player->getTerritory(territoryName)));
+        int territoryId;
+        cin >> territoryId;
+        player->issueOrder(new Blockade(player, player->getTerritory(territoryId)));
     } else if (orderType == "airlift") {
         cout << "Enter the territory you want to airlift from: " << endl;
-        string fromTerritoryName;
-        cin >> fromTerritoryName;
+        int sourceTerritoryId;
+        cin >> sourceTerritoryId;
         cout << "Enter the territory you want to airlift to: " << endl;
-        string toTerritoryName;
-        cin >> toTerritoryName;
+        int targetTerritoryId;
+        cin >> targetTerritoryId;
         cout << "Enter the number of armies you want to airlift: " << endl;
         int numArmies;
         cin >> numArmies;
-        player->issueOrder(new Airlift(player, player->getTerritory(fromTerritoryName),
-                                       player->getTerritory(toTerritoryName), numArmies));
+        player->issueOrder(new Airlift(player, player->getTerritory(sourceTerritoryId),
+                                       player->getTerritory(targetTerritoryId), numArmies));
     } else if (orderType == "negotiate") {
         cout << "Enter the player you want to negotiate with: " << endl;
         string playerName;
@@ -90,28 +102,28 @@ void HumanPlayerStrategy::issueOrder(Player *player, string orderType) {
 void HumanPlayerStrategy::toAttack(Player *player) {
     cout << "HumanPlayerStrategy::toAttack()" << endl;
     cout << "Enter the territory you want to attack from: " << endl;
-    string fromTerritoryName;
-    cin >> fromTerritoryName;
+    int sourceTerritoryId;
+    cin >> sourceTerritoryId;
     cout << "Enter the territory you want to attack: " << endl;
-    string toTerritoryName;
-    cin >> toTerritoryName;
+    int targetTerritoryId;
+    cin >> targetTerritoryId;
     cout << "Enter the number of armies you want to attack with: " << endl;
     int numArmies;
     cin >> numArmies;
-    player->issueOrder(new Advance(player, player->getTerritory(fromTerritoryName),
-                                   player->getTerritory(toTerritoryName), numArmies));
+    player->issueOrder(new Advance(player, player->getTerritory(sourceTerritoryId),
+                                   player->getTerritory(targetTerritoryId), numArmies));
 }
 
 void HumanPlayerStrategy::toDefend(Player *player) {
     cout << "HumanPlayerStrategy::toDefend()" << endl;
     cout << "Enter the territory you want to defend: " << endl;
-    string territoryName;
-    cin >> territoryName;
+    int sourceTerritoryId;
+    cin >> sourceTerritoryId;
     cout << "Enter the number of armies you want to defend with: " << endl;
     int numArmies;
     cin >> numArmies;
-    player->issueOrder(new Advance(player, player->getTerritory(territoryName),
-                                   player->getTerritory(territoryName), numArmies));
+    player->issueOrder(new Advance(player, player->getTerritory(sourceTerritoryId),
+                                   player->getTerritory(sourceTerritoryId), numArmies));
 }
 
 void AggressivePlayerStrategy::issueOrder(Player *player, string orderType) {
@@ -121,25 +133,25 @@ void AggressivePlayerStrategy::issueOrder(Player *player, string orderType) {
         player->issueOrder(new Deploy(player, strongestTerritory, strongestTerritory->getArmies() / 2));
     } else if (orderType == "advance") {
         Territory *strongestTerritory = player->getStrongestTerritory();
-        Territory *toTerritory = strongestTerritory->getStrongestAdjacentEnemyTerritory();
-        if (toTerritory != nullptr) {
-            player->issueOrder(new Advance(player, strongestTerritory, toTerritory,
+        Territory *targetTerritory = strongestTerritory->getStrongestAdjacentEnemyTerritory();
+        if (targetTerritory != nullptr) {
+            player->issueOrder(new Advance(player, strongestTerritory, targetTerritory,
                                            strongestTerritory->getArmies() / 2));
         }
     } else if (orderType == "bomb") {
         Territory *strongestTerritory = player->getStrongestTerritory();
-        Territory *toTerritory = strongestTerritory->getStrongestAdjacentEnemyTerritory();
-        if (toTerritory != nullptr) {
-            player->issueOrder(new Bomb(player, toTerritory));
+        Territory *targetTerritory = strongestTerritory->getStrongestAdjacentEnemyTerritory();
+        if (targetTerritory != nullptr) {
+            player->issueOrder(new Bomb(player, targetTerritory));
         }
     } else if (orderType == "blockade") {
         Territory *strongestTerritory = player->getStrongestTerritory();
         player->issueOrder(new Blockade(player, strongestTerritory));
     } else if (orderType == "airlift") {
         Territory *strongestTerritory = player->getStrongestTerritory();
-        Territory *toTerritory = strongestTerritory->getStrongestAdjacentEnemyTerritory();
-        if (toTerritory != nullptr) {
-            player->issueOrder(new Airlift(player, strongestTerritory, toTerritory,
+        Territory *targetTerritory = strongestTerritory->getStrongestAdjacentEnemyTerritory();
+        if (targetTerritory != nullptr) {
+            player->issueOrder(new Airlift(player, strongestTerritory, targetTerritory,
                                            strongestTerritory->getArmies() / 2));
         }
     } else if (orderType == "negotiate") {
@@ -153,9 +165,9 @@ void AggressivePlayerStrategy::issueOrder(Player *player, string orderType) {
 void AggressivePlayerStrategy::toAttack(Player *player) {
     cout << "AggressivePlayerStrategy::toAttack()" << endl;
     Territory *strongestTerritory = player->getStrongestTerritory();
-    Territory *toTerritory = strongestTerritory->getStrongestAdjacentEnemyTerritory();
-    if (toTerritory != nullptr) {
-        player->issueOrder(new Advance(player, strongestTerritory, toTerritory,
+    Territory *targetTerritory = strongestTerritory->getStrongestAdjacentEnemyTerritory();
+    if (targetTerritory != nullptr) {
+        player->issueOrder(new Advance(player, strongestTerritory, targetTerritory,
                                        strongestTerritory->getArmies() / 2));
     }
 }
@@ -174,25 +186,25 @@ void BenevolentPlayerStrategy::issueOrder(Player *player, string orderType) {
         player->issueOrder(new Deploy(player, weakestTerritory, weakestTerritory->getArmies() / 2));
     } else if (orderType == "advance") {
         Territory *weakestTerritory = player->getWeakestTerritory();
-        Territory *toTerritory = weakestTerritory->getStrongestAdjacentFriendlyTerritory();
-        if (toTerritory != nullptr) {
-            player->issueOrder(new Advance(player, weakestTerritory, toTerritory,
+        Territory *targetTerritory = weakestTerritory->getStrongestAdjacentFriendlyTerritory();
+        if (targetTerritory != nullptr) {
+            player->issueOrder(new Advance(player, weakestTerritory, targetTerritory,
                                            weakestTerritory->getArmies() / 2));
         }
     } else if (orderType == "bomb") {
         Territory *weakestTerritory = player->getWeakestTerritory();
-        Territory *toTerritory = weakestTerritory->getStrongestAdjacentFriendlyTerritory();
-        if (toTerritory != nullptr) {
-            player->issueOrder(new Bomb(player, toTerritory));
+        Territory *targetTerritory = weakestTerritory->getStrongestAdjacentFriendlyTerritory();
+        if (targetTerritory != nullptr) {
+            player->issueOrder(new Bomb(player, targetTerritory));
         }
     } else if (orderType == "blockade") {
         Territory *weakestTerritory = player->getWeakestTerritory();
         player->issueOrder(new Blockade(player, weakestTerritory));
     } else if (orderType == "airlift") {
         Territory *weakestTerritory = player->getWeakestTerritory();
-        Territory *toTerritory = weakestTerritory->getStrongestAdjacentFriendlyTerritory();
-        if (toTerritory != nullptr) {
-            player->issueOrder(new Airlift(player, weakestTerritory, toTerritory,
+        Territory *targetTerritory = weakestTerritory->getStrongestAdjacentFriendlyTerritory();
+        if (targetTerritory != nullptr) {
+            player->issueOrder(new Airlift(player, weakestTerritory, targetTerritory,
                                            weakestTerritory->getArmies() / 2));
         }
     } else if (orderType == "negotiate") {
@@ -206,9 +218,9 @@ void BenevolentPlayerStrategy::issueOrder(Player *player, string orderType) {
 void BenevolentPlayerStrategy::toAttack(Player *player) {
     cout << "BenevolentPlayerStrategy::toAttack()" << endl;
     Territory *weakestTerritory = player->getWeakestTerritory();
-    Territory *toTerritory = weakestTerritory->getStrongestAdjacentFriendlyTerritory();
-    if (toTerritory != nullptr) {
-        player->issueOrder(new Advance(player, weakestTerritory, toTerritory,
+    Territory *targetTerritory = weakestTerritory->getStrongestAdjacentFriendlyTerritory();
+    if (targetTerritory != nullptr) {
+        player->issueOrder(new Advance(player, weakestTerritory, targetTerritory,
                                        weakestTerritory->getArmies() / 2));
     }
 }
@@ -227,25 +239,25 @@ void NeutralPlayerStrategy::issueOrder(Player *player, string orderType) {
         player->issueOrder(new Deploy(player, randomTerritory, randomTerritory->getArmies() / 2));
     } else if (orderType == "advance") {
         Territory *randomTerritory = player->getRandomTerritory();
-        Territory *toTerritory = randomTerritory->getRandomAdjacentTerritory();
-        if (toTerritory != nullptr) {
-            player->issueOrder(new Advance(player, randomTerritory, toTerritory,
+        Territory *targetTerritory = randomTerritory->getRandomAdjacentTerritory();
+        if (targetTerritory != nullptr) {
+            player->issueOrder(new Advance(player, randomTerritory, targetTerritory,
                                            randomTerritory->getArmies() / 2));
         }
     } else if (orderType == "bomb") {
         Territory *randomTerritory = player->getRandomTerritory();
-        Territory *toTerritory = randomTerritory->getRandomAdjacentTerritory();
-        if (toTerritory != nullptr) {
-            player->issueOrder(new Bomb(player, toTerritory));
+        Territory *targetTerritory = randomTerritory->getRandomAdjacentTerritory();
+        if (targetTerritory != nullptr) {
+            player->issueOrder(new Bomb(player, targetTerritory));
         }
     } else if (orderType == "blockade") {
         Territory *randomTerritory = player->getRandomTerritory();
         player->issueOrder(new Blockade(player, randomTerritory));
     } else if (orderType == "airlift") {
         Territory *randomTerritory = player->getRandomTerritory();
-        Territory *toTerritory = randomTerritory->getRandomAdjacentTerritory();
-        if (toTerritory != nullptr) {
-            player->issueOrder(new Airlift(player, randomTerritory, toTerritory,
+        Territory *targetTerritory = randomTerritory->getRandomAdjacentTerritory();
+        if (targetTerritory != nullptr) {
+            player->issueOrder(new Airlift(player, randomTerritory, targetTerritory,
                                            randomTerritory->getArmies() / 2));
         }
     } else if (orderType == "negotiate") {
@@ -259,9 +271,9 @@ void NeutralPlayerStrategy::issueOrder(Player *player, string orderType) {
 void NeutralPlayerStrategy::toAttack(Player *player) {
     cout << "NeutralPlayerStrategy::toAttack()" << endl;
     Territory *randomTerritory = player->getRandomTerritory();
-    Territory *toTerritory = randomTerritory->getRandomAdjacentTerritory();
-    if (toTerritory != nullptr) {
-        player->issueOrder(new Advance(player, randomTerritory, toTerritory,
+    Territory *targetTerritory = randomTerritory->getRandomAdjacentTerritory();
+    if (targetTerritory != nullptr) {
+        player->issueOrder(new Advance(player, randomTerritory, targetTerritory,
                                        randomTerritory->getArmies() / 2));
     }
 }
@@ -280,25 +292,25 @@ void CheaterPlayerStrategy::issueOrder(Player *player, string orderType) {
         player->issueOrder(new Deploy(player, randomTerritory, randomTerritory->getArmies() * 2));
     } else if (orderType == "advance") {
         Territory *randomTerritory = player->getRandomTerritory();
-        Territory *toTerritory = randomTerritory->getRandomAdjacentTerritory();
-        if (toTerritory != nullptr) {
-            player->issueOrder(new Advance(player, randomTerritory, toTerritory,
+        Territory *targetTerritory = randomTerritory->getRandomAdjacentTerritory();
+        if (targetTerritory != nullptr) {
+            player->issueOrder(new Advance(player, randomTerritory, targetTerritory,
                                            randomTerritory->getArmies() * 2));
         }
     } else if (orderType == "bomb") {
         Territory *randomTerritory = player->getRandomTerritory();
-        Territory *toTerritory = randomTerritory->getRandomAdjacentTerritory();
-        if (toTerritory != nullptr) {
-            player->issueOrder(new Bomb(player, toTerritory));
+        Territory *targetTerritory = randomTerritory->getRandomAdjacentTerritory();
+        if (targetTerritory != nullptr) {
+            player->issueOrder(new Bomb(player, targetTerritory));
         }
     } else if (orderType == "blockade") {
         Territory *randomTerritory = player->getRandomTerritory();
         player->issueOrder(new Blockade(player, randomTerritory));
     } else if (orderType == "airlift") {
         Territory *randomTerritory = player->getRandomTerritory();
-        Territory *toTerritory = randomTerritory->getRandomAdjacentTerritory();
-        if (toTerritory != nullptr) {
-            player->issueOrder(new Airlift(player, randomTerritory, toTerritory,
+        Territory *targetTerritory = randomTerritory->getRandomAdjacentTerritory();
+        if (targetTerritory != nullptr) {
+            player->issueOrder(new Airlift(player, randomTerritory, targetTerritory,
                                            randomTerritory->getArmies() * 2));
         }
     } else if (orderType == "negotiate") {
@@ -312,9 +324,9 @@ void CheaterPlayerStrategy::issueOrder(Player *player, string orderType) {
 void CheaterPlayerStrategy::toAttack(Player *player) {
     cout << "CheaterPlayerStrategy::toAttack()" << endl;
     Territory *randomTerritory = player->getRandomTerritory();
-    Territory *toTerritory = randomTerritory->getRandomAdjacentTerritory();
-    if (toTerritory != nullptr) {
-        player->issueOrder(new Advance(player, randomTerritory, toTerritory,
+    Territory *targetTerritory = randomTerritory->getRandomAdjacentTerritory();
+    if (targetTerritory != nullptr) {
+        player->issueOrder(new Advance(player, randomTerritory, targetTerritory,
                                        randomTerritory->getArmies() * 2));
     }
 }

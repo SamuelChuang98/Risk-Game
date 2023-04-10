@@ -123,6 +123,15 @@ Deploy::Deploy()
 
 }
 
+Deploy::Deploy(Player* player, Territory* target, int* amount)
+{
+    set_id(0);
+
+    thisPlayer = player;
+    this->target = target;
+    this->amount = amount;
+}
+
 Deploy::~Deploy() {
     delete amount;
 }
@@ -148,6 +157,16 @@ Advance::Advance()
     //execute();
 }
 
+Advance::Advance(Player* player, Territory* source, Territory* target, int* amount)
+{
+    set_id(1);
+
+    thisPlayer = player;
+    this->source = source;
+    this->target = target;
+    this->amount = amount;
+}
+
 Advance::~Advance() {
     delete amount;
 }
@@ -168,6 +187,14 @@ Bomb::Bomb()
     //execute();
 }
 
+Bomb::Bomb(Player* player, Territory* target)
+{
+    set_id(2);
+
+    thisPlayer = player;
+    this->target = target;
+}
+
 Bomb::~Bomb() {}
 
 
@@ -185,6 +212,14 @@ Blockade::Blockade()
     //execute();
 }
 
+Blockade::Blockade(Player* player, Territory* target)
+{
+    set_id(3);
+
+    thisPlayer = player;
+    this->target = target;
+}
+
 Blockade::~Blockade() {}
 
 // Copy constructor
@@ -197,6 +232,16 @@ Blockade::Blockade(const Blockade& other)
 Airlift::Airlift()
 {
     set_id(4);
+}
+
+Airlift::Airlift(Player* player, Territory* source, Territory* target, int* amount)
+{
+    set_id(4);
+
+    thisPlayer = player;
+    this->source = source;
+    this->target = target;
+    this->amount = amount;
 }
 
 Airlift::~Airlift() {
@@ -216,6 +261,14 @@ Airlift::Airlift(const Airlift& other)
 Negotiate::Negotiate()
 {
     set_id(5);
+}
+
+Negotiate::Negotiate(Player* player, Player* targetPlayer)
+{
+    set_id(5);
+
+    thisPlayer = player;
+    this->targetPlayer = targetPlayer;
 }
 
 Negotiate::~Negotiate() {}

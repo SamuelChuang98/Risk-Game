@@ -28,6 +28,7 @@ public:
     vector<Territory*> toDefend();
     vector<Territory*> toAttack();
     void issueOrder();
+    void issueOrder(order& order);
     void addFriendly(Player& p);
     void addPlayerTerritory(Territory* t);
 
@@ -41,6 +42,9 @@ public:
     vector<Player*> getFriendlies();
     string getPlayerName();
     int getPiD();
+    id getTerritory(int id);
+    Territory getStrongestTerritory();
+    Territory getWeakestTerritory();
 
     // Mutators
     void setPlayerID(int id);

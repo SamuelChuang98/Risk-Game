@@ -116,6 +116,26 @@ void Territory::setY(int y) { this->y = y; }
 void Territory::setPlayer(Player* newPlayerName) { this->player = newPlayerName; }
 void Territory::setNumberOfArmies(int newArmyCount) { this->numberOfArmies = newArmyCount; }
 
+Territory::getStrongestAdjacentEnemyTerritory() {
+    // returns the strongest adjacent enemy territory
+    return nullptr;
+}
+
+Territory::getWeakestAdjacentEnemyTerritory() {
+    // returns the weakest adjacent enemy territory
+    return nullptr;
+}
+
+Territory::getStrongestAdjacentFriendlyTerritory() {
+    // returns the strongest adjacent friendly territory
+    return nullptr;
+}
+
+Territory::getWeakestAdjacentFriendlyTerritory() {
+    // returns the weakest adjacent friendly territory
+    return nullptr;
+}
+
 // --------------------------------------------------------------------------------------------------------------
 // Map 
 

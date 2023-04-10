@@ -47,6 +47,7 @@ class Deploy : public Order
 {
 public:
     Deploy();
+    Deploy(Player* player, Territory* target, int* amount);
     ~Deploy();
     Deploy(const Deploy& other);
 
@@ -68,6 +69,7 @@ private:
 class Advance : public Order {
 public:
     Advance();
+    Advance(Player* player, Territory* source, Territory* target, int* amount);
     ~Advance();
     Advance(const Advance& other);
 private:
@@ -83,6 +85,7 @@ class Bomb : public Order
 {
 public:
     Bomb();
+    Bomb(Player* player, Territory* target);
     ~Bomb();
     Bomb(const Bomb& other);
 private:
@@ -96,6 +99,7 @@ class Blockade : public Order
 {
 public:
     Blockade();
+    Blockade(Player* player, Territory* target);
     ~Blockade();
     Blockade(const Blockade& other);
 private:
@@ -109,6 +113,7 @@ class Airlift : public Order
 {
 public:
     Airlift();
+    Airlift(Player* player, Territory* source, Territory* target, int* amount);
     ~Airlift();
     Airlift(const Airlift& other);
 private:
@@ -124,6 +129,7 @@ class Negotiate : public Order
 {
 public:
     Negotiate();
+    Negotiate(Player* player, Player* targetPlayer);
     ~Negotiate();
     Negotiate(const Negotiate& other);
 private:
