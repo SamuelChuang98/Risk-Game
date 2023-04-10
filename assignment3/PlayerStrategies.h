@@ -14,7 +14,7 @@
 class Player;
 
 
-class PlayerStrategies {
+class PlayerStrategy {
 
 public:
     virtual void issueOrder(Player *player, string orderType) = 0;
@@ -23,32 +23,40 @@ public:
 
 };
 
-class HumanPlayer : public PlayerStrategies {
+class HumanPlayerStrategy : public PlayerStrategy {
 public:
     void issueOrder(Player *player, string orderType) override;
     vector<Territory *> toAttack(Player *player) override;
     vector<Territory *> toDefend(Player *player) override;
 };
 
-class AggressivePlayer : public PlayerStrategies {
+class AggressivePlayerStrategy : public PlayerStrategy {
 public:
     void issueOrder(Player *player, string orderType) override;
     vector<Territory *> toAttack(Player *player) override;
     vector<Territory *> toDefend(Player *player) override;
 };
 
-class BenevolentPlayer : public PlayerStrategies {
+class BenevolentPlayerStrategy : public PlayerStrategy {
 public:
     void issueOrder(Player *player, string orderType) override;
     vector<Territory *> toAttack(Player *player) override;
     vector<Territory *> toDefend(Player *player) override;
 };
 
-class NeutralPlayer : public PlayerStrategies {
+class NeutralPlayerStrategy : public PlayerStrategy {
 public:
     void issueOrder(Player *player, string orderType) override;
     vector<Territory *> toAttack(Player *player) override;
     vector<Territory *> toDefend(Player *player) override;
+};
+
+class CheaterPlayerStrategy : public PlayerStrategy {
+public:
+    void issueOrder(Player *player, string orderType) override;
+    vector<Territory *> toAttack(Player *player) override;
+    vector<Territory *> toDefend(Player *player) override;
+
 };
 
 #endif //ASSIGNMENT1_PLAYERSTRATEGIES_H
