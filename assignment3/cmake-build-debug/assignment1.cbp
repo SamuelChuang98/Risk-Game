@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="assignment1"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="C:/xampp/htdocs/comp345/assignment3/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="assignment1">
+				<Option output="C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/assignment1.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/xampp/htdocs/comp345/assignment3/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/xampp/htdocs/comp345/assignment3/."/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.3.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.3.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.3.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/backward"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.3.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.3.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.3.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include-fixed"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.3.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/Makefile&quot;  VERBOSE=1 assignment1"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="assignment1/fast">
+				<Option output="C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/assignment1.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/xampp/htdocs/comp345/assignment3/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/xampp/htdocs/comp345/assignment3/."/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.3.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.3.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.3.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/backward"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.3.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.3.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.3.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include-fixed"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.3.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/Makefile&quot;  VERBOSE=1 assignment1/fast"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="C:/xampp/htdocs/comp345/assignment3/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="C:/xampp/htdocs/comp345/assignment3/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/xampp/htdocs/comp345/assignment3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/Cards.cpp">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/Cards.h">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/CardsDriver.cpp">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/CommandProcessing.cpp">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/CommandProcessing.h">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/GameEngine.cpp">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/GameEngine.h">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/ILoggable.cpp">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/ILoggable.h">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/LogObserver.cpp">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/LogObserver.h">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/Map.cpp">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/Map.h">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/Orders.cpp">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/Orders.h">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/OrdersDriver.cpp">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/Part1Driver.cpp">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/Player.cpp">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/Player.h">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/PlayerDriver.cpp">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/PlayerStrategies.cpp">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/PlayerStrategies.h">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/Subject.cpp">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/Subject.h">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/main.cpp">
+			<Option target="assignment1"/>
+		</Unit>
+		<Unit filename="C:/xampp/htdocs/comp345/assignment3/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

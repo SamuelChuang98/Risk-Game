@@ -1,0 +1,41 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/assignment1.dir/Cards.cpp.obj"
+  "CMakeFiles/assignment1.dir/Cards.cpp.obj.d"
+  "CMakeFiles/assignment1.dir/CardsDriver.cpp.obj"
+  "CMakeFiles/assignment1.dir/CardsDriver.cpp.obj.d"
+  "CMakeFiles/assignment1.dir/CommandProcessing.cpp.obj"
+  "CMakeFiles/assignment1.dir/CommandProcessing.cpp.obj.d"
+  "CMakeFiles/assignment1.dir/GameEngine.cpp.obj"
+  "CMakeFiles/assignment1.dir/GameEngine.cpp.obj.d"
+  "CMakeFiles/assignment1.dir/ILoggable.cpp.obj"
+  "CMakeFiles/assignment1.dir/ILoggable.cpp.obj.d"
+  "CMakeFiles/assignment1.dir/LogObserver.cpp.obj"
+  "CMakeFiles/assignment1.dir/LogObserver.cpp.obj.d"
+  "CMakeFiles/assignment1.dir/Map.cpp.obj"
+  "CMakeFiles/assignment1.dir/Map.cpp.obj.d"
+  "CMakeFiles/assignment1.dir/Orders.cpp.obj"
+  "CMakeFiles/assignment1.dir/Orders.cpp.obj.d"
+  "CMakeFiles/assignment1.dir/OrdersDriver.cpp.obj"
+  "CMakeFiles/assignment1.dir/OrdersDriver.cpp.obj.d"
+  "CMakeFiles/assignment1.dir/Part1Driver.cpp.obj"
+  "CMakeFiles/assignment1.dir/Part1Driver.cpp.obj.d"
+  "CMakeFiles/assignment1.dir/Player.cpp.obj"
+  "CMakeFiles/assignment1.dir/Player.cpp.obj.d"
+  "CMakeFiles/assignment1.dir/PlayerDriver.cpp.obj"
+  "CMakeFiles/assignment1.dir/PlayerDriver.cpp.obj.d"
+  "CMakeFiles/assignment1.dir/PlayerStrategies.cpp.obj"
+  "CMakeFiles/assignment1.dir/PlayerStrategies.cpp.obj.d"
+  "CMakeFiles/assignment1.dir/Subject.cpp.obj"
+  "CMakeFiles/assignment1.dir/Subject.cpp.obj.d"
+  "CMakeFiles/assignment1.dir/main.cpp.obj"
+  "CMakeFiles/assignment1.dir/main.cpp.obj.d"
+  "assignment1.exe"
+  "assignment1.exe.manifest"
+  "assignment1.pdb"
+  "libassignment1.dll.a"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/assignment1.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()
