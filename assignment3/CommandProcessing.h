@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <map>
 
 #include "GameEngine.h"
 #include "Subject.h"
@@ -10,12 +11,21 @@
 
 using namespace std;
 
+// A structure of required objects to start a tou
+struct TournamentInit {
+    vector<string> maps;
+    vector<string> strats;
+    int games;
+    int turns;
+};
+
 // Command stores commands as an aggregate structure with a name and effect
 struct Command : public Subject, public ILoggable{
     void saveEffect(string str);    // Saves the effect of a command
     void StringTolog() override;
     string name;
     string effect;
+    TournamentInit tournament;
 };
 
 // Target; Processes game commands
@@ -24,9 +34,9 @@ class CommandProcessor : public Subject, public ILoggable {
 private:
     virtual string readCommand();           // Read command from console
     void validate(Command& c);              // Validate a given command
-    string validateTournament(Command& c);  // Validate a given tournament command
     void saveCommand(string c_str);         // Save a command to commands vector
     friend std::ostream &operator<<(std::ostream &strm, const CommandProcessor &p); // stream insertion operator
+    void processAndValidateTournament(Command& c);  // Validate a given tournament command
 
 
 protected:

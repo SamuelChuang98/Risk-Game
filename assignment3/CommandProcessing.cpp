@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <sstream>
-#include <map>
 
 using namespace std;
 
@@ -98,9 +97,8 @@ void CommandProcessor::validate(Command &c) {
             c.saveEffect("Error: quit must have state win");
     }
     else if (initial_command == "tournament"){
-        string effect = validateTournament(c);
-        if (effect != "")
-            c.saveEffect("Error: " + effect);
+        processAndValidateTournament(c);
+
     }
     else{
         c.saveEffect("Error: invalid command");
@@ -109,7 +107,7 @@ void CommandProcessor::validate(Command &c) {
 }
 
 // Returns the reason(s) for tournament command being invalid, if any.
-string CommandProcessor::validateTournament(Command &c) {
+void CommandProcessor::processAndValidateTournament(Command &c) {
 
     stringstream ss(c.name);
     map<string, string> flags;
@@ -129,6 +127,12 @@ string CommandProcessor::validateTournament(Command &c) {
         std::cout << "Key: " << pair.first << ", Value: " << pair.second << std::endl;
     }
 
+    // Values required for starting a tournament
+    vector<string> maps;
+    vector<string> strats;
+    int games;
+    int turns;
+
     // Start validating
     string invalidReason;
 
@@ -141,7 +145,6 @@ string CommandProcessor::validateTournament(Command &c) {
 
         stringstream ss1(mapsStr);
         string thisMap;
-        vector<string> maps;
 
         // Split maps, assuming they are comma-seperated
         while (getline(ss1, thisMap, ',')){
@@ -163,7 +166,6 @@ string CommandProcessor::validateTournament(Command &c) {
 
         stringstream ss1(stratsStr);
         string thisStrat;
-        vector<string> strats;
 
         // Split maps, assuming they are comma-seperated
         while (getline(ss1, thisStrat, ',')){
@@ -182,7 +184,6 @@ string CommandProcessor::validateTournament(Command &c) {
     }
     else {
         string gamesStr = flags["-G"];
-        int games;
 
         try {
             games = stoi(gamesStr);
@@ -201,7 +202,6 @@ string CommandProcessor::validateTournament(Command &c) {
     }
     else {
         string turnsStr = flags["-D"];
-        int turns;
 
         try {
             turns = stoi(turnsStr);
@@ -214,7 +214,13 @@ string CommandProcessor::validateTournament(Command &c) {
         }
     }
 
-    return invalidReason;
+    if (invalidReason != ""){
+        c.saveEffect("Error: " + invalidReason);
+        cerr << c.effect << endl;
+        exit(1);
+    }
+
+    c.tournament = TournamentInit{maps, strats, games, turns};
 }
 
 // Saves a command to a commands vector
