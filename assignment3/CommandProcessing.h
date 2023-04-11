@@ -22,9 +22,10 @@ struct Command : public Subject, public ILoggable{
 class CommandProcessor : public Subject, public ILoggable {
 
 private:
-    virtual string readCommand();       // Read command from console
-    void validate(Command& c);          // Validate a given command
-    void saveCommand(string c_str);     // Save a command to commands vector
+    virtual string readCommand();           // Read command from console
+    void validate(Command& c);              // Validate a given command
+    string validateTournament(Command& c);  // Validate a given tournament command
+    void saveCommand(string c_str);         // Save a command to commands vector
     friend std::ostream &operator<<(std::ostream &strm, const CommandProcessor &p); // stream insertion operator
 
 

@@ -1,6 +1,8 @@
 #include "CommandProcessing.h"
 
 #include <iostream>
+#include <sstream>
+#include <map>
 
 using namespace std;
 
@@ -95,10 +97,124 @@ void CommandProcessor::validate(Command &c) {
         if (currentState != "win")
             c.saveEffect("Error: quit must have state win");
     }
+    else if (initial_command == "tournament"){
+        string effect = validateTournament(c);
+        if (effect != "")
+            c.saveEffect("Error: " + effect);
+    }
     else{
         c.saveEffect("Error: invalid command");
     }
 
+}
+
+// Returns the reason(s) for tournament command being invalid, if any.
+string CommandProcessor::validateTournament(Command &c) {
+
+    stringstream ss(c.name);
+    map<string, string> flags;
+    string thisWord;
+
+    // Break command into key value pairs for flags and values respectively
+    while (ss >> thisWord){
+        if (thisWord == "-M" || thisWord == "-P" || thisWord == "-G" || thisWord == "-D"){
+            string value;
+            ss >> value;
+            flags[thisWord] = value;
+        }
+    }
+
+    // TODO: REMOVE DEBUG
+    for (const auto& pair : flags) {
+        std::cout << "Key: " << pair.first << ", Value: " << pair.second << std::endl;
+    }
+
+    // Start validating
+    string invalidReason;
+
+    // Validate map portion
+    if (flags.count("-M") < 1){
+        invalidReason += "No M flag. ";
+    }
+    else {
+        string mapsStr = flags["-M"];
+
+        stringstream ss1(mapsStr);
+        string thisMap;
+        vector<string> maps;
+
+        // Split maps, assuming they are comma-seperated
+        while (getline(ss1, thisMap, ',')){
+            maps.push_back(thisMap);
+        }
+
+        // Verify map size
+        if (!(maps.size() >= 1 && maps.size() <= 5)){
+            invalidReason += "Must have 1 to 5 different maps. ";
+        }
+    }
+
+    // Validate player strategy portion
+    if (flags.count("-P") < 1){
+        invalidReason += "No P flag. ";
+    }
+    else {
+        string stratsStr = flags["-P"];
+
+        stringstream ss1(stratsStr);
+        string thisStrat;
+        vector<string> strats;
+
+        // Split maps, assuming they are comma-seperated
+        while (getline(ss1, thisStrat, ',')){
+            strats.push_back(thisStrat);
+        }
+
+        // Verify map size
+        if (!(strats.size() >= 2 && strats.size() <= 4)){
+            invalidReason += "Must have 2 to 4 different player strategies. ";
+        }
+    }
+
+    // Validate game number portion
+    if (flags.count("-G") < 1){
+        invalidReason += "No G flag. ";
+    }
+    else {
+        string gamesStr = flags["-G"];
+        int games;
+
+        try {
+            games = stoi(gamesStr);
+            if (!(games >= 1 && games <= 5)){
+                invalidReason += "Number of games must be between 1 and 5. ";
+            }
+        }
+        catch (invalid_argument& e){
+            invalidReason += "Number of games must be an integer. ";
+        }
+    }
+
+    // Validate max turn portion
+    if (flags.count("-D") < 1){
+        invalidReason += "No D flag. ";
+    }
+    else {
+        string turnsStr = flags["-D"];
+        int turns;
+
+        try {
+            turns = stoi(turnsStr);
+            if (!(turns >= 10 && turns <= 50)){
+                invalidReason += "Number of turns must be between 10 and 50. ";
+            }
+        }
+        catch (invalid_argument& e){
+            invalidReason += "Number of turns must be an integer. ";
+        }
+    }
+
+    return invalidReason;
 }
 
 // Saves a command to a commands vector

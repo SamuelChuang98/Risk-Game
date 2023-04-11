@@ -12,4 +12,4 @@ add_executable(assignment1
         main.cpp
         Player.cpp
         Player.h
-        PlayerDriver.cpp OrdersDriver.cpp Orders.cpp Map.cpp CommandProcessing.cpp Part1Driver.cpp LogObserver.cpp Subject.cpp ILoggable.cpp GameEngine.cpp PlayerStrategies.cpp PlayerStrategies.h)
+        PlayerDriver.cpp OrdersDriver.cpp Orders.cpp Map.cpp CommandProcessing.cpp LogObserver.cpp Subject.cpp ILoggable.cpp GameEngine.cpp PlayerStrategies.cpp PlayerStrategies.h Part2Driver.cpp)
