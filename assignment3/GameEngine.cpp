@@ -133,6 +133,48 @@ void GameEngine::StringTolog() {
 	}
 }
 
+void GameEngine::startTournament(vector<string> mapsName, vector<string> strats, int games, int turns)
+{
+
+	MapLoader mapLoader;
+	vector<Map*> maps;
+	Map* map;
+	//loading the maps
+	for (int i = 0; i < mapsName.size(); i++)
+	{
+		mapLoader = MapLoader(mapsName[i]);
+		//check if the file is valid to be a map
+		if (mapLoader.fileChecker())
+		{ 
+			// load the map
+			map = new Map();
+			map->mapLoad(mapLoader.getFileName());
+			maps.push_back(map);
+		}
+		else
+		{
+			cout << "Invalid file" << endl;
+			exit(0);
+		}
+	}
+	
+	//validating the maps
+	for (int i = 0; i < mapsName.size(); i++)
+	{
+		//check if the map is valide
+		if (maps[i]->Validate())
+		{
+			//if valid do nothing
+		}
+		else //if not valid print error and exit
+		{
+			cout << "Map invalid" << endl;
+			exit(0);
+		}
+	}
+}
+
+
 //command responsible to load the map into the game
 void GameEngine::loadMap(MapLoader mapLoader, Map &map) {
 	//if the user enters this command while not being in the 'start' or 'mapLoaded' state, this command will not be executed and will result in an error
@@ -229,8 +271,7 @@ void GameEngine::gameStart(Map& map) {
 					{
 						random = rand() % map.getTerritories().size();
 					}
-				}
-				
+				}	
 			}
 			//assign 50 armies to each player
 			this->getPlayers()[i]->setReinforcementPool(50);
