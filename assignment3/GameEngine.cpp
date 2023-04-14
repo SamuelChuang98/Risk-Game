@@ -133,12 +133,16 @@ void GameEngine::StringTolog() {
 	}
 }
 
-void GameEngine::startTournament(vector<string> mapsName, vector<string> strats, int games, int turns)
+void GameEngine::startTournament(vector<string> mapsName, vector<string> stratNames, int games, int turns)
 {
+
+    string winners[mapsName.size()][games];    // 2D array stores the winner's name for each game
+
+    cout << "Starting tournament..." << endl;
 
 	MapLoader mapLoader;
 	vector<Map*> maps;
-	Map* map;
+
 	//loading the maps
 	for (int i = 0; i < mapsName.size(); i++)
 	{
@@ -147,7 +151,7 @@ void GameEngine::startTournament(vector<string> mapsName, vector<string> strats,
 		if (mapLoader.fileChecker())
 		{ 
 			// load the map
-			map = new Map();
+			Map* map = new Map();
 			map->mapLoad(mapLoader.getFileName());
 			maps.push_back(map);
 		}
@@ -172,6 +176,69 @@ void GameEngine::startTournament(vector<string> mapsName, vector<string> strats,
 			exit(0);
 		}
 	}
+
+    vector<PlayerStrategy*> strategies;
+
+    // Add players to game and assign strategies
+    for (int i = 0; i < stratNames.size(); i++){
+        // Just naming the player after their strategy for simplicity
+        this->addPlayer(stratNames[i], i);
+
+        PlayerStrategy* thisStrategy;
+
+        if (stratNames[i] == "aggressive")
+            thisStrategy = new AggressivePlayerStrategy();
+        else if (stratNames[i] == "benevolent")
+            thisStrategy = new BenevolentPlayerStrategy();
+        else if (stratNames[i] == "neutral")
+            thisStrategy = new NeutralPlayerStrategy();
+        else if (stratNames[i] == "cheater")
+            thisStrategy = new CheaterPlayerStrategy();
+
+        strategies.push_back(thisStrategy);
+
+    }
+
+    // Tournament loop
+    // Outer loop for each map
+    for (int m = 0; m < maps.size(); m++){
+
+        // Loop for each game of the specified map
+        for (int g = 0; g < games; g++) {
+
+            // Start game
+            this->gameStart(*maps[m]);
+
+            // Inner loop for each turn
+            for (int t = 0; t < turns; t++) {
+
+                Player *currentPlayer = this->players[t % this->players.size()];    // Current player whose turn it is
+                // [ Player actions here ]
+
+            }
+
+            // If turn loop completes w/o a winner, force a draw.
+            if (state->getGameState() != "win") {
+                state->setGameState("win");
+                state->win();
+                winners[m][g] = "Draw";
+                cout << "Draw occurred - Turn limit reached" << endl;
+            }
+        }
+    }
+
+     cout << "Tournament Ended" << endl;
+
+    // Mem. management
+
+    for(vector<Map*>::iterator i = maps.begin(); i != maps.end(); ++i ){
+        delete *i;
+    }
+
+    for(vector<PlayerStrategy*>::iterator i = strategies.begin(); i != strategies.end(); ++i ){
+        delete *i;
+    }
+
 }
 
 

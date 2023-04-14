@@ -7,6 +7,7 @@
 #include "Subject.h"
 #include "Map.h"
 #include "LogObserver.h"
+#include "PlayerStrategies.h"
 
 using namespace std;
 
@@ -69,7 +70,7 @@ public:
 	void play();					//transition from 'win' state to 'start' state
 	void end();						//exit 'win' state and terminates the program
 	void startupPhase(MapLoader& mapLoader, Map& map);
-	void startTournament(vector<string> maps, vector<string> strats, int games, int turns);
+	void startTournament(vector<string> maps, vector<string> stratNames, int games, int turns);
 
 	//state accessor
 	GameState* getState();
