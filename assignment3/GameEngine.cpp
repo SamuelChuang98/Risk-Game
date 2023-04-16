@@ -181,6 +181,7 @@ void GameEngine::startTournament(vector<string> mapsName, vector<string> stratNa
 
     // Add players to game and assign strategies
     for (int i = 0; i < stratNames.size(); i++){
+
         // Just naming the player after their strategy for simplicity
         this->addPlayer(stratNames[i], i);
 
@@ -213,7 +214,17 @@ void GameEngine::startTournament(vector<string> mapsName, vector<string> stratNa
             for (int t = 0; t < turns; t++) {
 
                 Player *currentPlayer = this->players[t % this->players.size()];    // Current player whose turn it is
-                // [ Player actions here ]
+                PlayerStrategy *currentStrategy = strategies[t % strategies.size()];    // Current player strategy...
+
+                // First, deployment phase occurs
+                currentStrategy->issueOrder(currentPlayer, "deploy");
+
+                // Attack/transfer phase, specific action is randomized
+                const int size = 5;
+                string possibleActions[size] = {"advance", "bomb", "blockade", "airlift",
+                                                "negotiate"};
+                int actionIndex = (rand() % size) - 1;
+                currentStrategy->issueOrder(currentPlayer, possibleActions[actionIndex]);
 
             }
 
